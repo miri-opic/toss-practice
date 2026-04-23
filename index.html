@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOSS 연습</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #3B6FE8; --primary-light: #EEF2FF;
+  --success: #10B981; --danger: #EF4444;
+  --orange: #F59E0B; --orange-light: #FFF9EC;
+  --bg: #F5F7FF; --card: #FFFFFF;
+  --text: #1E293B; --text-sub: #64748B; --border: #E2E8F0;
+  --radius: 16px;
+}
+body { font-family: -apple-system, 'Noto Sans KR', sans-serif; background: var(--bg); display: flex; justify-content: center; }
+.app { width: 100%; max-width: 420px; min-height: 100vh; background: var(--bg); }
+
+/* 탭 */
+.tab-bar { display: flex; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 20; }
+.tab-btn { flex: 1; padding: 12px 4px; border: none; background: none; font-size: 12px; font-weight: 600; color: var(--text-sub); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; line-height: 1.3; text-align: center; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* 헤더 */
+.header { background: var(--card); padding: 14px 18px 10px; border-bottom: 1px solid var(--border); }
+.header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+.back-btn { width: 30px; height: 30px; border: none; background: none; cursor: pointer; font-size: 20px; color: var(--text-sub); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.back-btn:hover { background: var(--bg); }
+.header h1 { font-size: 16px; font-weight: 700; color: var(--text); }
+.header .sub { font-size: 12px; color: var(--text-sub); }
+
+/* 화면 */
+.screen { display: none; padding: 18px; }
+.screen.active { display: block; }
+
+/* 홈 */
+.badge { display: inline-flex; align-items: center; gap: 5px; background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 20px; margin-bottom: 12px; }
+.section-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
+.section-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 18px; line-height: 1.5; }
+
+.question-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; }
+.question-card:hover { border-color: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,111,232,0.1); }
+.q-num { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.q-num.blue { background: var(--primary-light); color: var(--primary); }
+.q-num.green { background: #ECFDF5; color: var(--success); }
+.q-num.orange { background: var(--orange-light); color: var(--orange); }
+.q-content { flex: 1; min-width: 0; }
+.q-topic { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.q-preview { font-size: 11px; color: var(--text-sub); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 타이머 */
+.timer-section { text-align: center; padding: 24px 0; }
+.timer-label { font-size: 11px; font-weight: 600; color: var(--text-sub); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; }
+.timer-circle { width: 120px; height: 120px; margin: 0 auto 12px; position: relative; }
+.timer-circle svg { transform: rotate(-90deg); }
+.track { fill: none; stroke: var(--border); stroke-width: 8; }
+.progress-ring { fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.9s linear, stroke 0.3s; }
+.progress-ring.urgent { stroke: var(--danger); }
+.timer-number { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 36px; font-weight: 800; color: var(--text); line-height: 1; }
+.timer-number.urgent { color: var(--danger); }
+.timer-desc { font-size: 12px; color: var(--text-sub); }
+
+/* 문제 박스 */
+.question-box { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+.q-label { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 1px; margin-bottom: 7px; text-transform: uppercase; }
+.q-en { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
+.q-ko { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
+
+/* 표 */
+.table-box { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; overflow-x: auto; }
+.table-box .t-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.table-box .t-desc { font-size: 11px; color: var(--text-sub); margin-bottom: 10px; line-height: 1.4; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; padding: 7px 9px; text-align: left; border-bottom: 2px solid var(--primary); white-space: nowrap; }
+.data-table td { padding: 7px 9px; border-bottom: 1px solid var(--border); color: var(--text); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #F8FAFC; }
+
+/* 힌트 박스 */
+.hint-box { background: var(--primary-light); border-radius: var(--radius); padding: 13px 16px; margin-bottom: 16px; }
+.hint-box .h-label { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 1px; margin-bottom: 7px; text-transform: uppercase; }
+.hint-item { display: flex; align-items: flex-start; gap: 7px; margin-bottom: 5px; font-size: 13px; color: var(--text); line-height: 1.4; }
+.hint-item:last-child { margin-bottom: 0; }
+.h-dot { width: 17px; height: 17px; background: var(--primary); color: white; border-radius: 50%; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+
+/* 스텝 표시 */
+.step-row { display: flex; gap: 7px; margin-bottom: 16px; }
+.step-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+.step-dot.done { background: var(--success); }
+.step-dot.active { background: var(--primary); }
+
+/* 상황 박스 (Q5~Q7) */
+.situation-box { background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+.situation-box .s-label { font-size: 10px; font-weight: 700; color: var(--success); letter-spacing: 1px; margin-bottom: 7px; text-transform: uppercase; }
+.situation-box .s-en { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 5px; }
+.situation-box .s-ko { font-size: 11px; color: var(--text-sub); line-height: 1.5; }
+
+/* 결과 */
+.result-section { margin-bottom: 16px; }
+.r-title { font-size: 11px; font-weight: 700; color: var(--text-sub); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.answer-box { background: var(--card); border-radius: var(--radius); padding: 16px; font-size: 14px; line-height: 1.8; color: var(--text); border-left: 4px solid var(--success); }
+.sub-answer-box { background: var(--card); border-radius: 12px; padding: 14px; font-size: 14px; line-height: 1.7; color: var(--text); border-left: 3px solid var(--success); margin-bottom: 9px; }
+.sub-tip { background: var(--primary-light); border-radius: 10px; padding: 9px 13px; font-size: 12px; color: var(--primary); line-height: 1.5; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.tag { background: var(--card); border: 1.5px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 12px; color: var(--text); line-height: 1.4; }
+.tag strong { color: var(--primary); }
+.point-list { display: flex; flex-direction: column; gap: 6px; }
+.point-item { background: var(--card); border-radius: 9px; padding: 10px 13px; font-size: 13px; color: var(--text); display: flex; align-items: flex-start; gap: 7px; line-height: 1.4; }
+.tip-box { background: var(--orange-light); border: 1.5px solid var(--orange); border-radius: var(--radius); padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.5; display: flex; gap: 7px; }
+
+/* 버튼 */
+.btn { width: 100%; padding: 14px; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: #2a5cc9; }
+.btn-secondary { background: var(--card); color: var(--text-sub); border: 1.5px solid var(--border); font-size: 13px; font-weight: 500; }
+.btn-success { background: var(--success); color: white; }
+.btn-row { display: flex; gap: 9px; }
+.btn-row .btn { flex: 1; }
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 16px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); border-radius: 2px; transition: width 0.3s; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.spacer { height: 80px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- 탭 -->
+<div class="tab-bar">
+  <button class="tab-btn active" id="tab-q11" onclick="switchTab('q11')">Q11<br>의견제시</button>
+  <button class="tab-btn" id="tab-q5q7" onclick="switchTab('q5q7')">Q5~Q7<br>인터뷰</button>
+  <button class="tab-btn" id="tab-q8q10" onclick="switchTab('q8q10')">Q8~Q10<br>표 보고 답하기</button>
+</div>
+
+<!-- ═══ Q11 홈 ═══ -->
+<div id="screen-q11-home" class="screen active">
+  <div class="badge">🎯 2026년 4월 기출 기반</div>
+  <div class="section-title">Q11 의견제시<br>연습 주제 선택</div>
+  <div class="section-sub">준비 15초 → 답변 60초로 진행돼요.</div>
+  <div id="q11-list"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══ Q5~Q7 홈 ═══ -->
+<div id="screen-q5q7-home" class="screen">
+  <div class="badge">📋 실전 인터뷰 형식</div>
+  <div class="section-title">Q5~Q7 인터뷰<br>시나리오 선택</div>
+  <div class="section-sub">상황 → Q5(짧게) → Q6(보통) → Q7(길게) 순서로 진행돼요.</div>
+  <div id="q5q7-list"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══ Q8~Q10 홈 ═══ -->
+<div id="screen-q8q10-home" class="screen">
+  <div class="badge" style="background:var(--orange-light); color:var(--orange);">📊 표 보고 답하기</div>
+  <div class="section-title">Q8~Q10 연습<br>세트 선택</div>
+  <div class="section-sub">표를 보고 질문에 답해요. Q8(짧게) → Q9(보통) → Q10(의견 포함) 순서로 진행돼요.</div>
+  <div id="q8q10-list"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══ 준비 화면 (공통) ═══ -->
+<div id="screen-ready" class="screen">
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn" id="ready-back-btn">←</button>
+      <h1 id="ready-title">문제 확인</h1>
+    </div>
+    <div class="sub" id="ready-sub"></div>
+  </div>
+  <div style="height:16px;"></div>
+  <div class="progress-bar"><div class="progress-fill" id="ready-progress"></div></div>
+  <div class="step-row" id="step-row" style="display:none;">
+    <div class="step-dot" id="step-a"></div>
+    <div class="step-dot" id="step-b"></div>
+    <div class="step-dot" id="step-c"></div>
+  </div>
+  <div class="timer-section">
+    <div class="timer-label">준비 시간</div>
+    <div class="timer-circle">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle class="track" cx="60" cy="60" r="50"/>
+        <circle class="progress-ring" id="ready-ring" cx="60" cy="60" r="50" stroke-dasharray="314.2" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-number" id="ready-count">15</div>
+    </div>
+    <div class="timer-desc">질문을 읽고 답변을 구성하세요</div>
+  </div>
+  <!-- 표 (Q8~Q10 준비 화면에서 표시) -->
+  <div class="table-box" id="ready-table-box" style="display:none;">
+    <div class="t-title" id="ready-table-title"></div>
+    <div class="t-desc" id="ready-table-desc"></div>
+    <table class="data-table" id="ready-table"></table>
+  </div>
+  <div class="question-box">
+    <div class="q-label" id="ready-q-label">Question</div>
+    <div class="q-en" id="ready-q-en"></div>
+    <div class="q-ko" id="ready-q-ko"></div>
+  </div>
+  <div class="hint-box" id="hint-box">
+    <div class="h-label">💡 답변 힌트</div>
+    <div id="hint-items"></div>
+  </div>
+  <button class="btn btn-primary" id="ready-start-btn">답변 시작하기 →</button>
+  <div style="height:9px;"></div>
+  <button class="btn btn-secondary" id="ready-skip-btn">바로 시작</button>
+</div>
+
+<!-- ═══ 답변 화면 (공통) ═══ -->
+<div id="screen-answer" class="screen">
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn" id="answer-back-btn">←</button>
+      <h1 id="answer-title">답변 중</h1>
+    </div>
+    <div class="sub">마이크에 대고 크게 말해보세요</div>
+  </div>
+  <div style="height:16px;"></div>
+  <div class="step-row" id="answer-step-row" style="display:none;">
+    <div class="step-dot" id="answer-step-a"></div>
+    <div class="step-dot" id="answer-step-b"></div>
+    <div class="step-dot" id="answer-step-c"></div>
+  </div>
+  <!-- 표 (Q8~Q10 답변 중 표시) -->
+  <div class="table-box" id="answer-table-box" style="display:none;">
+    <div class="t-title" id="answer-table-title"></div>
+    <table class="data-table" id="answer-table"></table>
+  </div>
+  <div class="timer-section">
+    <div class="timer-label">답변 시간</div>
+    <div class="timer-circle">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle class="track" cx="60" cy="60" r="50"/>
+        <circle class="progress-ring" id="answer-ring" cx="60" cy="60" r="50" stroke-dasharray="314.2" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-number" id="answer-count">60</div>
+    </div>
+  </div>
+  <div class="question-box">
+    <div class="q-label" id="answer-q-label">Question</div>
+    <div class="q-en" id="answer-q-en"></div>
+  </div>
+  <button class="btn btn-success" id="answer-done-btn">✅ 답변 완료 — 모범 답변 보기</button>
+</div>
+
+<!-- ═══ Q11 결과 ═══ -->
+<div id="screen-q11-result" class="screen">
+  <div class="header">
+    <div class="header-top"><button class="back-btn" onclick="goHome('q11')">←</button><h1>모범 답변</h1></div>
+    <div class="sub" id="q11-result-topic"></div>
+  </div>
+  <div style="height:16px;"></div>
+  <div class="result-section"><div class="r-title">🎯 AL 모범 답변</div><div class="answer-box" id="q11-result-answer"></div></div>
+  <div class="divider"></div>
+  <div class="result-section"><div class="r-title">💬 핵심 표현</div><div class="tag-list" id="q11-result-expr"></div></div>
+  <div class="divider"></div>
+  <div class="result-section"><div class="r-title">✅ 채점 포인트</div><div class="point-list" id="q11-result-scoring"></div></div>
+  <div class="divider"></div>
+  <div class="result-section"><div class="r-title">⚠️ 흔한 실수</div><div class="point-list" id="q11-result-mistakes"></div></div>
+  <div class="divider"></div>
+  <div class="result-section"><div class="r-title">💡 연습 팁</div><div class="tip-box"><span>💡</span><span id="q11-result-tip"></span></div></div>
+  <div style="height:16px;"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goHome('q11')">목록으로</button>
+    <button class="btn btn-primary" onclick="nextQ11()">다음 문제 →</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══ Q5~Q7 상황 설명 ═══ -->
+<div id="screen-situation" class="screen">
+  <div class="header">
+    <div class="header-top"><button class="back-btn" onclick="goHome('q5q7')">←</button><h1 id="situation-theme"></h1></div>
+    <div class="sub">상황 확인 후 시작하세요</div>
+  </div>
+  <div style="height:16px;"></div>
+  <div class="situation-box">
+    <div class="s-label">📋 상황 설정</div>
+    <div class="s-en" id="situation-en"></div>
+    <div style="height:7px;"></div>
+    <div class="s-ko" id="situation-ko"></div>
+  </div>
+  <div class="question-box" style="background:var(--primary-light); border:none; margin-bottom:16px;">
+    <div class="q-label">진행 순서</div>
+    <div style="font-size:13px; color:var(--text); line-height:1.8;">Q5 준비(10초) → 답변(20초)<br>Q6 준비(10초) → 답변(25초)<br>Q7 준비(15초) → 답변(45초)</div>
+  </div>
+  <button class="btn btn-primary" onclick="startSubQ(5)">시작하기 →</button>
+</div>
+
+<!-- ═══ Q8~Q10 표 확인 ═══ -->
+<div id="screen-table" class="screen">
+  <div class="header">
+    <div class="header-top"><button class="back-btn" onclick="goHome('q8q10')">←</button><h1 id="table-screen-theme"></h1></div>
+    <div class="sub">표를 충분히 확인한 후 시작하세요</div>
+  </div>
+  <div style="height:16px;"></div>
+  <div class="table-box">
+    <div class="t-title" id="table-screen-title"></div>
+    <div class="t-desc" id="table-screen-desc"></div>
+    <table class="data-table" id="table-screen-table"></table>
+  </div>
+  <div class="question-box" style="background:var(--orange-light); border:none; margin-bottom:16px;">
+    <div class="q-label" style="color:var(--orange);">진행 순서</div>
+    <div style="font-size:13px; color:var(--text); line-height:1.8;">Q8 준비(5초) → 답변(15초)<br>Q9 준비(5초) → 답변(15초)<br>Q10 준비(5초) → 답변(30초)</div>
+  </div>
+  <button class="btn btn-primary" onclick="startTableQ(8)">Q8부터 시작하기 →</button>
+</div>
+
+<!-- ═══ 단계별 결과 (Q5~Q7 / Q8~Q10 공통) ═══ -->
+<div id="screen-sub-result" class="screen">
+  <div class="header">
+    <div class="header-top"><button class="back-btn" id="sub-result-back-btn">←</button><h1 id="sub-result-title">모범 답변</h1></div>
+    <div class="sub" id="sub-result-sub"></div>
+  </div>
+  <div style="height:16px;"></div>
+  <div class="step-row">
+    <div class="step-dot" id="sr-step-a"></div>
+    <div class="step-dot" id="sr-step-b"></div>
+    <div class="step-dot" id="sr-step-c"></div>
+  </div>
+  <!-- Q8~Q10 표 (결과 화면에서도 표시) -->
+  <div class="table-box" id="sr-table-box" style="display:none;">
+    <div class="t-title" id="sr-table-title"></div>
+    <table class="data-table" id="sr-table"></table>
+  </div>
+  <div class="result-section">
+    <div class="r-title" id="sub-result-q-label">모범 답변</div>
+    <div class="sub-answer-box" id="sub-result-answer"></div>
+  </div>
+  <div class="sub-tip" id="sub-result-tip"></div>
+  <div style="height:16px;"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" id="sub-result-exit-btn">그만하기</button>
+    <button class="btn btn-primary" id="sub-next-btn">다음 →</button>
+  </div>
+</div>
+
+<!-- ═══ 세트 완료 (공통) ═══ -->
+<div id="screen-set-complete" class="screen">
+  <div class="header">
+    <div class="header-top"><button class="back-btn" id="complete-back-btn">←</button><h1>세트 완료!</h1></div>
+    <div class="sub" id="complete-sub"></div>
+  </div>
+  <div style="height:16px;"></div>
+  <div style="text-align:center; padding:16px 0 24px; font-size:44px;">🎉</div>
+  <div class="result-section"><div class="r-title">💬 핵심 표현 정리</div><div class="tag-list" id="complete-expr"></div></div>
+  <div class="divider"></div>
+  <div class="result-section"><div class="r-title">⚠️ 흔한 실수</div><div class="point-list" id="complete-mistakes"></div></div>
+  <div style="height:16px;"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" id="complete-exit-btn">목록으로</button>
+    <button class="btn btn-primary" id="complete-next-btn">다음 세트 →</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+</div><!-- .app -->
+
+<script>
+// ═══════════ 데이터 ═══════════
+const Q11 = [{"topic":"음악 감상 vs 콘서트","question_en":"Which do you prefer, listening to music at home or going to concerts? Why?","question_ko":"집에서 음악을 감상하는 것과 콘서트에 가는 것 중 어떤 것을 선호하나요?","answer_structure":{"position":"I prefer going to concerts.","reason1":"실제 현장 경험","reason2":"사회적 상호작용"},"al_model_answer":"I prefer going to concerts because they offer a unique experience that you can't get from just listening to music at home. First, at concerts, you can enjoy live performances by your favorite artists, which creates a thrilling atmosphere. For example, I recently attended a concert by my favorite band, and the energy of the crowd was incredible. Secondly, concerts are great for social interaction. You can meet people who share the same interests and enjoy the music together. Overall, nothing compares to the excitement of a live concert.","key_expressions":["unique experience: 독특한 경험","live performances: 라이브 공연","social interaction: 사회적 상호작용","energy of the crowd: 관중의 에너지"],"scoring_points":["구체적인 예시를 포함하여 답변하기","명확한 이유를 제시하기","자연스럽고 유창한 발음으로 말하기"],"common_mistakes":["이유 없이 단순히 선호만 말하기","예시 없이 일반적인 내용으로만 답변하기"],"practice_tip":"개인적인 경험을 포함하여 구체적으로 말하는 연습을 하세요."},{"topic":"여행지 선택","question_en":"What factors do you consider when choosing a travel destination?","question_ko":"여행지를 선택할 때 어떤 요소를 고려하나요?","answer_structure":{"position":"I prioritize culture when choosing destinations.","reason1":"문화적 경험","reason2":"음식"},"al_model_answer":"When choosing a travel destination, I prioritize culture. I believe experiencing different cultures enriches my life. For example, I love visiting places like Italy, where I can explore historical sites and enjoy authentic Italian cuisine. The culture and food together create a memorable experience. Additionally, meeting locals and learning their traditions adds a personal touch to my travels. Overall, culture is the main reason I select my travel destinations.","key_expressions":["prioritize culture: 문화를 우선시하다","enrich my life: 내 삶을 풍요롭게 하다","authentic cuisine: 정통 요리","meaningful travel: 의미 있는 여행"],"scoring_points":["구체적인 예시를 통해 주장을 뒷받침하기","자연스러운 연결어 사용하기","감정을 담아 말하기"],"common_mistakes":["주제를 벗어난 이야기하기","답변 시간이 너무 짧거나 길어지기"],"practice_tip":"여행지 이야기 시 구체적인 경험을 포함시키세요."},{"topic":"신입사원의 성공적인 직장 생활","question_en":"What do you think are the most important factors for a new employee to succeed in the workplace?","question_ko":"신입사원이 직장에서 성공하기 위해 가장 중요한 요인은 무엇입니까?","answer_structure":{"position":"Communication skills and adaptability are essential.","reason1":"의사소통 능력","reason2":"적응력"},"al_model_answer":"In my opinion, communication skills and adaptability are crucial for new employees. First of all, good communication helps them convey their ideas clearly and collaborate effectively. For example, during team projects, being able to express thoughts and listen to others leads to better outcomes. Secondly, adaptability is equally important because the workplace can be unpredictable. A new employee who adjusts to changing tasks will be more successful. Therefore, these two factors are key to thriving in a new job.","key_expressions":["communication skills: 의사소통 능력","adaptability: 적응력","collaborate effectively: 효과적으로 협력하다","thrive in a new job: 새 직장에서 성공하다"],"scoring_points":["구체적인 예시를 통해 주장을 뒷받침하기","자연스러운 연결어 사용하기","명확한 발음과 유창성 유지하기"],"common_mistakes":["답변이 너무 일반적이거나 구체성이 부족한 경우","시간 관리를 못해 답변이 길어지는 경우"],"practice_tip":"실제 상황을 가정하고 구체적인 예시를 들어 연습하세요."},{"topic":"프로젝트 문제 해결 방법","question_en":"What are some effective ways to solve problems in a project?","question_ko":"프로젝트에서 문제를 해결하는 효과적인 방법은 무엇인가요?","answer_structure":{"position":"Teamwork is essential for solving project problems.","reason1":"협업의 중요성","reason2":"다양한 관점"},"al_model_answer":"I believe teamwork is essential for solving project problems. When team members come together, they can share ideas and perspectives, leading to more creative solutions. For example, in my last project, we faced a delay due to technical issues. By holding a team meeting, we brainstormed approaches and one member suggested a new tool that helped us get back on track. This showed me how collaboration can turn challenges into opportunities.","key_expressions":["teamwork is essential: 협업은 필수적이다","share ideas: 아이디어를 공유하다","brainstorm approaches: 다양한 방법을 모색하다","turn challenges into opportunities: 도전을 기회로"],"scoring_points":["구체적인 사례를 포함할 것","일관된 구조로 답변할 것","명확하고 자연스럽게 말할 것"],"common_mistakes":["답변이 불명확하거나 모호한 경우","사례가 부족하거나 관련성이 떨어지는 경우"],"practice_tip":"팀워크와 커뮤니케이션의 중요성을 강조하며 연습하세요."},{"topic":"가족 여행 계획","question_en":"Do you think planning a family trip is important? Why or why not?","question_ko":"가족 여행 계획이 중요하다고 생각하나요? 그 이유는?","answer_structure":{"position":"Planning a family trip is essential.","reason1":"가족 간의 유대감","reason2":"효율적인 시간 관리"},"al_model_answer":"I strongly believe that planning a family trip is essential. First, it helps strengthen bonds between family members. When everyone is involved in planning, it creates excitement and anticipation. Secondly, planning allows for efficient time management. For instance, last year my family went to Jeju Island. We made an itinerary in advance, which helped us visit all attractions without wasting time. Overall, planning not only enhances our experience but also makes trips more enjoyable.","key_expressions":["strengthen the bonds: 유대감을 강화하다","efficient time management: 효율적인 시간 관리","make an itinerary: 일정을 짜다","enhance our experience: 경험을 향상시키다"],"scoring_points":["구체적인 예시를 제공하기","명확하고 논리적인 이유 제시하기","자연스럽고 유창한 발음 유지하기"],"common_mistakes":["이유가 불명확하거나 모호한 경우","시간 관리 부족으로 답변이 길어지는 경우"],"practice_tip":"미리 준비하고 자연스럽게 말할 수 있도록 연습하세요."}];
+
+const Q5Q7 = [{"theme":"새로운 은행과의 거래 여부","situation":"Imagine that a new bank is doing research in your country. You have agreed to answer some questions about whether you would consider using their services.","situation_ko":"새로운 은행이 당신의 나라에서 연구를 하고 있습니다. 그들의 서비스 이용 여부에 대한 질문에 답하기로 했습니다.","Q5":{"question":"Would you consider opening an account with a new bank?","question_ko":"새로운 은행에 계좌를 개설할 생각이 있으신가요?","model_answer":"Yes, I would consider it if they offer good services and competitive rates.","tip":"간단하게 긍정 또는 부정을 명확히 표현하세요."},"Q6":{"question":"What factors would influence your decision to choose a new bank?","question_ko":"새로운 은행을 선택하는 데 영향을 미치는 요인은 무엇인가요?","model_answer":"The main factors would be the interest rates and customer service. I want to make sure I get the best deal possible and receive support when I need it.","tip":"구체적인 경험이나 선호를 언급하세요."},"Q7":{"question":"Why do you think people are hesitant to switch to a new bank?","question_ko":"사람들이 새로운 은행으로 전환하는 것을 주저하는 이유는 무엇인가요?","model_answer":"People are often hesitant to switch banks for a couple of reasons. First, they feel comfortable with their current bank and worry about the hassle of moving accounts. For example, automatic payments might be disrupted. Second, trust plays a big role — many customers are concerned about the reliability of a new bank.","tip":"이유를 두 가지 제시하고 구체적인 예시를 포함하세요."},"key_expressions":["competitive rates: 경쟁력 있는 금리","customer service: 고객 서비스","financial routine: 재정적 일상","reliability: 신뢰성"],"common_mistakes":["답변이 너무 짧거나 불명확함","이유와 예시를 잘 연결하지 않음"]},{"theme":"노트북과 데스크탑 선호","situation":"Imagine that a tech company is doing research in your country. You have agreed to answer some questions about your preferences regarding laptops and desktop computers.","situation_ko":"한 기술 회사가 당신의 나라에서 연구를 하고 있습니다. 노트북과 데스크탑에 대한 선호도 질문에 답하기로 했습니다.","Q5":{"question":"Do you prefer laptops over desktop computers?","question_ko":"노트북이 데스크탑보다 더 좋다고 생각하시나요?","model_answer":"Yes, I definitely prefer laptops because they are portable and easy to carry around.","tip":"간단하고 명확하게 답변하세요."},"Q6":{"question":"What features do you consider important when choosing a laptop?","question_ko":"노트북을 선택할 때 어떤 기능이 중요하다고 생각하시나요?","model_answer":"I think battery life and weight are very important. A long battery life helps me work without looking for outlets, and a lightweight laptop is easier to carry.","tip":"두 가지 이상의 요소를 언급하세요."},"Q7":{"question":"Why do you think people prefer laptops over desktop computers?","question_ko":"사람들이 데스크탑보다 노트북을 선호하는 이유는 무엇인가요?","model_answer":"I believe people prefer laptops because of their portability and convenience. For example, students can bring laptops to class or libraries, studying anywhere. Additionally, many professionals work remotely, making laptops essential for a flexible work environment.","tip":"두 가지 이유를 제시하고 구체적인 예시를 들어주세요."},"key_expressions":["portable: 휴대성이 좋다","battery life: 배터리 수명","lightweight: 가벼운","flexible work environment: 유연한 근무 환경"],"common_mistakes":["이해하기 어려운 긴 문장 사용하기","구체적인 예시 없이 일반적인 답변하기"]},{"theme":"온라인 쇼핑 습관","situation":"Imagine that a market research company is doing research in your country. You have agreed to answer some questions about your online shopping habits.","situation_ko":"한 시장 조사 회사가 당신의 나라에서 조사를 하고 있습니다. 온라인 쇼핑 습관에 대한 질문에 답하기로 했습니다.","Q5":{"question":"Do you shop online frequently?","question_ko":"온라인 쇼핑을 자주 하나요?","model_answer":"Yes, I shop online quite often, at least once a week.","tip":"간단명료하게 대답하세요."},"Q6":{"question":"What types of products do you usually buy online?","question_ko":"주로 어떤 종류의 제품을 온라인에서 구매하나요?","model_answer":"I usually buy clothing and electronics online. It's convenient and I can find better deals.","tip":"구체적으로 두 가지 이상 언급하세요."},"Q7":{"question":"Why do you prefer to shop online instead of in physical stores?","question_ko":"왜 오프라인 매장 대신 온라인 쇼핑을 선호하나요?","model_answer":"I prefer online shopping for a couple of reasons. First, it's more convenient — I can shop anytime and anywhere. Second, I often find better prices and discounts. For example, I recently bought a laptop online that was 20% cheaper than in the store.","tip":"이유를 두 개 이상 제시하고 구체적인 예시를 포함하세요."},"key_expressions":["convenient: 편리하다","find better deals: 더 좋은 거래를 찾다","wide variety of options: 다양한 선택지","save time: 시간을 절약하다"],"common_mistakes":["답변이 너무 짧거나 불완전함","구체적인 예시 없이 일반적인 의견만 제시함"]},{"theme":"운동 및 건강 관리","situation":"Imagine that a health organization is doing research in your country. You have agreed to answer some questions about exercise and health management.","situation_ko":"건강 기관이 당신의 나라에서 연구를 하고 있습니다. 운동 및 건강 관리에 대한 질문에 답하기로 했습니다.","Q5":{"question":"Do you exercise regularly?","question_ko":"정기적으로 운동하나요?","model_answer":"Yes, I try to exercise at least three times a week.","tip":"간단하고 명확하게 답변하세요."},"Q6":{"question":"What type of exercise do you prefer and why?","question_ko":"어떤 종류의 운동을 선호하나요? 그 이유는?","model_answer":"I prefer running because it helps me clear my mind and stay fit. I also enjoy yoga for the community aspect.","tip":"두 가지 이상의 이유를 제시하세요."},"Q7":{"question":"What do you think are the benefits of regular exercise?","question_ko":"정기적인 운동의 장점은 무엇이라고 생각하나요?","model_answer":"Regular exercise has many benefits. Firstly, it improves physical health by strengthening the heart and muscles. Secondly, it enhances mental well-being by reducing stress. For example, after a long day, going for a run helps me relax and feel more energized.","tip":"구체적인 예시와 함께 이유를 두 가지 이상 언급하세요."},"key_expressions":["improves physical health: 신체 건강을 개선하다","reduces stress: 스트레스를 줄이다","stay fit: 건강을 유지하다","mental well-being: 정신적 건강"],"common_mistakes":["답변이 너무 짧거나 단편적이다","이유나 예시 없이 의견을 제시한다"]}];
+
+const Q8Q10 = [{"theme":"Company Event Schedule","table_title":"Annual Company Events","table_description":"This table shows the schedule of our annual company events including dates and locations.","table_data":{"headers":["Event","Date","Time","Location"],"rows":[["Kick-off Meeting","March 15, 2024","10:00 AM","Conference Room A"],["Team Building","April 22, 2024","1:00 PM","Outdoor Park"],["Quarterly Review","June 10, 2024","3:00 PM","Conference Room B"],["Annual Party","December 20, 2024","6:00 PM","Banquet Hall"],["Training Workshop","September 5, 2024","9:00 AM","Training Room 1"]]},"Q8":{"question":"What is the date of the Annual Party?","question_ko":"연례 파티 날짜는 언제인가요?","model_answer":"The Annual Party is on December 20, 2024.","tip":"표에서 직접 찾은 정보를 간단하게 요약하세요."},"Q9":{"question":"Which event is scheduled to occur first, the Team Building or the Quarterly Review?","question_ko":"팀 빌딩과 분기 리뷰 중 어느 행사가 먼저 예정되어 있나요?","model_answer":"The Team Building event is scheduled for April 22, 2024, while the Quarterly Review is on June 10, 2024. Therefore, the Team Building occurs first.","tip":"날짜를 비교하여 정리하세요."},"Q10":{"question":"Which event do you think is the most important and why?","question_ko":"가장 중요한 행사라고 생각하는 것은 무엇이며 그 이유는 무엇인가요?","model_answer":"I believe the Quarterly Review is the most important event. It allows us to assess our performance and set goals for the next quarter. This meeting provides insights into our progress and helps align the team's focus. Additionally, it is a good opportunity for team members to voice concerns and suggestions for improvement.","tip":"표 정보를 바탕으로 자신의 의견을 충분히 설명하세요."},"key_expressions":["scheduled for: ~로 예정되어 있다","occurs first: 먼저 발생하다","most important: 가장 중요한","opportunity: 기회"],"common_mistakes":["표에서 정보를 잘못 해석하는 경우","답변이 너무 짧거나 불충분한 경우"]},{"theme":"제품 가격 비교표","table_title":"Product Price Comparison","table_description":"This table compares different products based on their features and prices.","table_data":{"headers":["Product","Price","Warranty","Rating"],"rows":[["Product A","$200","2 years","4.5"],["Product B","$150","1 year","4.0"],["Product C","$250","3 years","5.0"],["Product D","$180","2 years","4.2"],["Product E","$220","1 year","4.8"]]},"Q8":{"question":"What is the price of Product B?","question_ko":"제품 B의 가격은 얼마인가요?","model_answer":"The price of Product B is $150.","tip":"가격을 정확히 읽고 말하는 것이 중요합니다."},"Q9":{"question":"Which product has the highest rating and how much does it cost?","question_ko":"가장 높은 평가를 받은 제품은 무엇이며, 가격은 얼마인가요?","model_answer":"Product C has the highest rating of 5.0, and it costs $250.","tip":"평가와 가격을 비교할 때는 각 제품의 정보를 잘 살펴보세요."},"Q10":{"question":"Based on the table, which product would you recommend and why?","question_ko":"표를 바탕으로 어떤 제품을 추천하고 그 이유는 무엇인가요?","model_answer":"I would recommend Product C because it has the highest rating of 5.0 and a 3-year warranty, indicating better quality and durability. Although it is priced at $250, the investment could be worth it for long-term use. The high rating also suggests customer satisfaction, making it a reliable choice.","tip":"추천할 때는 제품의 장점과 가격, 보증 기간 등을 잘 설명하세요."},"key_expressions":["highest rating: 가장 높은 평가","long-term use: 장기 사용","customer satisfaction: 고객 만족도","reliable choice: 믿을 수 있는 선택"],"common_mistakes":["제품 이름이나 가격을 잘못 말하는 것","비교할 때 기준을 명확히 하지 않는 것"]},{"theme":"Employee Training Program","table_title":"Training Program Schedule","table_description":"The following table outlines the schedule for employee training programs in the upcoming month.","table_data":{"headers":["Date","Training Topic","Duration","Location"],"rows":[["Oct 1","Customer Service","3 hours","Room A"],["Oct 5","Sales Strategies","4 hours","Room B"],["Oct 10","Time Management","2 hours","Room C"],["Oct 15","Team Building","5 hours","Room D"],["Oct 20","Conflict Resolution","3 hours","Room E"]]},"Q8":{"question":"What is the training topic scheduled for October 5th?","question_ko":"10월 5일에 예정된 교육 주제는 무엇인가요?","model_answer":"The training topic scheduled for October 5th is Sales Strategies.","tip":"표에서 직접 정보를 찾아 간단히 답하세요."},"Q9":{"question":"Which training program has the longest duration, and how long is it?","question_ko":"가장 긴 시간 동안 진행되는 교육 프로그램은 무엇이며, 얼마나 걸리나요?","model_answer":"The training program with the longest duration is Team Building, which lasts for 5 hours.","tip":"표를 비교하고 계산하여 답변하세요."},"Q10":{"question":"Which training program do you think is the most beneficial for employees, and why?","question_ko":"어떤 교육 프로그램이 직원들에게 가장 유익하다고 생각하며, 그 이유는?","model_answer":"I believe the Team Building program on October 15th is the most beneficial. It lasts 5 hours, allowing ample time for team activities and communication, which strengthens relationships among colleagues. Effective teamwork is crucial in a work environment, and this program can enhance collaboration and trust within teams.","tip":"자신의 의견을 명확히 하고 이유를 설명하세요."},"key_expressions":["training program: 교육 프로그램","duration: 기간","beneficial: 유익한","strengthen relationships: 관계를 강화하다"],"common_mistakes":["표의 정보를 정확히 읽지 않음","답변이 너무 짧거나 불완전함"]}];
+
+// ═══════════ 상태 ═══════════
+let currentTab = 'q11';
+let currentQ11Idx = 0;
+let currentQ5Q7Idx = 0;
+let currentQ8Q10Idx = 0;
+let currentSubQ = 0;
+let readyTimer = null, answerTimer = null;
+let readyLeft = 15, answerLeft = 60;
+let readyTotal = 15, answerTotal = 60;
+
+const SUB_TIMES_Q5Q7 = {5:{ready:10,answer:20}, 6:{ready:10,answer:25}, 7:{ready:15,answer:45}};
+const SUB_TIMES_Q8Q10 = {8:{ready:5,answer:15}, 9:{ready:5,answer:15}, 10:{ready:5,answer:30}};
+
+// ═══════════ 초기화 ═══════════
+function init() {
+  // Q11 목록
+  document.getElementById('q11-list').innerHTML = Q11.map((q,i) => `
+    <div class="question-card" onclick="selectQ11(${i})">
+      <div class="q-num blue">Q${i+1}</div>
+      <div class="q-content"><div class="q-topic">${q.topic}</div><div class="q-preview">${q.question_en}</div></div>
+      <span style="color:var(--text-sub);">›</span>
+    </div>`).join('');
+
+  // Q5~Q7 목록
+  document.getElementById('q5q7-list').innerHTML = Q5Q7.map((s,i) => `
+    <div class="question-card" onclick="selectQ5Q7(${i})">
+      <div class="q-num green">S${i+1}</div>
+      <div class="q-content"><div class="q-topic">${s.theme}</div><div class="q-preview">${s.situation}</div></div>
+      <span style="color:var(--text-sub);">›</span>
+    </div>`).join('');
+
+  // Q8~Q10 목록
+  document.getElementById('q8q10-list').innerHTML = Q8Q10.map((s,i) => `
+    <div class="question-card" onclick="selectQ8Q10(${i})">
+      <div class="q-num orange">T${i+1}</div>
+      <div class="q-content"><div class="q-topic">${s.theme}</div><div class="q-preview">${s.table_title}</div></div>
+      <span style="color:var(--text-sub);">›</span>
+    </div>`).join('');
+
+  // 공통 이벤트
+  document.getElementById('ready-back-btn').onclick = () => goHome(currentTab);
+  document.getElementById('answer-back-btn').onclick = () => goHome(currentTab);
+  document.getElementById('ready-start-btn').onclick = () => startAnswer();
+  document.getElementById('ready-skip-btn').onclick = () => { clearTimers(); startAnswer(); };
+  document.getElementById('answer-done-btn').onclick = () => showSubResult();
+}
+
+// ═══════════ 탭 ═══════════
+function switchTab(tab) {
+  currentTab = tab;
+  ['q11','q5q7','q8q10'].forEach(t => document.getElementById(`tab-${t}`).classList.toggle('active', t === tab));
+  if (tab === 'q11') showScreen('screen-q11-home');
+  else if (tab === 'q5q7') showScreen('screen-q5q7-home');
+  else showScreen('screen-q8q10-home');
+}
+
+function goHome(tab) { clearTimers(); switchTab(tab); }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════ Q11 ═══════════
+function selectQ11(idx) {
+  currentQ11Idx = idx; currentSubQ = 11;
+  const q = Q11[idx];
+  setReadyScreen(`Q11 문제 확인`, `${idx+1} / ${Q11.length}번째 주제`, `${((idx+1)/Q11.length)*100}%`,
+    'Q11 Question', q.question_en, q.question_ko, false);
+  const s = q.answer_structure;
+  document.getElementById('hint-items').innerHTML = `
+    <div class="hint-item"><div class="h-dot">P</div><span>입장: ${s.position}</span></div>
+    <div class="hint-item"><div class="h-dot">1</div><span>이유 1: ${s.reason1}</span></div>
+    <div class="hint-item"><div class="h-dot">2</div><span>이유 2: ${s.reason2}</span></div>`;
+  document.getElementById('hint-box').style.display = 'block';
+  document.getElementById('step-row').style.display = 'none';
+  document.getElementById('ready-table-box').style.display = 'none';
+  startReadyTimer(15, 15);
+  showScreen('screen-ready');
+}
+
+function showQ11Result() {
+  const q = Q11[currentQ11Idx];
+  document.getElementById('q11-result-topic').textContent = q.topic;
+  document.getElementById('q11-result-answer').textContent = q.al_model_answer;
+  document.getElementById('q11-result-expr').innerHTML = q.key_expressions.map(e => {
+    const [a,b] = e.split(': '); return `<div class="tag"><strong>${a}</strong>${b?': '+b:''}</div>`;}).join('');
+  document.getElementById('q11-result-scoring').innerHTML = q.scoring_points.map(p=>
+    `<div class="point-item"><span>✅</span><span>${p}</span></div>`).join('');
+  document.getElementById('q11-result-mistakes').innerHTML = q.common_mistakes.map(m=>
+    `<div class="point-item"><span>⚠️</span><span>${m}</span></div>`).join('');
+  document.getElementById('q11-result-tip').textContent = q.practice_tip;
+  showScreen('screen-q11-result');
+}
+
+function nextQ11() { selectQ11((currentQ11Idx+1) % Q11.length); }
+
+// ═══════════ Q5~Q7 ═══════════
+function selectQ5Q7(idx) {
+  currentQ5Q7Idx = idx;
+  const s = Q5Q7[idx];
+  document.getElementById('situation-theme').textContent = s.theme;
+  document.getElementById('situation-en').textContent = s.situation;
+  document.getElementById('situation-ko').textContent = s.situation_ko;
+  showScreen('screen-situation');
+}
+
+function startSubQ(q) {
+  currentSubQ = q;
+  const set = Q5Q7[currentQ5Q7Idx];
+  const qdata = set[`Q${q}`];
+  const times = SUB_TIMES_Q5Q7[q];
+  const labels = ['Q5','Q6','Q7'];
+  const qIdx = q - 5;
+
+  setReadyScreen(`Q${q} 문제 확인`, set.theme, `${((q-4)/3)*100}%`,
+    `Q${q} Question`, qdata.question, qdata.question_ko, true);
+  document.getElementById('hint-box').style.display = 'none';
+  document.getElementById('ready-table-box').style.display = 'none';
+  setSteps('step-row', 'step-', labels, qIdx);
+  setSteps('answer-step-row', 'answer-step-', labels, qIdx);
+  setAnswerScreen(`Q${q} 답변 중`, `Q${q} Question`, qdata.question, true, labels, qIdx);
+  startReadyTimer(times.ready, times.ready);
+  showScreen('screen-ready');
+}
+
+// ═══════════ Q8~Q10 ═══════════
+function selectQ8Q10(idx) {
+  currentQ8Q10Idx = idx;
+  const s = Q8Q10[idx];
+  document.getElementById('table-screen-theme').textContent = s.theme;
+  document.getElementById('table-screen-title').textContent = s.table_title;
+  document.getElementById('table-screen-desc').textContent = s.table_description;
+  renderTable('table-screen-table', s.table_data);
+  showScreen('screen-table');
+}
+
+function startTableQ(q) {
+  currentSubQ = q;
+  const set = Q8Q10[currentQ8Q10Idx];
+  const qdata = set[`Q${q}`];
+  const times = SUB_TIMES_Q8Q10[q];
+  const labels = ['Q8','Q9','Q10'];
+  const qIdx = q - 8;
+
+  setReadyScreen(`Q${q} 문제 확인`, set.theme, `${((q-7)/3)*100}%`,
+    `Q${q} Question`, qdata.question, qdata.question_ko, true);
+  document.getElementById('hint-box').style.display = 'none';
+  // 표 표시
+  document.getElementById('ready-table-box').style.display = 'block';
+  document.getElementById('ready-table-title').textContent = set.table_title;
+  document.getElementById('ready-table-desc').textContent = '';
+  renderTable('ready-table', set.table_data);
+  setSteps('step-row', 'step-', labels, qIdx);
+  setSteps('answer-step-row', 'answer-step-', labels, qIdx);
+  // 답변 화면 표 설정
+  document.getElementById('answer-table-box').style.display = 'block';
+  document.getElementById('answer-table-title').textContent = set.table_title;
+  renderTable('answer-table', set.table_data);
+  setAnswerScreen(`Q${q} 답변 중`, `Q${q} Question`, qdata.question, true, labels, qIdx);
+  startReadyTimer(times.ready, times.ready);
+  showScreen('screen-ready');
+}
+
+// ═══════════ 공통 헬퍼 ═══════════
+function setReadyScreen(title, sub, progress, label, en, ko, showStep) {
+  document.getElementById('ready-title').textContent = title;
+  document.getElementById('ready-sub').textContent = sub;
+  document.getElementById('ready-progress').style.width = progress;
+  document.getElementById('ready-q-label').textContent = label;
+  document.getElementById('ready-q-en').textContent = en;
+  document.getElementById('ready-q-ko').textContent = ko;
+  document.getElementById('step-row').style.display = showStep ? 'flex' : 'none';
+  document.getElementById('answer-step-row').style.display = showStep ? 'flex' : 'none';
+}
+
+function setAnswerScreen(title, label, en, showStep, labels, activeIdx) {
+  document.getElementById('answer-title').textContent = title;
+  document.getElementById('answer-q-label').textContent = label;
+  document.getElementById('answer-q-en').textContent = en;
+}
+
+function setSteps(rowId, prefix, labels, activeIdx) {
+  const row = document.getElementById(rowId);
+  row.style.display = 'flex';
+  const dots = row.querySelectorAll('.step-dot');
+  dots.forEach((d,i) => d.className = 'step-dot' + (i < activeIdx ? ' done' : i === activeIdx ? ' active' : ''));
+}
+
+function renderTable(tableId, data) {
+  const tbl = document.getElementById(tableId);
+  const headers = data.headers || [];
+  const rows = data.rows || [];
+  tbl.innerHTML = `<thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+
+function showSubResult() {
+  clearTimers();
+  const isQ8Q10 = currentSubQ >= 8;
+  const set = isQ8Q10 ? Q8Q10[currentQ8Q10Idx] : (currentSubQ >= 5 ? Q5Q7[currentQ5Q7Idx] : null);
+
+  if (currentSubQ === 11) { showQ11Result(); return; }
+
+  const qdata = set[`Q${currentSubQ}`];
+  const labels = isQ8Q10 ? ['Q8','Q9','Q10'] : ['Q5','Q6','Q7'];
+  const qIdx = isQ8Q10 ? currentSubQ - 8 : currentSubQ - 5;
+  const maxQ = isQ8Q10 ? 10 : 7;
+
+  document.getElementById('sub-result-title').textContent = `Q${currentSubQ} 모범 답변`;
+  document.getElementById('sub-result-sub').textContent = set.theme;
+  document.getElementById('sub-result-q-label').textContent = `Q${currentSubQ} 모범 답변`;
+  document.getElementById('sub-result-answer').textContent = qdata.model_answer;
+  document.getElementById('sub-result-tip').textContent = '💡 ' + qdata.tip;
+
+  // Q8~Q10 결과에서 표 표시
+  const srTableBox = document.getElementById('sr-table-box');
+  if (isQ8Q10) {
+    srTableBox.style.display = 'block';
+    document.getElementById('sr-table-title').textContent = set.table_title;
+    renderTable('sr-table', set.table_data);
+  } else {
+    srTableBox.style.display = 'none';
+  }
+
+  // 스텝 업데이트 (완료된 것)
+  ['sr-step-a','sr-step-b','sr-step-c'].forEach((id,i) => {
+    document.getElementById(id).className = 'step-dot' + (i <= qIdx ? ' done' : '');
+  });
+
+  // 뒤로/다음 버튼
+  document.getElementById('sub-result-back-btn').onclick = () => goHome(isQ8Q10 ? 'q8q10' : 'q5q7');
+  document.getElementById('sub-result-exit-btn').onclick = () => goHome(isQ8Q10 ? 'q8q10' : 'q5q7');
+  const nextBtn = document.getElementById('sub-next-btn');
+  if (currentSubQ < maxQ) {
+    nextBtn.textContent = `Q${currentSubQ+1} 진행하기 →`;
+    nextBtn.onclick = () => isQ8Q10 ? startTableQ(currentSubQ+1) : startSubQ(currentSubQ+1);
+  } else {
+    nextBtn.textContent = '완료 — 총정리 보기';
+    nextBtn.onclick = () => showSetComplete(isQ8Q10 ? 'q8q10' : 'q5q7');
+  }
+  showScreen('screen-sub-result');
+}
+
+function showSetComplete(tab) {
+  const set = tab === 'q8q10' ? Q8Q10[currentQ8Q10Idx] : Q5Q7[currentQ5Q7Idx];
+  document.getElementById('complete-sub').textContent = set.theme;
+  document.getElementById('complete-expr').innerHTML = set.key_expressions.map(e => {
+    const [a,b] = e.split(': '); return `<div class="tag"><strong>${a}</strong>${b?': '+b:''}</div>`;}).join('');
+  document.getElementById('complete-mistakes').innerHTML = set.common_mistakes.map(m=>
+    `<div class="point-item"><span>⚠️</span><span>${m}</span></div>`).join('');
+  document.getElementById('complete-back-btn').onclick = () => goHome(tab);
+  document.getElementById('complete-exit-btn').onclick = () => goHome(tab);
+  document.getElementById('complete-next-btn').onclick = () =>
+    tab === 'q8q10' ? selectQ8Q10((currentQ8Q10Idx+1) % Q8Q10.length) : selectQ5Q7((currentQ5Q7Idx+1) % Q5Q7.length);
+  showScreen('screen-set-complete');
+}
+
+// ═══════════ 타이머 ═══════════
+function startReadyTimer(total, left) {
+  readyTotal = total; readyLeft = left;
+  updateReadyTimer();
+  readyTimer = setInterval(() => {
+    readyLeft--;
+    updateReadyTimer();
+    if (readyLeft <= 0) { clearInterval(readyTimer); startAnswer(); }
+  }, 1000);
+}
+
+function startAnswer() {
+  clearTimers();
+  let total;
+  if (currentSubQ === 11) total = 60;
+  else if (currentSubQ >= 8) total = SUB_TIMES_Q8Q10[currentSubQ].answer;
+  else total = SUB_TIMES_Q5Q7[currentSubQ].answer;
+
+  // Q8~Q10이 아니면 표 숨기기
+  if (currentSubQ < 8) {
+    document.getElementById('answer-table-box').style.display = 'none';
+  }
+
+  answerTotal = total; answerLeft = total;
+  updateAnswerTimer();
+  showScreen('screen-answer');
+  answerTimer = setInterval(() => {
+    answerLeft--;
+    updateAnswerTimer();
+    if (answerLeft <= 0) { clearInterval(answerTimer); showSubResult(); }
+  }, 1000);
+}
+
+function updateReadyTimer() {
+  const circumference = 314.2;
+  const el = document.getElementById('ready-count');
+  const ring = document.getElementById('ready-ring');
+  ring.style.strokeDashoffset = circumference * (1 - readyLeft/readyTotal);
+  el.textContent = readyLeft;
+  const urgent = readyLeft <= 5;
+  el.className = 'timer-number' + (urgent ? ' urgent' : '');
+  ring.className = 'progress-ring' + (urgent ? ' urgent' : '');
+}
+
+function updateAnswerTimer() {
+  const circumference = 314.2;
+  const el = document.getElementById('answer-count');
+  const ring = document.getElementById('answer-ring');
+  ring.style.strokeDashoffset = circumference * (1 - answerLeft/answerTotal);
+  el.textContent = answerLeft;
+  const urgent = answerLeft <= 10;
+  el.className = 'timer-number' + (urgent ? ' urgent' : '');
+  ring.className = 'progress-ring' + (urgent ? ' urgent' : '');
+}
+
+function clearTimers() {
+  if (readyTimer) { clearInterval(readyTimer); readyTimer = null; }
+  if (answerTimer) { clearInterval(answerTimer); answerTimer = null; }
+}
+
+init();
+</script>
+</body>
+</html>
