@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>OPIc 미신 #01 — 5-5 vs 6-6 (캐러셀 7장)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    background: #F5F5F7;
+    min-height: 100vh;
+    color: #0F0F12;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  .meta {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 20px;
+    padding: 14px 18px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #E5E5EA;
+  }
+  .meta h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+  .meta p { font-size: 12px; color: #6E6E73; }
+
+  /* Carousel viewport */
+  .carousel-wrap {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 720px;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    padding: 6.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.32s ease, transform 0.32s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.prev {
+    transform: translateX(-20px);
+  }
+
+  .slide-number {
+    position: absolute;
+    bottom: 22px;
+    right: 28px;
+    font-size: 12px;
+    color: rgba(0,0,0,0.32);
+    font-weight: 500;
+  }
+  .slide-number.dark { color: rgba(255,255,255,0.45); }
+
+  /* Slide 1 — Hook */
+  .s1 { background: #0F0F12; color: #FFFFFF; }
+  .s1 .tag { display: inline-block; background: #FF3B30; color: #FFFFFF; padding: 8px 18px; border-radius: 100px; font-size: 14px; font-weight: 600; align-self: flex-start; }
+  .s1 .kicker { font-size: 16px; color: #8E8E93; margin-bottom: 12px; }
+  .s1 .headline { font-size: clamp(36px, 7.6vw, 56px); font-weight: 700; line-height: 1.15; letter-spacing: -1px; }
+  .s1 .footer { display: flex; justify-content: space-between; align-items: center; }
+  .s1 .footer .from { font-size: 14px; color: #8E8E93; }
+  .s1 .footer .arrow { font-size: 22px; }
+
+  /* Slide 2 — Pull quote */
+  .s2 { background: #FFFFFF; }
+  .s2 .qmark { font-size: clamp(80px, 16vw, 120px); color: #FF3B30; font-family: Georgia, serif; line-height: 0.8; font-weight: 700; }
+  .s2 .quote { font-size: clamp(26px, 5.2vw, 38px); font-weight: 600; line-height: 1.35; letter-spacing: -0.5px; }
+  .s2 .source-line { height: 1px; background: #E5E5EA; margin-bottom: 14px; }
+  .s2 .source { font-size: 14px; color: #6E6E73; font-weight: 500; }
+
+  /* Slide 3 — Truth 1 */
+  .s3 { background: #F2F2F7; }
+  .s3 .tag { font-size: 14px; color: #FF3B30; font-weight: 700; letter-spacing: 0.8px; }
+  .s3 .headline { font-size: clamp(26px, 5.3vw, 38px); font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 24px; }
+  .s3 .compare { display: flex; gap: 12px; align-items: center; }
+  .s3 .compare-item { flex: 1; background: #FFFFFF; border: 1px solid #D1D1D6; border-radius: 14px; padding: 22px 14px; text-align: center; }
+  .s3 .compare-label { font-size: 13px; color: #6E6E73; margin-bottom: 6px; font-weight: 500; }
+  .s3 .compare-num { font-size: clamp(22px, 4.5vw, 32px); font-weight: 700; }
+  .s3 .vs { font-size: 18px; color: #6E6E73; font-weight: 500; }
+  .s3 .caption { font-size: 14px; color: #6E6E73; line-height: 1.5; }
+
+  /* Slide 4 — Truth 2 */
+  .s4 { background: #F2F2F7; }
+  .s4 .tag { font-size: 14px; color: #FF3B30; font-weight: 700; letter-spacing: 0.8px; }
+  .s4 .headline { font-size: clamp(24px, 5vw, 36px); font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 24px; }
+  .s4 .grid-q { display: grid; grid-template-columns: repeat(15, 1fr); gap: 5px; }
+  .s4 .q-cell { aspect-ratio: 1; background: #D1D1D6; border-radius: 4px; }
+  .s4 .q-cell.al { background: #FF3B30; }
+  .s4 .legend { font-size: 14px; color: #6E6E73; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+  .s4 .legend .dot { display: inline-block; width: 12px; height: 12px; background: #FF3B30; border-radius: 3px; }
+
+  /* Slide 5 — Truth 3 (warning) */
+  .s5 { background: #FFF4F2; }
+  .s5 .tag { font-size: 14px; color: #FF3B30; font-weight: 700; letter-spacing: 0.8px; }
+  .s5 .headline { font-size: clamp(24px, 5vw, 36px); font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 24px; }
+  .s5 .callout { background: #FFFFFF; border-left: 5px solid #FF3B30; padding: 22px 26px; }
+  .s5 .callout-head { font-size: clamp(18px, 3.2vw, 22px); color: #FF3B30; font-weight: 700; margin-bottom: 8px; }
+  .s5 .callout-body { font-size: clamp(14px, 2.5vw, 16px); color: #6E6E73; line-height: 1.6; }
+  .s5 .footnote { font-size: 13px; color: #6E6E73; font-style: italic; }
+
+  /* Slide 6 — Conclusion */
+  .s6 { background: #0F0F12; color: #FFFFFF; }
+  .s6 .tag { font-size: 14px; color: #34C759; font-weight: 700; letter-spacing: 0.8px; }
+  .s6 .label { font-size: 18px; color: #8E8E93; margin-bottom: 8px; }
+  .s6 .big-num { font-size: clamp(96px, 20vw, 140px); font-weight: 800; letter-spacing: -4px; line-height: 1; }
+  .s6 .pill { display: inline-block; margin-top: 18px; background: rgba(52,199,89,0.18); color: #34C759; padding: 10px 18px; border-radius: 100px; font-size: 15px; font-weight: 600; }
+  .s6 .footnote { font-size: 14px; color: #8E8E93; }
+
+  /* Slide 7 — CTA */
+  .s7 { background: #FFFFFF; }
+  .s7 .label { font-size: 14px; color: #6E6E73; font-weight: 600; }
+  .s7 .next-tag { font-size: 14px; color: #FF3B30; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }
+  .s7 .next-headline { font-size: clamp(28px, 5.8vw, 42px); font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; }
+  .s7 .actions { display: flex; gap: 12px; }
+  .s7 .btn { flex: 1; padding: 18px; border-radius: 100px; font-size: 16px; font-weight: 600; text-align: center; }
+  .s7 .btn-primary { background: #0F0F12; color: #FFFFFF; }
+  .s7 .btn-secondary { background: #F2F2F7; color: #0F0F12; }
+
+  /* Navigation */
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 20px;
+    color: #0F0F12;
+    user-select: none;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+  }
+  .nav-arrow:hover { transform: translateY(-50%) scale(1.06); }
+  .nav-arrow:active { transform: translateY(-50%) scale(0.96); }
+  .nav-arrow.prev { left: -22px; }
+  .nav-arrow.next { right: -22px; }
+  .nav-arrow.disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+  @media (max-width: 760px) {
+    .nav-arrow.prev { left: 8px; }
+    .nav-arrow.next { right: 8px; }
+  }
+
+  /* Dots */
+  .dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #C7C7CC;
+    transition: background 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  .dot.active { background: #0F0F12; transform: scale(1.25); }
+
+  /* Counter */
+  .counter {
+    font-size: 13px;
+    color: #6E6E73;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Hint */
+  .hint {
+    font-size: 11px;
+    color: #8E8E93;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="meta">
+  <h1>오픽 미신 #01 — 5-5 vs 6-6</h1>
+  <p>카톡방 질문 빈도 1위 (634회) · 강지완 쌤 답변 인용 기반</p>
+</div>
+
+<div class="carousel-wrap">
+  <div class="stage" id="stage">
+    <button class="nav-arrow prev" id="prev" aria-label="이전 슬라이드">‹</button>
+    <button class="nav-arrow next" id="next" aria-label="다음 슬라이드">›</button>
+
+    <!-- Slide 1: Hook -->
+    <div class="slide s1 active" data-index="0">
+      <div class="tag">오픽 미신 #01</div>
+      <div>
+        <div class="kicker">유튜브에서 본 그 말</div>
+        <div class="headline">6-6이 AL<br/>더 잘 나온다?</div>
+      </div>
+      <div class="footer">
+        <div class="from">강쌤이 직접 답함</div>
+        <div class="arrow">→</div>
+      </div>
+      <div class="slide-number dark">1 / 7</div>
+    </div>
+
+    <!-- Slide 2: Pull Quote -->
+    <div class="slide s2" data-index="1">
+      <div class="qmark">"</div>
+      <div class="quote">유리하기보다<br/>차이가 없어요.</div>
+      <div>
+        <div class="source-line"></div>
+        <div class="source">강지완 쌤 · 오픽 정보공유방</div>
+      </div>
+      <div class="slide-number">2 / 7</div>
+    </div>
+
+    <!-- Slide 3: Truth 1 -->
+    <div class="slide s3" data-index="2">
+      <div class="tag">진실 01</div>
+      <div>
+        <div class="headline">5-5와 6-6은<br/>단 1문항 차이</div>
+        <div class="compare">
+          <div class="compare-item">
+            <div class="compare-label">난이도 5-5</div>
+            <div class="compare-num">15문항</div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="compare-item">
+            <div class="compare-label">난이도 6-6</div>
+            <div class="compare-num">15문항</div>
+          </div>
+        </div>
+      </div>
+      <div class="caption">전체 구성은 같고, 한 문항만 유형이 달라집니다.</div>
+      <div class="slide-number">3 / 7</div>
+    </div>
+
+    <!-- Slide 4: Truth 2 -->
+    <div class="slide s4" data-index="3">
+      <div class="tag">진실 02</div>
+      <div>
+        <div class="headline">그 1문항은<br/>6번 또는 9번의<br/>"비교 문항"</div>
+        <div class="grid-q">
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell al"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell al"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+          <div class="q-cell"></div>
+        </div>
+      </div>
+      <div class="legend"><span class="dot"></span> AL 측정용 비교 문항 (6번 / 9번)</div>
+      <div class="slide-number">4 / 7</div>
+    </div>
+
+    <!-- Slide 5: Truth 3 -->
+    <div class="slide s5" data-index="4">
+      <div class="tag">진실 03 · 함정</div>
+      <div>
+        <div class="headline">비교 문항이 늘면<br/>비슷한 표현 반복</div>
+        <div class="callout">
+          <div class="callout-head">→ 감점 위험 ↑</div>
+          <div class="callout-body">"성적이 오르기보다<br/>하향하는 경우 더 많은데요."</div>
+        </div>
+      </div>
+      <div class="footnote">— 강지완 쌤 원문</div>
+      <div class="slide-number">5 / 7</div>
+    </div>
+
+    <!-- Slide 6: Conclusion -->
+    <div class="slide s6" data-index="5">
+      <div class="tag">결론</div>
+      <div>
+        <div class="label">강쌤 개인적 추천</div>
+        <div class="big-num">5-5</div>
+        <div class="pill">IH/AL 모두 동일하게 가능</div>
+      </div>
+      <div class="footnote">난이도 3-3 이상이면 AL 측정이 가능합니다.</div>
+      <div class="slide-number dark">6 / 7</div>
+    </div>
+
+    <!-- Slide 7: CTA -->
+    <div class="slide s7" data-index="6">
+      <div class="label">다음 화 예고</div>
+      <div>
+        <div class="next-tag">미신 #02</div>
+        <div class="next-headline">14, 15번<br/>스킵하면<br/>점수 못 받아?</div>
+      </div>
+      <div class="actions">
+        <div class="btn btn-primary">팔로우</div>
+        <div class="btn btn-secondary">저장 ✓</div>
+      </div>
+      <div class="slide-number">7 / 7</div>
+    </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+  <div class="counter" id="counter">1 / 7</div>
+  <div class="hint">← / → 키보드, 좌우 스와이프, 점 클릭으로도 이동 가능</div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const dotsWrap = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', `${i + 1}번 슬라이드로 이동`);
+    d.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(d);
+  }
+  const dots = dotsWrap.querySelectorAll('.dot');
+
+  function go(idx) {
+    if (idx < 0 || idx >= total || idx === current) return;
+    const direction = idx > current ? 'forward' : 'backward';
+    slides[current].classList.remove('active');
+    slides[current].classList.toggle('prev', direction === 'forward');
+    slides[idx].classList.remove('prev');
+    slides[idx].classList.add('active');
+    dots[current].classList.remove('active');
+    dots[idx].classList.add('active');
+    current = idx;
+    counter.textContent = `${current + 1} / ${total}`;
+    prevBtn.classList.toggle('disabled', current === 0);
+    nextBtn.classList.toggle('disabled', current === total - 1);
+  }
+
+  prevBtn.addEventListener('click', () => go(current - 1));
+  nextBtn.addEventListener('click', () => go(current + 1));
+  prevBtn.classList.add('disabled');
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') go(current + 1);
+    if (e.key === 'ArrowLeft') go(current - 1);
+  });
+
+  // Touch swipe
+  let touchStartX = null;
+  const stage = document.getElementById('stage');
+  stage.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) go(current + 1);
+      else go(current - 1);
+    }
+    touchStartX = null;
+  });
+</script>
+
+</body>
+</html>
