@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPIc 미신 vs 진실 — 컨텐츠 큐레이션</title>
+<meta name="description" content="강지완 쌤 카톡방 Q&A에서 추출한 OPIc 미신 vs 진실 컨텐츠 후보 큐레이션">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --bg-card: #FFFFFF;
+    --bg-soft: #F2F2EE;
+    --text: #0F0F12;
+    --text-mute: #6E6E73;
+    --text-light: #8E8E93;
+    --border: #E5E5E0;
+    --red: #FF3B30;
+    --red-soft: #FFF1EF;
+    --green: #34C759;
+    --green-soft: #E8F8EC;
+    --orange: #FF9500;
+    --blue: #007AFF;
+    --tier1: #FF3B30;
+    --tier2: #FF9500;
+    --tier3: #8E8E93;
+    --radius: 14px;
+    --radius-lg: 20px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+    --toolbar-h: 64px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero .breadcrumb {
+    font-size: 13px;
+    color: var(--text-mute);
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 4.5vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .hero .lead {
+    font-size: 15px;
+    color: var(--text-mute);
+    max-width: 720px;
+    line-height: 1.7;
+  }
+  .hero .lead strong { color: var(--text); }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .stat .label { font-size: 11px; color: var(--text-mute); font-weight: 600; margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+  .stat.accent .value { color: var(--red); }
+
+  /* ===== STICKY TOOLBAR ===== */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 250, 247, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+  }
+  .toolbar-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 9px 14px 9px 38px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: var(--bg-card);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-box input:focus { border-color: var(--text); }
+  .search-box::before {
+    content: "⌕";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 16px;
+  }
+  .tier-filter {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-soft);
+    padding: 3px;
+    border-radius: 100px;
+  }
+  .tier-btn {
+    padding: 7px 14px;
+    border: none;
+    background: transparent;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mute);
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tier-btn.active { background: var(--bg-card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+  .results-count {
+    font-size: 12px;
+    color: var(--text-mute);
+    font-weight: 500;
+  }
+
+  /* ===== TWO-PANE LAYOUT ===== */
+  .layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-top: 24px;
+  }
+  .sidebar {
+    position: sticky;
+    top: calc(var(--toolbar-h) + 12px);
+    max-height: calc(100vh - var(--toolbar-h) - 24px);
+    overflow-y: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+  }
+  .sidebar-head {
+    padding: 8px 10px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .sidebar-head .tier-name {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
+  .sidebar-head .tier-name.t1 { color: var(--tier1); }
+  .sidebar-head .tier-name.t2 { color: var(--tier2); }
+  .sidebar-head .tier-name.t3 { color: var(--tier3); }
+  .sidebar-head .tier-sub {
+    font-size: 11px;
+    color: var(--text-mute);
+    margin-top: 2px;
+  }
+
+  .myth-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .myth-item {
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.12s, border-color 0.12s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .myth-item:hover { background: var(--bg-soft); }
+  .myth-item.active {
+    background: var(--red-soft);
+    border-color: rgba(255,59,48,0.25);
+  }
+  .myth-item.hidden { display: none; }
+  .myth-item-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .myth-item .num {
+    font-weight: 800;
+    color: var(--text-light);
+    letter-spacing: 0.3px;
+  }
+  .myth-item.active .num { color: var(--red); }
+  .myth-item .freq-mini {
+    background: var(--bg-soft);
+    padding: 2px 7px;
+    border-radius: 100px;
+    color: var(--text-mute);
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .myth-item.active .freq-mini {
+    background: rgba(255,59,48,0.12);
+    color: var(--red);
+  }
+  .myth-item .item-title {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+
+  /* ===== DETAIL PANE ===== */
+  .detail {
+    min-width: 0;
+  }
+  .myth-detail { display: none; }
+  .myth-detail.active { display: block; }
+
+  .detail-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+  }
+  .detail-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-head .num {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+  }
+  .detail-head .tier-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 100px;
+    color: #FFFFFF;
+    letter-spacing: 0.4px;
+  }
+  .detail-head .tier-badge.t1 { background: var(--tier1); }
+  .detail-head .tier-badge.t2 { background: var(--tier2); }
+  .detail-head .tier-badge.t3 { background: var(--tier3); }
+  .detail-head .meta {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-mute);
+  }
+  .detail-head .freq {
+    background: var(--bg-soft);
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+  .anchor-link {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .anchor-link:hover { background: var(--bg-soft); text-decoration: none; }
+
+  .myth-statement {
+    font-size: clamp(22px, 2.8vw, 28px);
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .myth-statement .x {
+    color: var(--red);
+    font-size: 32px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .truth {
+    background: var(--green-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    border-left: 4px solid var(--green);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .truth .check {
+    color: var(--green);
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .truth-body { flex: 1; }
+  .truth-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .truth-text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #1A4F2A;
+  }
+
+  blockquote.quote {
+    background: var(--bg-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  blockquote.quote .q-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    font-weight: 500;
+  }
+  blockquote.quote .q-text::before {
+    content: """;
+    color: var(--red);
+    font-family: Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 0;
+    margin-right: 4px;
+    vertical-align: -8px;
+  }
+  blockquote.quote cite {
+    display: block;
+    font-size: 12px;
+    font-style: normal;
+    color: var(--text-mute);
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  blockquote.quote .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--text-mute);
+    transition: all 0.15s;
+  }
+  blockquote.quote .copy-btn:hover { background: var(--text); color: #FFFFFF; border-color: var(--text); }
+  blockquote.quote .copy-btn.copied { background: var(--green); color: #FFFFFF; border-color: var(--green); }
+
+  .detail-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding-top: 14px;
+    margin-top: 4px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-mute);
+  }
+  .format-pill {
+    background: var(--bg-soft);
+    padding: 5px 11px;
+    border-radius: 100px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 12px;
+  }
+  .format-pill.shorts { background: #FFE5E5; color: #B71C1C; }
+  .format-pill.carousel { background: #E5F0FF; color: #0B4C9F; }
+  .format-pill.long { background: #F2E5FF; color: #4F1B7C; }
+
+  /* sidebar mini pills */
+  .pill-mini {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .pill-mini.shorts { background: #FFE5E5; color: #B71C1C; }
+  .pill-mini.carousel { background: #E5F0FF; color: #0B4C9F; }
+
+  /* nav between myths (prev/next) */
+  .detail-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .nav-btn {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    font-size: 12px;
+    color: var(--text-mute);
+    transition: border-color 0.15s, background 0.15s;
+    min-width: 0;
+  }
+  .nav-btn:hover:not(:disabled) { border-color: var(--text); background: var(--bg-card); }
+  .nav-btn:disabled { opacity: 0.35; cursor: default; }
+  .nav-btn .nav-label { font-size: 11px; font-weight: 700; color: var(--text-light); letter-spacing: 0.3px; margin-bottom: 4px; }
+  .nav-btn .nav-title { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-btn.next { text-align: right; }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-mute);
+    font-size: 14px;
+  }
+
+  /* ===== SERIES PLANNING ===== */
+  .series-section {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .series-section h2 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 18px;
+  }
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .series-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+  }
+  .series-block h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .series-block ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .series-block li {
+    padding: 9px 12px;
+    background: var(--bg-soft);
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .series-block li strong { color: var(--text); }
+
+  .recommend-box {
+    background: linear-gradient(135deg, #FFF1EF, #FFE5E0);
+    border: 1px solid #FFCFC8;
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    grid-column: 1 / -1;
+  }
+  .recommend-box .label {
+    display: inline-block;
+    background: var(--red);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .recommend-box h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .recommend-box p { color: #6B1F18; line-height: 1.7; font-size: 13px; }
+  .recommend-box ol {
+    margin-top: 8px;
+    padding-left: 20px;
+    color: #6B1F18;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    margin-top: 40px;
+    padding: 24px 0 48px;
+    border-top: 1px solid var(--border);
+    color: var(--text-mute);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  footer .file-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  footer code {
+    font-family: 'Menlo', 'Consolas', monospace;
+    font-size: 12px;
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .sidebar {
+      position: static;
+      max-height: none;
+      padding: 10px;
+    }
+    .myth-list {
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .detail-card { padding: 20px 22px; }
+    .myth-statement { font-size: 19px; }
+    .myth-statement .x { font-size: 26px; }
+    blockquote.quote .copy-btn { position: static; margin-top: 8px; display: inline-block; }
+  }
+  @media (max-width: 500px) {
+    .container { padding: 0 14px; }
+    .hero { padding: 28px 0 22px; }
+    .toolbar-inner { gap: 8px; }
+    .tier-filter { width: 100%; justify-content: center; }
+    .tier-btn { flex: 1; padding: 7px 10px; }
+  }
+
+  @media print {
+    .toolbar, .copy-btn, .anchor-link, .detail-nav, .sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .myth-detail { display: block !important; break-after: page; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="breadcrumb">강지완 쌤 카톡방 Q&A 분석 · 컨텐츠 큐레이션</div>
+    <h1>OPIc 미신 vs 진실</h1>
+    <p class="lead">두 카톡방에서 강지완 쌤이 직접 답한 Q&A 6,444개에서 추출한 <strong>미신 vs 진실 컨텐츠 후보 27개</strong>. 왼쪽 목록에서 미신을 선택하면 오른쪽에 강쌤 답변과 추천 포맷이 보입니다.</p>
+    <div class="stats">
+      <div class="stat"><div class="label">총 메시지</div><div class="value">85,258</div></div>
+      <div class="stat"><div class="label">강쌤 답변</div><div class="value">10,976</div></div>
+      <div class="stat"><div class="label">Q&A 페어</div><div class="value">6,444</div></div>
+      <div class="stat accent"><div class="label">미신 후보</div><div class="value">27</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="container">
+    <div class="toolbar-inner">
+      <div class="search-box">
+        <input type="search" id="search" placeholder="미신 검색 (예: 난이도, 스킵, 발음, 음악…)">
+      </div>
+      <div class="tier-filter" role="tablist">
+        <button class="tier-btn active" data-tier="1">TIER 1 · 10</button>
+        <button class="tier-btn" data-tier="2">TIER 2 · 10</button>
+        <button class="tier-btn" data-tier="3">TIER 3 · 7</button>
+      </div>
+      <div class="results-count" id="results-count"></div>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <div class="tier-name t1" id="tier-name">TIER 1 · 즉시 만들 만한 핵심</div>
+        <div class="tier-sub" id="tier-sub">강쌤 답변이 명확하고 빈도가 높은 후보</div>
+      </div>
+      <ul class="myth-list" id="myth-list"></ul>
+    </aside>
+
+    <div class="detail" id="detail">
+      <!-- Detail cards generated by JS -->
+    </div>
+
+  </div>
+
+  <!-- =================== SERIES PLANNING =================== -->
+  <section class="series-section" id="series-planning">
+    <h2>컨텐츠 시리즈 기획 제안</h2>
+    <div class="series-grid">
+
+      <div class="recommend-box">
+        <span class="label">시리즈 1탄 추천</span>
+        <h3>"5-5 vs 6-6 어떤 게 유리해요?" (질문 빈도 1위, 634회)</h3>
+        <p>캐러셀 7장 구성:</p>
+        <ol>
+          <li>후킹: "유튜브에서 6-6이 AL 잘 나온다는데 진짜?"</li>
+          <li>강쌤 한 마디: "유리하기보다 차이가 없어요."</li>
+          <li>진실 1: 5-5와 6-6은 단 한 문항 차이</li>
+          <li>진실 2: 그 한 문항은 6/9번의 비교 문항</li>
+          <li>진실 3: 비교 문항이 늘면 비슷한 표현 반복으로 감점 위험</li>
+          <li>결론: "강쌤 추천은 5-5"</li>
+          <li>CTA: 다음 화 "14, 15번 스킵해도 되나요?"</li>
+        </ol>
+      </div>
+
+      <div class="series-block">
+        <h3>시리즈명 후보</h3>
+        <ul>
+          <li><strong>"오픽 미신 vs 진실"</strong></li>
+          <li>"강쌤이 직접 답하는 오픽 루머 검증"</li>
+          <li>"이거 믿었으면 점수 손해 본 거예요"</li>
+          <li>"오픽 주관사 출신이 알려주는 진짜"</li>
+        </ul>
+      </div>
+
+      <div class="series-block">
+        <h3>포맷 추천</h3>
+        <ul>
+          <li><strong>숏츠</strong> — 한 줄 명제 (#02, #03, #05, #06, #11, #12)</li>
+          <li><strong>캐러셀</strong> — 비교/시각화 (#01, #04, #07, #08, #09)</li>
+          <li><strong>롱폼</strong> — 채점 시스템 묶음 (#10, #12, #13, #14)</li>
+        </ul>
+      </div>
+
+      <div class="series-block">
+        <h3>신뢰도 부스터</h3>
+        <ul>
+          <li>강쌤 = <strong>"오픽 주관사 연구소장 재직 시절 조기발표 제도를 직접 만든 사람"</strong></li>
+          <li>강쌤 = <strong>"채점관 화면을 직접 만든 사람"</strong></li>
+          <li>인트로/아웃트로에 한 줄로 박아두면 즉시 차별화</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+
+
+<script>
+  // =========== DATA ===========
+  const myths = [
+    // ----- TIER 1 -----
+    { id: '01', tier: 1, freq: '634회', title: '6-6으로 봐야 AL이 잘 나온다', format: 'carousel', formatLabel: '캐러셀',
+      truth: '5-5와 6-6은 단 한 문항 차이. 6-6은 AL 측정 비교 문항이 하나 더 있을 뿐, IH 측정에는 차이 없음. 오히려 비교 문항이 늘면 비슷한 표현 반복으로 감점 위험이 커짐.',
+      quotes: [
+        '유리하기보다 차이가 없어요. 6-6은 AL 문항이 6, 9에 하나 더 출제되는데 IH를 측정하지 않기 때문에 차이가 없어요.',
+        '5-5나 6-6의 문제는 단 한 문제 차이입니다. 한 문제가 더 비교 문제가 나오면 비슷한 표현을 더 쓸 확률이 높아서 성적이 오르기보다는 하향하는 경우가 더 많은데요. 그래서 저의 개인적인 추천은 5-5입니다.'
+      ],
+      note: '시리즈 첫 화로 강력 추천' },
+
+    { id: '02', tier: 1, freq: '194회', title: '14, 15번 스킵하면 점수 못 받는다', format: 'shorts', formatLabel: '숏츠',
+      truth: '14, 15번은 AL 측정 문항. IH가 목표라면 둘 다 스킵해도 무방. 후기 10건 이상에서 14, 15 스킵하고 IH 받은 사례 존재.',
+      quotes: [
+        '14, 15는 AL의 달성을 물어보는 문항입니다.',
+        '후기를 보시면 10개가 넘게 14, 15번을 스킵하고 IH를 받으셨어요. 증거가 충분하면 사실명제로 볼 수 있으니 안심하고 스킵하셔도 IH가 가능하세요.'
+      ],
+      note: '메시지 단순·강력' },
+
+    { id: '03', tier: 1, freq: '22회', title: '선택주제 30개 채우면 돌발이 적게 나온다', format: 'shorts', formatLabel: '숏츠',
+      truth: '돌발은 누구에게나 5~6문항 고정 출제. 선택 개수와 무관.',
+      quotes: ['전혀 사실이 아닙니다. 선택주제를 30개 골라도 돌발은 동일수 출제됩니다. 돌발은 누구에게나 5~6문항 출제됩니다.'],
+      note: '한 줄로 끝나는 명제' },
+
+    { id: '04', tier: 1, freq: '9회', title: '선택주제와 돌발 답변 길이 차이가 크면 스크립트로 판정된다', format: 'carousel', formatLabel: '캐러셀',
+      truth: '선택과 돌발은 독립 채점. 시간 차이는 심사 대상이 아님. 선택은 IM 측정용, 돌발은 IH/AL 측정용.',
+      quotes: [
+        '전혀 사실이 아닙니다. 녹음파일로만 채점합니다. 선택과 돌발의 역할이 달라요. 두 개의 시간 차이는 심사 대상이 아닙니다. 선택은 IM, 돌발은 IH/AL을 심사합니다.',
+        '사실이 아니구요. 선택주제와 돌발주제는 채점이 독립적으로 이루어집니다.'
+      ],
+      note: '채점 구조 다이어그램화 시 임팩트' },
+
+    { id: '05', tier: 1, freq: '27회', title: '연속적으로 빠르게 말하면 스크립트 판정 받는다', format: 'shorts', formatLabel: '숏츠',
+      truth: '연속성은 스크립트 판정 사유가 아님. NH는 블랙리스트 답변 사용 시에만.',
+      quotes: [
+        '연속적인 말이 스크립트를 의미하지는 않으세요. 스크립트 판정으로 NH가 나오는 경우는 블랙리스트에 오른 답변 사용 시에만 한해서이고, 최근까지 꾸준하게 나오고 있는 성적 수기가 그렇지 않음을 충분히 반증한다고 생각합니다.',
+        '암기한 것 같은 느낌과, 암기한 것처럼 말하는 것과, 읽듯이 말하는 것은 원어민에게는 다 같은 느낌입니다.'
+      ],
+      note: '직접적 반박이 효과적' },
+
+    { id: '06', tier: 1, freq: null, title: '일부러 더듬어야 스크립트로 안 잡힌다', format: 'shorts', formatLabel: '숏츠',
+      truth: '버벅거림(halt)과 억양 부재(intonation)는 명시적 감점 항목. 해당 영역 감점이 있으면 IM2까지가 최고치인 경우가 많음.',
+      quotes: ['버벅거리거나 억양이 없거나는 채점기준에 들어가 있구요. halt와 intonation의 감점사항입니다. 해당 영역의 감점이 있으면 IM2까지 받는 경우가 최고치가 되는 경우가 많습니다.'],
+      note: '반(反)직관적이라 후킹 강함' },
+
+    { id: '07', tier: 1, freq: null, title: '답변 시간이 길면 감점된다', format: 'carousel', formatLabel: '캐러셀',
+      truth: '길게 답하고 AL 받은 사례 많음. 평가는 시간이 아닌 밀도(density).',
+      quotes: [
+        '시간이 길면 감점이라는 루머가 있는데 전혀 사실이 아닙니다. 길게 답변하셔서 12번까지 푸셨는데 AL 나오셨어요.',
+        '총 시간으로 평가하는 게 아니고 밀도로 평가한다라고 보시면 되겠습니다. Not a volume, but the density. 질소 포장된 바나나킥이 아니라 동원 참치캔이 되면 됩니다.'
+      ],
+      note: '바나나킥 vs 참치캔 비유 시각화' },
+
+    { id: '08', tier: 1, freq: null, title: '음악/공연/콘서트는 안 나온다', format: 'carousel', formatLabel: '캐러셀',
+      truth: '오히려 압도적으로 잘 출제됨. 4번처럼 여러 개 고르는 항목만 1/N 확률로 줄어들 뿐.',
+      quotes: [
+        '사실이 아닙니다. 잘 나옵니다. 고르고 안 준비하시면 큰일납니다.',
+        '당연히 음악처럼 하나를 고르는 항목은 압도적으로 많이 나오고, 4·6번처럼 다른 항목도 고르는 항목은 고른 수만큼 1/N 확률이 되지만 안 나온다고 할 정도는 아닙니다.'
+      ],
+      note: '서베이 항목별 출제 확률 시각화' },
+
+    { id: '09', tier: 1, freq: '25회', title: '운동하지 않음을 고르면 다른 운동 종목도 안 나온다', format: 'carousel', formatLabel: '캐러셀',
+      truth: '운동하지 않음은 fake button. 단지 빈값 N/A이고, 함께 고른 운동 종목 출제와 1도 영향 없음.',
+      quotes: [
+        '운동X는 항목이 없는 빈값의 선택이지, 다른 항목에 영향을 주는 항목이 아니에요. 그냥 없는 깡통 선택으로 생각하시면 됩니다.',
+        '출제되지 않는 선택주제는 없으세요. 루머에요.'
+      ],
+      note: '서베이 화면 캡쳐 + 빨간 X 표시' },
+
+    { id: '10', tier: 1, freq: '88회', title: '같은 시험장에서 보면 같은 채점관에게 걸린다', format: 'shorts', formatLabel: '숏츠',
+      truth: '채점관은 3,000명. 시험 종료 순서대로 한 명씩 분배. 시험장 코드는 채점에 일절 관여 안 함.',
+      quotes: [
+        '전혀 그렇지 않습니다. 각각 배분되는 채점 순번에 따라 같은 고사장이라도 각각 뉴욕에 있는 피터와 마이애미에 있는 제니퍼 등 순번에 의해 배분됩니다. 미용실 처음 갔을 때 아무도 모르고 가면 디자이너 순번으로 배분 주듯 그런 방식입니다.',
+        '지역은 결국 출제 주관사에게는 그냥 코드일 뿐입니다. 출제와 채점에 전혀 관여하지 않으니, 절대 다른 데서 보지 마시고 가까운 좋은 데서 보세요. 이동하는 차비로 따뜻한 차 한 잔이 더 효율적이세요.'
+      ],
+      note: '미용실 비유 드립으로 좋음' },
+
+    // ----- TIER 2 -----
+    { id: '11', tier: 2, freq: null, title: '다른 지역(KTX 타고)에서 보면 점수 잘 나온다', format: 'shorts', formatLabel: '숏츠',
+      truth: '채점관은 지역 베이스 없이 종료 순서대로 배분. 지역 변경은 우연일 뿐.',
+      quotes: ['잘못된 정보를 퍼트리는 분들은 성적이 오른 사실과 지역을 바꾼 우연의 두 사건을 주술처럼 엮는 분들이 있는데, 꼭 피하시고 소중한 가족들과의 시간을 더 보내셨으면 좋겠습니다.'] },
+
+    { id: '12', tier: 2, freq: null, title: '조기발표 시험은 점수 잘 나온다', format: 'shorts', formatLabel: '숏츠',
+      truth: '채점관은 조기발표 시험인지 모름. 조기발표는 발표만 앞당기는 국내 시행사 정책. (강쌤이 직접 만든 제도)',
+      quotes: ['조기 발표가 점수가 잘 나온다는 루머가 있는데 사실이 아닙니다. 왜냐하면 조기 발표를 채점하는 사람이 조기 발표인지 모르기 때문입니다. 제가 오픽 주관사 연구소장 재직 시절 만든 제도입니다.'],
+      note: '강쌤 이력 강조 (신뢰도↑)' },
+
+    { id: '13', tier: 2, freq: null, title: '채점관은 문제는 모르고 답변만 듣는다', format: 'shorts', formatLabel: '숏츠',
+      truth: '채점관 화면에 음성 플레이 + 문제 텍스트 모두 노출. (그 화면을 강쌤이 직접 만들었다고 언급)',
+      quotes: ['그 화면을 제가 만들었는데요. 음성 플레이 밑에 글이 있어요. 그거 보고 안 듣고도 알아요.'] },
+
+    { id: '14', tier: 2, freq: null, title: '내년에 OPIc 채점 기준이 바뀐다', format: 'shorts', formatLabel: '숏츠',
+      truth: '80년 된 시험. 기준은 유지, 문구만 일부 수정 (예: \'못한다\' → \'부족하다\').',
+      quotes: ['전혀 사실이 아닙니다. 기준이 바뀐 게 아니라 기준의 문구를 수정하는데요. 80년 된 시험이고요. 기준을 바꾸지 않고 유지해 온 것으로 유명한 평가기관입니다.'] },
+
+    { id: '15', tier: 2, freq: '10회', title: '콤보 답변은 일관성을 지켜야 한다 (해리포터 좋아하면 외국 배우)', format: 'shorts', formatLabel: '숏츠',
+      truth: '일관성을 측정하지 않음. 영어만 잘하면 OK.',
+      quotes: ['관계없으세요. 어떤 말을 해도 영어만 잘되면 전에 답변한 것과 일관성을 측정하지 않으세요.'] },
+
+    { id: '16', tier: 2, freq: null, title: '사실관계가 일치해야 한다 (실제 거주지/직업 등)', format: 'carousel', formatLabel: '캐러셀',
+      truth: '사실 체크 없음. 영어 능력만 평가.',
+      quotes: ['기존에 테스트할 때, 집 묘사에서 \'나는 개고, 우리집은 개집이다. 바깥에 있어서 좋다. 내가 영어를 하는 이유는 미국 출신이다. 놀랍지?\' 디즈니에서 일어날 것만 같은 세팅이지만 정말 AL이 나온 적이 있습니다. 회사에서 지원받는 시험이라 여러 테스트를 해 보았습니다.'],
+      note: '"충격 실화" 톤 후킹 강력' },
+
+    { id: '17', tier: 2, freq: '9회', title: 'B2B 사내시험은 점수가 짜게 나온다', format: 'shorts', formatLabel: '숏츠',
+      truth: '동일 채점관이 채점. 채점관은 B2B/B2C 구분 모름.',
+      quotes: ['동일한 채점관이 채점하구요. 채점관은 해당 시험이 B2B 시험인지 B2C 시험인지 알지 못 하거든요. 그래서 차이가 있다고 말하는 것이 오히려 잘못된 이야기가 됩니다.'] },
+
+    { id: '18', tier: 2, freq: null, title: '상세 레포트(추가 결제) = 더 자세한 채점', format: 'shorts', formatLabel: '숏츠',
+      truth: '채점 자체는 동일. 감점 항목만 리포팅. AL을 노린다면 권장하지 않음 (실수가 더 부각되어 보임).',
+      quotes: ['AL을 노리는 분은 절대 하지 않는 것을 추천합니다. 리포팅하면서 들으면 실수가 더 크게 느껴집니다.'] },
+
+    { id: '19', tier: 2, freq: null, title: '(고유명사) 영어식 발음으로 해야 한다', format: 'shorts', formatLabel: '숏츠',
+      truth: '모르면 한글처럼 발음해도 OK. 흐름이 좋으면 무관.',
+      quotes: ['괜찮아요. 고유명사는 그대로 해야죠. 중국어 발음을 모르면 한글처럼 해야죠. 괜찮아요.'] },
+
+    { id: '20', tier: 2, freq: null, title: '선택주제만 잘하면 IH/AL 가능', format: 'shorts', formatLabel: '숏츠',
+      truth: '선택은 IM 측정용, 돌발이 IH/AL 측정용. 돌발 잘해야 IH 이상.',
+      quotes: ['선택 주제만 잘하는 것은 IM, 돌발 주제까지 할 수 있어야 IH와 AL 가능합니다.'] },
+
+    // ----- TIER 3 -----
+    { id: '21', tier: 3, freq: null, title: '평일/주말 시험에서 점수가 다르다', format: 'shorts', formatLabel: '숏츠',
+      truth: '랜덤 출제·랜덤 채점관. 무관.',
+      quotes: ['전혀 사실이 아닙니다. 랜덤으로 출제되는 것에 주중 주말이 연계될 수 없어요.'] },
+
+    { id: '22', tier: 3, freq: '12회', title: '모른다고 하고 넘기기 vs 묵음 스킵이 다르다', format: 'shorts', formatLabel: '숏츠',
+      truth: '둘 다 스킵의 범주. 동일.',
+      quotes: ['모른다고 하고 넘어 가는 것과 스킵 하는 게 같기 때문에 더 낫다고 하는 것이 없다는 말씀을 드린 것입니다. 둘 다 동일합니다.'] },
+
+    { id: '23', tier: 3, freq: '238회', title: 'AI 점수 측정(미리오픽 등)이 정확하다', format: 'shorts', formatLabel: '숏츠',
+      truth: 'STT 기반이라 잘하는 쪽엔 신뢰 가능, 중간 등급은 오류 잦음. 참고용.',
+      quotes: ['현존하는 AI는 모두 내 음성을 텍스트로 변환한 뒤에 그것을 가지고 나의 등급을 판단하기 때문에 오류가 나오곤 합니다. … 중간 등급에서는 시간적인 부분에 얼마나 밀도있게 이야기하냐는 측정하기가 어렵기 때문에 참고 자료로 사용하시는 것이 좋겠습니다.'] },
+
+    { id: '24', tier: 3, freq: null, title: 'Cats and dogs 같은 관용표현 써야 점수 잘 나옴', format: 'shorts', formatLabel: '숏츠',
+      truth: '"할머니 때 영어". 안 써도 무관.',
+      quotes: ['Cats and dogs를 비에 쓰는 표현은 항상 원어민 친구들이 할머니 때 영어라고 하더라구요. 틀린 것도 아니지만 현재 많이 쓰지 않는 것은 사실인 것 같습니다.'] },
+
+    { id: '25', tier: 3, freq: null, title: '카페만 골랐는데 술집이 출제될 수 있다', format: 'shorts', formatLabel: '숏츠',
+      truth: '같은 항목에서 독점 출제. 다른 항목은 안 나옴.',
+      quotes: ['그렇지 않아요. 같은 항목에서는 독점적인 출제가 됩니다. 다른 항목은 안 나와요.'] },
+
+    { id: '26', tier: 3, freq: null, title: '응답 시간 초과하면 채점관이 끝까지 안 듣는다', format: 'shorts', formatLabel: '숏츠',
+      truth: '홀리스틱 어프로치 채점, 한 문항으로 결정 안 됨.',
+      quotes: ['롤플레이 제외하고, 한 문항으로 전체 성적이 결정되지 않으세요. 다른 문항의 중요 기준들에서 도달과, 감점 영역의 사항이 모두 고려되어 성적이 결정되는 홀리스틱 어프로치로 채점하고 있습니다.'] },
+
+    { id: '27', tier: 3, freq: '7회', title: '텐션/목소리 톤 높여야 점수 잘 나옴', format: 'shorts', formatLabel: '숏츠 (검증 필요)',
+      truth: '해당 카테고리 답변 적음. 시험장에서 목소리 작게 해달라고 한 사례 있음. 후속 검증 필요.',
+      quotes: ['(데이터 부족 — 강쌤 답변 추가 확인 필요)'],
+      note: '검증 후 발행 권장' },
+  ];
+
+  const tierMeta = {
+    1: { name: 'TIER 1 · 즉시 만들 만한 핵심', sub: '강쌤 답변이 명확하고 빈도가 높은 후보' },
+    2: { name: 'TIER 2 · 시리즈 확장용', sub: '1~3화 반응 본 뒤 양산 라인업' },
+    3: { name: 'TIER 3 · 보너스 / 묶음용', sub: '한 줄 미신, 짧은 숏츠로 양산 적합' }
+  };
+
+  // =========== STATE ===========
+  let currentTier = 1;
+  let activeId = '01';
+  let searchQuery = '';
+
+  const listEl = document.getElementById('myth-list');
+  const detailEl = document.getElementById('detail');
+  const tierNameEl = document.getElementById('tier-name');
+  const tierSubEl = document.getElementById('tier-sub');
+  const resultsEl = document.getElementById('results-count');
+  const searchEl = document.getElementById('search');
+  const tierBtns = document.querySelectorAll('.tier-btn');
+
+  // =========== RENDER ===========
+  function renderSidebar() {
+    const tierMyths = myths.filter(m => m.tier === currentTier);
+    const filtered = searchQuery
+      ? tierMyths.filter(m => (m.title + ' ' + m.truth + ' ' + m.quotes.join(' ')).toLowerCase().includes(searchQuery))
+      : tierMyths;
+
+    tierNameEl.textContent = tierMeta[currentTier].name;
+    tierNameEl.className = 'tier-name t' + currentTier;
+    tierSubEl.textContent = tierMeta[currentTier].sub;
+    resultsEl.textContent = `${filtered.length}개`;
+
+    listEl.innerHTML = filtered.length === 0
+      ? '<li style="padding:20px;text-align:center;color:var(--text-mute);font-size:13px">검색 결과가 없습니다.</li>'
+      : filtered.map(m => `
+        <li class="myth-item ${m.id === activeId ? 'active' : ''}" data-id="${m.id}">
+          <div class="myth-item-head">
+            <span class="num">#${m.id}</span>
+            ${m.freq ? `<span class="freq-mini">${m.freq}</span>` : ''}
+            <span class="pill-mini ${m.format}">${m.formatLabel}</span>
+          </div>
+          <div class="item-title">${m.title}</div>
+        </li>
+      `).join('');
+
+    // attach click handlers
+    listEl.querySelectorAll('.myth-item').forEach(item => {
+      item.addEventListener('click', () => selectMyth(item.dataset.id));
+    });
+
+    // Auto-select first if active not in current tier
+    if (filtered.length > 0 && !filtered.find(m => m.id === activeId)) {
+      activeId = filtered[0].id;
+      renderDetail();
+      renderSidebar();
+    }
+  }
+
+  function renderDetail() {
+    const m = myths.find(x => x.id === activeId);
+    if (!m) {
+      detailEl.innerHTML = '<div class="empty-state">선택한 미신이 없습니다.</div>';
+      return;
+    }
+    const tierMyths = myths.filter(x => x.tier === m.tier);
+    const idx = tierMyths.findIndex(x => x.id === m.id);
+    const prev = idx > 0 ? tierMyths[idx - 1] : null;
+    const next = idx < tierMyths.length - 1 ? tierMyths[idx + 1] : null;
+
+    detailEl.innerHTML = `
+      <article class="myth-detail active">
+        <div class="detail-card">
+          <div class="detail-head">
+            <span class="num">#${m.id}</span>
+            <span class="tier-badge t${m.tier}">TIER ${m.tier}</span>
+            <span class="meta">
+              ${m.freq ? `<span class="freq">질문 빈도 ${m.freq}</span>` : ''}
+              <a href="#myth-${m.id}" class="anchor-link" title="이 미신으로 링크">#</a>
+            </span>
+          </div>
+          <h2 class="myth-statement"><span class="x">✕</span>"${m.title}"</h2>
+          <div class="truth">
+            <span class="check">✓</span>
+            <div class="truth-body">
+              <div class="truth-label">진실</div>
+              <div class="truth-text">${m.truth}</div>
+            </div>
+          </div>
+          ${m.quotes.map(q => `
+            <blockquote class="quote">
+              <button class="copy-btn">복사</button>
+              <p class="q-text">${q}</p>
+              <cite>— 강지완 쌤</cite>
+            </blockquote>
+          `).join('')}
+          <div class="detail-foot">
+            <span class="format-pill ${m.format}">추천 ${m.formatLabel}</span>
+            ${m.note ? `<span>· ${m.note}</span>` : ''}
+          </div>
+        </div>
+        <div class="detail-nav">
+          <button class="nav-btn prev" ${prev ? '' : 'disabled'} ${prev ? `data-id="${prev.id}"` : ''}>
+            <div class="nav-label">← 이전</div>
+            <div class="nav-title">${prev ? '#' + prev.id + ' · ' + prev.title : '없음'}</div>
+          </button>
+          <button class="nav-btn next" ${next ? '' : 'disabled'} ${next ? `data-id="${next.id}"` : ''}>
+            <div class="nav-label">다음 →</div>
+            <div class="nav-title">${next ? '#' + next.id + ' · ' + next.title : '없음'}</div>
+          </button>
+        </div>
+      </article>
+    `;
+
+    // copy buttons
+    detailEl.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.parentElement.querySelector('.q-text').innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = btn.textContent;
+          btn.textContent = '복사됨 ✓';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+          }, 1500);
+        } catch (e) { alert('복사 실패. 텍스트를 직접 선택해 주세요.'); }
+      });
+    });
+
+    // nav buttons
+    detailEl.querySelectorAll('.nav-btn[data-id]').forEach(btn => {
+      btn.addEventListener('click', () => selectMyth(btn.dataset.id));
+    });
+  }
+
+  function selectMyth(id) {
+    activeId = id;
+    history.replaceState(null, '', '#myth-' + id);
+    renderSidebar();
+    renderDetail();
+    // scroll detail into view on mobile
+    if (window.innerWidth <= 860) {
+      detailEl.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
+
+  function selectTier(tier) {
+    currentTier = tier;
+    tierBtns.forEach(b => b.classList.toggle('active', parseInt(b.dataset.tier) === tier));
+    const firstInTier = myths.find(m => m.tier === tier);
+    if (firstInTier) activeId = firstInTier.id;
+    renderSidebar();
+    renderDetail();
+  }
+
+  // =========== EVENTS ===========
+  searchEl.addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    renderSidebar();
+  });
+
+  tierBtns.forEach(btn => {
+    btn.addEventListener('click', () => selectTier(parseInt(btn.dataset.tier)));
+  });
+
+  // =========== INIT ===========
+  // Check URL hash for direct link
+  const hashMatch = window.location.hash.match(/myth-(\d+)/);
+  if (hashMatch) {
+    const id = hashMatch[1];
+    const m = myths.find(x => x.id === id);
+    if (m) {
+      currentTier = m.tier;
+      activeId = id;
+      tierBtns.forEach(b => b.classList.toggle('active', parseInt(b.dataset.tier) === m.tier));
+    }
+  }
+  renderSidebar();
+  renderDetail();
+</script>
+
+</body>
+</html>
