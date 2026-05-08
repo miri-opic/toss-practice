@@ -3,13 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OPIc 미신 #01 — 5-5 vs 6-6 (캐러셀 7장)</title>
+<title>OPIc 미신 #01 — 5-5 vs 6-6 (V3 · 에반 톤)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
   :root {
+    --bg-stage: #000000;
+    --bg-stage-alt: #0A0A0A;
+    --neon: #00E676;
+    --neon-dim: rgba(0,230,118,0.15);
+    --neon-mid: rgba(0,230,118,0.4);
+    --white: #FFFFFF;
+    --gray: #B0B0B0;
+    --gray-2: #707070;
+    --gray-3: #2A2A2A;
     --maxw: 720px;
     --slide-radius: 24px;
     --hpad: 24px;
@@ -25,14 +34,11 @@
     padding: var(--vpad) var(--hpad) calc(var(--vpad) + env(safe-area-inset-bottom));
   }
 
-  /* Top bar — meta + ratio toggle */
+  /* Topbar */
   .topbar {
-    width: 100%;
-    max-width: var(--maxw);
+    width: 100%; max-width: var(--maxw);
     margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: flex; flex-direction: column; gap: 10px;
   }
   .meta {
     padding: 12px 16px;
@@ -40,137 +46,444 @@
     border-radius: 12px;
     border: 1px solid #E5E5EA;
   }
-  .meta h1 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .meta h1 { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
   .meta p { font-size: 12px; color: #6E6E73; }
+  .meta .v3 { display: inline-block; background: var(--neon); color: #000; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 800; margin-left: 6px; letter-spacing: 0.3px; }
 
   .ratio-toggle {
-    display: inline-flex;
-    background: #E5E5EA;
-    border-radius: 10px;
-    padding: 3px;
-    align-self: flex-start;
-    gap: 0;
+    display: inline-flex; background: #E5E5EA;
+    border-radius: 10px; padding: 3px;
+    align-self: flex-start; gap: 0;
   }
   .ratio-btn {
-    border: none;
-    background: transparent;
-    padding: 7px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #6E6E73;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s ease, color 0.15s ease;
+    border: none; background: transparent;
+    padding: 7px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: #6E6E73;
+    cursor: pointer; font-family: inherit;
   }
   .ratio-btn.active { background: #FFFFFF; color: #0F0F12; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
-  /* Carousel viewport */
+  /* Carousel */
   .carousel-wrap {
-    width: 100%;
-    max-width: var(--maxw);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
+    width: 100%; max-width: var(--maxw);
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
   }
-
   .stage {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
+    position: relative; width: 100%; aspect-ratio: 1 / 1;
     transition: aspect-ratio 0.25s ease;
   }
-  .stage[data-ratio="4-5"] {
-    aspect-ratio: 4 / 5;
-  }
+  .stage[data-ratio="4-5"] { aspect-ratio: 4 / 5; }
 
   .slide {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     border-radius: var(--slide-radius);
-    padding: 7%;
+    background: var(--bg-stage);
+    color: var(--white);
+    padding: 8% 7%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     overflow: hidden;
     opacity: 0;
     transform: translateX(20px);
     transition: opacity 0.32s ease, transform 0.32s ease;
     pointer-events: none;
+    font-feature-settings: "tnum" 1;
   }
   .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
   .slide.prev { transform: translateX(-20px); }
 
-  .slide-number {
+  /* Brand badge — top right */
+  .brand-badge {
     position: absolute;
-    bottom: 18px;
-    right: 22px;
-    font-size: 12px;
-    color: rgba(0,0,0,0.32);
+    top: 6%;
+    right: 7%;
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 14px 6px 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    font-size: clamp(10px, 1.4vw, 12px);
+  }
+  .brand-badge .b-dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--neon); color: #000;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 12px;
+  }
+  .brand-badge .b-name { color: var(--white); font-weight: 700; }
+
+  /* Slide number indicator */
+  .slide-num {
+    position: absolute;
+    bottom: 5%; right: 7%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(10px, 1.5vw, 12px);
+    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* Caption (small heading at top) */
+  .caption {
+    font-size: clamp(13px, 2.2vw, 18px);
+    color: var(--gray);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: clamp(12px, 2.5vw, 24px);
+  }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    border: 1px solid var(--neon);
+    color: var(--neon);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+  }
+
+  /* ============= SLIDE 1 — HOOK ============= */
+  .s1 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: clamp(16px, 3vw, 32px);
+    padding: 0 4%;
+  }
+  .s1 .myth-tag {
+    background: var(--neon-dim);
+    color: var(--neon);
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: clamp(11px, 1.6vw, 13px);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .s1 .quoted {
+    font-size: clamp(28px, 5.8vw, 46px);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -1px;
+    color: var(--white);
+  }
+  .s1 .quoted .qmark {
+    color: var(--neon);
+    font-family: Georgia, serif;
+    font-weight: 700;
+  }
+  .s1 .reveal-q {
+    font-size: clamp(16px, 2.8vw, 22px);
+    color: var(--gray);
+    font-weight: 500;
+    margin-top: 8px;
+  }
+
+  /* ============= SLIDE 2 — STRONG REVEAL ============= */
+  .s2 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: clamp(8px, 1.5vw, 16px);
+  }
+  .s2 .pre {
+    font-size: clamp(20px, 3.5vw, 28px);
+    color: var(--gray);
     font-weight: 500;
   }
-  .slide-number.dark { color: rgba(255,255,255,0.45); }
+  .s2 .answer {
+    font-size: clamp(40px, 9vw, 76px);
+    font-weight: 900;
+    color: var(--neon);
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+  .s2 .quote-mark {
+    font-size: clamp(50px, 10vw, 90px);
+    color: var(--neon);
+    font-family: Georgia, serif;
+    line-height: 0.5;
+    font-weight: 700;
+  }
+  .s2 .source {
+    font-size: clamp(13px, 1.9vw, 15px);
+    color: var(--gray-2);
+    font-weight: 500;
+    margin-top: clamp(20px, 4vw, 36px);
+    letter-spacing: 0.3px;
+  }
 
-  /* ----- Slides ----- */
-  .s1 { background: #0F0F12; color: #FFFFFF; }
-  .s1 .tag { display: inline-block; background: #FF3B30; color: #FFFFFF; padding: 8px 18px; border-radius: 100px; font-size: 14px; font-weight: 600; align-self: flex-start; }
-  .s1 .kicker { font-size: 16px; color: #8E8E93; margin-bottom: 12px; }
-  .s1 .headline { font-size: clamp(34px, 8.2vw, 60px); font-weight: 700; line-height: 1.15; letter-spacing: -1px; }
-  .s1 .footer { display: flex; justify-content: space-between; align-items: center; }
-  .s1 .footer .from { font-size: 14px; color: #8E8E93; }
-  .s1 .footer .arrow { font-size: 22px; }
+  /* ============= SLIDE 3 — COMPARISON GRID ============= */
+  .s3 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(20px, 3.5vw, 36px);
+  }
+  .s3 .compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: clamp(12px, 2vw, 24px);
+    align-items: center;
+  }
+  .s3 .compare-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 14px);
+  }
+  .s3 .col-label {
+    font-size: clamp(20px, 3.6vw, 30px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .s3 .col-label.alt { color: var(--neon); }
+  .s3 .grid-q {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: clamp(3px, 0.6vw, 6px);
+    width: 100%;
+    max-width: 180px;
+  }
+  .s3 .q-cell {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.18);
+    border-radius: 4px;
+  }
+  .s3 .q-cell.al {
+    background: var(--neon);
+    box-shadow: 0 0 12px rgba(0,230,118,0.5);
+  }
+  .s3 .col-sub {
+    font-size: clamp(11px, 1.7vw, 13px);
+    color: var(--gray-2);
+    font-weight: 500;
+  }
+  .s3 .vs {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(13px, 2vw, 16px);
+    color: var(--gray-2);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .s3 .conclusion {
+    text-align: center;
+    font-size: clamp(20px, 3.8vw, 32px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    margin-top: clamp(8px, 1.5vw, 16px);
+  }
+  .s3 .conclusion em { color: var(--neon); font-style: normal; }
 
-  .s2 { background: #FFFFFF; }
-  .s2 .qmark { font-size: clamp(80px, 18vw, 130px); color: #FF3B30; font-family: Georgia, serif; line-height: 0.8; font-weight: 700; }
-  .s2 .quote { font-size: clamp(26px, 6vw, 42px); font-weight: 600; line-height: 1.35; letter-spacing: -0.5px; }
-  .s2 .source-line { height: 1px; background: #E5E5EA; margin-bottom: 14px; }
-  .s2 .source { font-size: 14px; color: #6E6E73; font-weight: 500; }
+  /* ============= SLIDE 4 — THAT ONE QUESTION ============= */
+  .s4 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: clamp(16px, 3vw, 28px);
+  }
+  .s4 .ring {
+    width: clamp(100px, 22vw, 180px);
+    height: clamp(100px, 22vw, 180px);
+    border-radius: 50%;
+    border: clamp(3px, 0.6vw, 6px) solid var(--neon);
+    background: var(--neon-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--neon);
+    font-size: clamp(18px, 3.4vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    box-shadow: 0 0 30px rgba(0,230,118,0.3);
+  }
+  .s4 .who {
+    font-size: clamp(28px, 5.8vw, 46px);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -1px;
+    line-height: 1.2;
+  }
+  .s4 .who em { color: var(--neon); font-style: normal; }
+  .s4 .desc {
+    font-size: clamp(13px, 2.2vw, 17px);
+    color: var(--gray);
+    font-weight: 500;
+    line-height: 1.5;
+    max-width: 80%;
+  }
 
-  .s3 { background: #F2F2F7; }
-  .s3 .tag { font-size: 13px; color: #FF3B30; font-weight: 700; letter-spacing: 0.8px; }
-  .s3 .headline { font-size: clamp(24px, 5.8vw, 40px); font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 22px; }
-  .s3 .compare { display: flex; gap: 10px; align-items: center; }
-  .s3 .compare-item { flex: 1; background: #FFFFFF; border: 1px solid #D1D1D6; border-radius: 14px; padding: 18px 12px; text-align: center; }
-  .s3 .compare-label { font-size: 13px; color: #6E6E73; margin-bottom: 6px; font-weight: 500; }
-  .s3 .compare-num { font-size: clamp(22px, 5vw, 34px); font-weight: 700; }
-  .s3 .vs { font-size: 16px; color: #6E6E73; font-weight: 500; }
-  .s3 .caption { font-size: 13px; color: #6E6E73; line-height: 1.5; }
+  /* ============= SLIDE 5 — THE TRAP ============= */
+  .s5 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(14px, 2.4vw, 24px);
+  }
+  .s5 .trap-flow {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 1.4vw, 14px);
+  }
+  .s5 .step {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 1.8vw, 16px);
+    padding: clamp(14px, 2.4vw, 20px) clamp(16px, 2.6vw, 22px);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+  }
+  .s5 .step-icon {
+    width: clamp(28px, 5vw, 40px);
+    height: clamp(28px, 5vw, 40px);
+    border-radius: 50%;
+    background: var(--gray-3);
+    color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(13px, 2vw, 16px);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .s5 .step.warn .step-icon {
+    background: var(--neon);
+    color: #000;
+  }
+  .s5 .step-text {
+    font-size: clamp(15px, 2.6vw, 20px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+  .s5 .step.warn .step-text { color: var(--neon); }
+  .s5 .quote-line {
+    font-size: clamp(13px, 2vw, 16px);
+    color: var(--gray);
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.5;
+    padding: clamp(10px, 1.8vw, 16px) clamp(14px, 2.4vw, 20px);
+    border-left: 2px solid var(--neon);
+    margin-top: clamp(4px, 0.8vw, 8px);
+  }
 
-  .s4 { background: #F2F2F7; }
-  .s4 .tag { font-size: 13px; color: #FF3B30; font-weight: 700; letter-spacing: 0.8px; }
-  .s4 .headline { font-size: clamp(22px, 5.4vw, 38px); font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 22px; }
-  .s4 .grid-q { display: grid; grid-template-columns: repeat(15, 1fr); gap: 4px; }
-  .s4 .q-cell { aspect-ratio: 1; background: #D1D1D6; border-radius: 4px; }
-  .s4 .q-cell.al { background: #FF3B30; }
-  .s4 .legend { font-size: 13px; color: #6E6E73; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
-  .s4 .legend .dot-mark { display: inline-block; width: 12px; height: 12px; background: #FF3B30; border-radius: 3px; }
+  /* ============= SLIDE 6 — CONCLUSION ============= */
+  .s6 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: clamp(8px, 1.6vw, 18px);
+  }
+  .s6 .pre-label {
+    font-size: clamp(13px, 2vw, 16px);
+    color: var(--gray-2);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .s6 .verdict {
+    font-size: clamp(96px, 24vw, 200px);
+    font-weight: 900;
+    color: var(--neon);
+    letter-spacing: -6px;
+    line-height: 0.9;
+    text-shadow: 0 0 40px rgba(0,230,118,0.4);
+  }
+  .s6 .verdict-sub {
+    font-size: clamp(20px, 3.6vw, 30px);
+    font-weight: 700;
+    color: var(--white);
+    margin-top: clamp(4px, 0.8vw, 10px);
+  }
+  .s6 .badge-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: clamp(8px, 1.4vw, 12px) clamp(14px, 2.2vw, 20px);
+    background: var(--neon-dim);
+    border: 1px solid var(--neon-mid);
+    border-radius: 100px;
+    font-size: clamp(12px, 2vw, 15px);
+    color: var(--neon);
+    font-weight: 700;
+    margin-top: clamp(8px, 1.4vw, 16px);
+  }
+  .s6 .badge-row .check {
+    width: clamp(16px, 2.6vw, 20px);
+    height: clamp(16px, 2.6vw, 20px);
+    border-radius: 50%;
+    background: var(--neon);
+    color: #000;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(10px, 1.6vw, 13px);
+    font-weight: 900;
+  }
 
-  .s5 { background: #FFF4F2; }
-  .s5 .tag { font-size: 13px; color: #FF3B30; font-weight: 700; letter-spacing: 0.8px; }
-  .s5 .headline { font-size: clamp(22px, 5.4vw, 38px); font-weight: 700; line-height: 1.3; letter-spacing: -0.5px; margin-bottom: 22px; }
-  .s5 .callout { background: #FFFFFF; border-left: 5px solid #FF3B30; padding: 20px 22px; }
-  .s5 .callout-head { font-size: clamp(18px, 3.8vw, 24px); color: #FF3B30; font-weight: 700; margin-bottom: 8px; }
-  .s5 .callout-body { font-size: clamp(14px, 3vw, 17px); color: #6E6E73; line-height: 1.6; }
-  .s5 .footnote { font-size: 13px; color: #6E6E73; font-style: italic; }
+  /* ============= SLIDE 7 — CTA ============= */
+  .s7 .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(16px, 3vw, 28px);
+  }
+  .s7 .next-label {
+    font-size: clamp(11px, 1.7vw, 13px);
+    color: var(--neon);
+    font-weight: 800;
+    letter-spacing: 1.5px;
+  }
+  .s7 .next-q {
+    font-size: clamp(28px, 5.8vw, 48px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+  .s7 .next-q em { color: var(--neon); font-style: normal; }
+  .s7 .actions {
+    display: flex;
+    gap: clamp(8px, 1.4vw, 12px);
+    margin-top: clamp(8px, 1.6vw, 18px);
+  }
+  .s7 .btn {
+    flex: 1;
+    padding: clamp(12px, 2.2vw, 18px);
+    border-radius: 100px;
+    font-size: clamp(13px, 2.2vw, 17px);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -0.2px;
+  }
+  .s7 .btn-primary {
+    background: var(--neon);
+    color: #000;
+  }
+  .s7 .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
 
-  .s6 { background: #0F0F12; color: #FFFFFF; }
-  .s6 .tag { font-size: 13px; color: #34C759; font-weight: 700; letter-spacing: 0.8px; }
-  .s6 .label { font-size: 17px; color: #8E8E93; margin-bottom: 4px; }
-  .s6 .big-num { font-size: clamp(96px, 22vw, 160px); font-weight: 800; letter-spacing: -4px; line-height: 1; }
-  .s6 .pill { display: inline-block; margin-top: 16px; background: rgba(52,199,89,0.18); color: #34C759; padding: 9px 18px; border-radius: 100px; font-size: 14px; font-weight: 600; }
-  .s6 .footnote { font-size: 13px; color: #8E8E93; }
-
-  .s7 { background: #FFFFFF; }
-  .s7 .label { font-size: 13px; color: #6E6E73; font-weight: 600; }
-  .s7 .next-tag { font-size: 13px; color: #FF3B30; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }
-  .s7 .next-headline { font-size: clamp(26px, 6.4vw, 46px); font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; }
-  .s7 .actions { display: flex; gap: 10px; }
-  .s7 .btn { flex: 1; padding: 16px; border-radius: 100px; font-size: 15px; font-weight: 600; text-align: center; }
-  .s7 .btn-primary { background: #0F0F12; color: #FFFFFF; }
-  .s7 .btn-secondary { background: #F2F2F7; color: #0F0F12; }
-
-  /* ----- Navigation ----- */
+  /* ============= NAVIGATION ============= */
   .nav-arrow {
     position: absolute;
     top: 50%;
@@ -181,13 +494,9 @@
     background: rgba(255,255,255,0.95);
     border: 1px solid rgba(0,0,0,0.08);
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    font-size: 22px;
-    color: #0F0F12;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 10;
+    font-size: 22px; color: #0F0F12;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     transition: transform 0.15s ease, opacity 0.2s ease;
@@ -198,44 +507,19 @@
   .nav-arrow.next { right: -22px; }
   .nav-arrow.disabled { opacity: 0.3; cursor: default; pointer-events: none; }
 
-  .dots {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    justify-content: center;
-  }
+  .dots { display: flex; gap: 6px; align-items: center; justify-content: center; }
   .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
+    width: 7px; height: 7px; border-radius: 50%;
     background: #C7C7CC;
     transition: background 0.2s ease, transform 0.2s ease;
-    cursor: pointer;
-    border: none;
-    padding: 0;
+    cursor: pointer; border: none; padding: 0;
   }
   .dot.active { background: #0F0F12; transform: scale(1.25); }
+  .counter { font-size: 13px; color: #6E6E73; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .hint { font-size: 11px; color: #8E8E93; margin-top: 2px; text-align: center; }
 
-  .counter {
-    font-size: 13px;
-    color: #6E6E73;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-  }
-  .hint {
-    font-size: 11px;
-    color: #8E8E93;
-    margin-top: 2px;
-    text-align: center;
-  }
-
-  /* ----- Mobile (full-bleed feed feel) ----- */
   @media (max-width: 600px) {
-    :root {
-      --hpad: 0px;
-      --vpad: 12px;
-      --slide-radius: 0px;
-    }
+    :root { --hpad: 0px; --vpad: 12px; --slide-radius: 0px; }
     body { background: #FFFFFF; }
     .topbar { padding: 0 14px; }
     .meta { display: none; }
@@ -251,10 +535,10 @@
 
 <div class="topbar">
   <div class="meta">
-    <h1>오픽 미신 #01 — 5-5 vs 6-6</h1>
-    <p>카톡방 질문 빈도 1위 (634회) · 강지완 쌤 답변 인용 기반</p>
+    <h1>오픽 미신 #01 — 5-5 vs 6-6 <span class="v3">V3 · 에반 톤</span></h1>
+    <p>순흑 + 네온 그린 단일 액센트 · 굵은 산세리프 · 정보형 미니멀</p>
   </div>
-  <div class="ratio-toggle" role="tablist" aria-label="비율 선택">
+  <div class="ratio-toggle" role="tablist">
     <button class="ratio-btn active" data-ratio="1-1" type="button">1:1 (정사각)</button>
     <button class="ratio-btn" data-ratio="4-5" type="button">4:5 (인스타 권장)</button>
   </div>
@@ -265,116 +549,155 @@
     <button class="nav-arrow prev" id="prev" aria-label="이전 슬라이드">‹</button>
     <button class="nav-arrow next" id="next" aria-label="다음 슬라이드">›</button>
 
+    <!-- Slide 1: Hook -->
     <div class="slide s1 active" data-index="0">
-      <div class="tag">오픽 미신 #01</div>
-      <div>
-        <div class="kicker">유튜브에서 본 그 말</div>
-        <div class="headline">6-6이 AL<br/>더 잘 나온다?</div>
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
       </div>
-      <div class="footer">
-        <div class="from">강쌤이 직접 답함</div>
-        <div class="arrow">→</div>
+      <div class="content">
+        <div class="myth-tag">오픽 미신 #01</div>
+        <div class="quoted"><span class="qmark">"</span>6-6으로 봐야<br/>AL이 잘 나와요<span class="qmark">"</span></div>
+        <div class="reveal-q">정말 그럴까요?</div>
       </div>
-      <div class="slide-number dark">1 / 7</div>
+      <div class="slide-num">01 / 07</div>
     </div>
 
+    <!-- Slide 2: Strong Reveal -->
     <div class="slide s2" data-index="1">
-      <div class="qmark">"</div>
-      <div class="quote">유리하기보다<br/>차이가 없어요.</div>
-      <div>
-        <div class="source-line"></div>
-        <div class="source">강지완 쌤 · 오픽 정보공유방</div>
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
       </div>
-      <div class="slide-number">2 / 7</div>
+      <div class="content">
+        <div class="quote-mark">"</div>
+        <div class="pre">사실,</div>
+        <div class="answer">차이가 없어요</div>
+        <div class="source">— 강지완 쌤</div>
+      </div>
+      <div class="slide-num">02 / 07</div>
     </div>
 
+    <!-- Slide 3: Comparison Grid -->
     <div class="slide s3" data-index="2">
-      <div class="tag">진실 01</div>
-      <div>
-        <div class="headline">5-5와 6-6은<br/>단 1문항 차이</div>
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
+      </div>
+      <div class="caption">실제 시험 구성</div>
+      <div class="content">
         <div class="compare">
-          <div class="compare-item">
-            <div class="compare-label">난이도 5-5</div>
-            <div class="compare-num">15문항</div>
+          <div class="compare-col">
+            <div class="col-label">5-5</div>
+            <div class="grid-q">
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+            </div>
+            <div class="col-sub">15 문항</div>
           </div>
           <div class="vs">vs</div>
-          <div class="compare-item">
-            <div class="compare-label">난이도 6-6</div>
-            <div class="compare-num">15문항</div>
+          <div class="compare-col">
+            <div class="col-label alt">6-6</div>
+            <div class="grid-q">
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell al"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell al"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+              <div class="q-cell"></div><div class="q-cell"></div><div class="q-cell"></div>
+            </div>
+            <div class="col-sub">15 문항 + AL 측정</div>
           </div>
         </div>
+        <div class="conclusion">딱 <em>1문항</em> 차이</div>
       </div>
-      <div class="caption">전체 구성은 같고, 한 문항만 유형이 달라집니다.</div>
-      <div class="slide-number">3 / 7</div>
+      <div class="slide-num">03 / 07</div>
     </div>
 
+    <!-- Slide 4: That One Question -->
     <div class="slide s4" data-index="3">
-      <div class="tag">진실 02</div>
-      <div>
-        <div class="headline">그 1문항은<br/>6번 또는 9번의<br/>"비교 문항"</div>
-        <div class="grid-q">
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell al"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell al"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-          <div class="q-cell"></div>
-        </div>
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
       </div>
-      <div class="legend"><span class="dot-mark"></span> AL 측정용 비교 문항 (6번 / 9번)</div>
-      <div class="slide-number">4 / 7</div>
+      <div class="caption">그 1문항의 정체</div>
+      <div class="content">
+        <div class="ring">비교</div>
+        <div class="who"><em>AL 측정용</em><br/>비교 문항</div>
+        <div class="desc">6번 또는 9번에 추가 출제<br/>IH 측정과는 무관합니다</div>
+      </div>
+      <div class="slide-num">04 / 07</div>
     </div>
 
+    <!-- Slide 5: The Trap -->
     <div class="slide s5" data-index="4">
-      <div class="tag">진실 03 · 함정</div>
-      <div>
-        <div class="headline">비교 문항이 늘면<br/>비슷한 표현 반복</div>
-        <div class="callout">
-          <div class="callout-head">→ 감점 위험 ↑</div>
-          <div class="callout-body">"성적이 오르기보다<br/>하향하는 경우 더 많은데요."</div>
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
+      </div>
+      <div class="caption">근데, 함정이 있어요</div>
+      <div class="content">
+        <div class="trap-flow">
+          <div class="step">
+            <div class="step-icon">1</div>
+            <div class="step-text">비교 문항이 1개 더</div>
+          </div>
+          <div class="step">
+            <div class="step-icon">2</div>
+            <div class="step-text">비슷한 표현 반복 가능성 ↑</div>
+          </div>
+          <div class="step warn">
+            <div class="step-icon">3</div>
+            <div class="step-text">감점 위험 ↑</div>
+          </div>
+        </div>
+        <div class="quote-line">"성적이 오르기보다 하향하는 경우가 더 많은데요." — 강지완 쌤</div>
+      </div>
+      <div class="slide-num">05 / 07</div>
+    </div>
+
+    <!-- Slide 6: Conclusion -->
+    <div class="slide s6" data-index="5">
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
+      </div>
+      <div class="content">
+        <div class="pre-label">강쌤 추천</div>
+        <div class="verdict">5-5</div>
+        <div class="verdict-sub">선택하세요</div>
+        <div class="badge-row">
+          <div class="check">✓</div>
+          IH/AL 모두 동일하게 가능
         </div>
       </div>
-      <div class="footnote">— 강지완 쌤 원문</div>
-      <div class="slide-number">5 / 7</div>
+      <div class="slide-num">06 / 07</div>
     </div>
 
-    <div class="slide s6" data-index="5">
-      <div class="tag">결론</div>
-      <div>
-        <div class="label">강쌤 개인적 추천</div>
-        <div class="big-num">5-5</div>
-        <div class="pill">IH/AL 모두 동일하게 가능</div>
-      </div>
-      <div class="footnote">난이도 3-3 이상이면 AL 측정이 가능합니다.</div>
-      <div class="slide-number dark">6 / 7</div>
-    </div>
-
+    <!-- Slide 7: CTA -->
     <div class="slide s7" data-index="6">
-      <div class="label">다음 화 예고</div>
-      <div>
-        <div class="next-tag">미신 #02</div>
-        <div class="next-headline">14, 15번<br/>스킵하면<br/>점수 못 받아?</div>
+      <div class="brand-badge">
+        <div class="b-dot">강</div>
+        <div class="b-name">강지완 쌤</div>
       </div>
-      <div class="actions">
-        <div class="btn btn-primary">팔로우</div>
-        <div class="btn btn-secondary">저장 ✓</div>
+      <div class="caption">다음 화 예고</div>
+      <div class="content">
+        <div class="next-label">미신 #02</div>
+        <div class="next-q"><em>14, 15번</em><br/>스킵하면<br/>점수 못 받아?</div>
+        <div class="actions">
+          <div class="btn btn-primary">팔로우 +</div>
+          <div class="btn btn-secondary">저장 ✓</div>
+        </div>
       </div>
-      <div class="slide-number">7 / 7</div>
+      <div class="slide-num">07 / 07</div>
     </div>
   </div>
 
   <div class="dots" id="dots"></div>
   <div class="counter" id="counter">1 / 7</div>
-  <div class="hint">화살표 / 키보드 ←→ / 좌우 스와이프 / 점 클릭 모두 가능</div>
+  <div class="hint">화살표 / 키보드 ←→ / 좌우 스와이프 / 점 클릭</div>
 </div>
 
 <script>
@@ -391,7 +714,7 @@
   for (let i = 0; i < total; i++) {
     const d = document.createElement('button');
     d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', `${i + 1}번 슬라이드로 이동`);
+    d.setAttribute('aria-label', `${i + 1}번 슬라이드`);
     d.addEventListener('click', () => go(i));
     dotsWrap.appendChild(d);
   }
@@ -421,8 +744,7 @@
     if (e.key === 'ArrowLeft') go(current - 1);
   });
 
-  let touchStartX = null;
-  let touchStartY = null;
+  let touchStartX = null, touchStartY = null;
   stage.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
@@ -435,8 +757,7 @@
       if (dx < 0) go(current + 1);
       else go(current - 1);
     }
-    touchStartX = null;
-    touchStartY = null;
+    touchStartX = null; touchStartY = null;
   });
 
   ratioBtns.forEach(btn => {
