@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>강지완 오픽 — 내 강의 진단받기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+  html,body{background:#f3f3f3}
+  body{
+    font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    color:#1a1a1a;
+    line-height:1.55;
+    min-height:100vh;
+  }
+  .container{max-width:560px;margin:0 auto;padding:32px 20px 80px}
+
+  /* ───── 헤더 ───── */
+  .topbar{
+    background:#0e1f33;color:#fff;
+    border-radius:18px;
+    padding:28px 24px;
+    margin-bottom:24px;
+    position:relative;overflow:hidden;
+  }
+  .topbar::before{
+    content:"";position:absolute;right:-30px;top:-30px;
+    width:160px;height:160px;background:radial-gradient(circle,rgba(254,229,0,0.18) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .topbar .badge{
+    display:inline-block;background:#fee500;color:#1a1a1a;
+    padding:5px 11px;border-radius:999px;
+    font-size:11.5px;font-weight:800;letter-spacing:0.04em;
+  }
+  .topbar h1{
+    font-size:28px;font-weight:900;line-height:1.18;letter-spacing:-0.03em;
+    margin-top:14px;
+  }
+  .topbar h1 em{color:#fee500;font-style:normal}
+  .topbar p{
+    font-size:13.5px;color:#9ab1c8;margin-top:10px;line-height:1.65;
+  }
+
+  /* ───── 스텝 카드 ───── */
+  .step{
+    background:#fff;border-radius:18px;padding:22px 22px 18px;
+    margin-bottom:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    border:1.5px solid #ececec;
+    transition:border-color 0.25s, box-shadow 0.25s;
+  }
+  .step.active{
+    border-color:#fee500;box-shadow:0 6px 20px rgba(254,229,0,0.20);
+  }
+  .step.done{
+    border-color:#0e1f33;
+  }
+  .step-head{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:14px;
+  }
+  .step-num{
+    width:26px;height:26px;border-radius:8px;
+    background:#1a1a1a;color:#fee500;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:13px;flex-shrink:0;
+  }
+  .step.done .step-num{background:#fee500;color:#1a1a1a}
+  .step-title{
+    font-size:15.5px;font-weight:800;color:#1a1a1a;letter-spacing:-0.01em;
+  }
+  .step-hint{font-size:12.5px;color:#888;margin-left:auto}
+
+  /* ───── 라디오 옵션 ───── */
+  .options{display:grid;gap:8px}
+  .options.two{grid-template-columns:repeat(2,1fr)}
+  .options.three{grid-template-columns:repeat(3,1fr)}
+  .options.four{grid-template-columns:repeat(2,1fr)}
+  .opt{
+    display:block;cursor:pointer;
+    border:1.5px solid #e5e5e5;border-radius:12px;
+    padding:11px 12px;
+    font-size:13.5px;font-weight:600;color:#333;
+    text-align:center;
+    background:#fafafa;
+    transition:all 0.15s;
+    user-select:none;
+  }
+  .opt input{display:none}
+  .opt:hover{border-color:#1a1a1a;background:#fff}
+  .opt.checked{
+    background:#1a1a1a;color:#fee500;border-color:#1a1a1a;
+    font-weight:800;
+  }
+  .opt small{display:block;font-size:11px;color:#888;font-weight:500;margin-top:2px}
+  .opt.checked small{color:#cfa800}
+
+  /* ───── 결과 영역 ───── */
+  .result{
+    margin-top:8px;
+    opacity:0;transform:translateY(8px);
+    pointer-events:none;
+    transition:opacity 0.3s, transform 0.3s;
+  }
+  .result.show{opacity:1;transform:translateY(0);pointer-events:auto}
+
+  .result-head{
+    background:#fee500;color:#1a1a1a;
+    border-radius:18px 18px 0 0;
+    padding:18px 22px;
+  }
+  .result-head .small{font-size:11.5px;font-weight:800;letter-spacing:0.06em;color:#5a4a00}
+  .result-head h2{font-size:21px;font-weight:900;letter-spacing:-0.02em;line-height:1.25;margin-top:6px}
+
+  .result-body{
+    background:#fff;
+    border-radius:0 0 18px 18px;
+    padding:22px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.05);
+  }
+
+  .summary-box{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+    margin-bottom:18px;
+  }
+  .summary-box .ipt{
+    background:#f7f7f7;border-radius:10px;padding:11px 8px;
+    text-align:center;
+  }
+  .summary-box .lbl{font-size:10.5px;color:#888;font-weight:700;letter-spacing:0.06em;margin-bottom:4px}
+  .summary-box .val{font-size:16px;font-weight:900;color:#1a1a1a;letter-spacing:-0.01em}
+
+  .recommend-box{
+    background:#0e1f33;color:#fff;
+    border-radius:14px;
+    padding:18px 20px;
+    margin-bottom:16px;
+  }
+  .recommend-box .pre{
+    font-size:11.5px;color:#fee500;font-weight:800;letter-spacing:0.06em;margin-bottom:6px;
+  }
+  .recommend-box .course{
+    font-size:23px;font-weight:900;letter-spacing:-0.02em;line-height:1.18;
+  }
+  .recommend-box .desc{
+    font-size:13px;color:#cfd8e2;line-height:1.65;margin-top:10px;
+    border-top:1px solid rgba(255,255,255,0.12);
+    padding-top:11px;
+  }
+  .recommend-box.warn{background:#5c1a1a}
+  .recommend-box.warn .pre{color:#ffd166}
+  .recommend-box.warn .course{font-size:18px}
+
+  /* ───── 셀 통계 박스 ───── */
+  .stats-box{
+    background:#fffbe0;
+    border:1.5px solid #fee500;
+    border-radius:14px;
+    padding:14px 16px 12px;
+    margin-bottom:18px;
+  }
+  .stats-head{
+    display:flex;align-items:center;gap:8px;
+    padding-bottom:10px;
+    border-bottom:1px dashed rgba(0,0,0,0.10);
+    margin-bottom:11px;
+    flex-wrap:wrap;
+  }
+  .stats-icon{font-size:15px;line-height:1}
+  .stats-title{font-size:13px;color:#1a1a1a;font-weight:600;letter-spacing:-0.005em;flex:1}
+  .stats-title b{color:#1a1a1a;font-weight:900;font-size:15px}
+  .stats-sub{font-size:10.5px;color:#7a6500;font-weight:700;letter-spacing:0.04em}
+  .stats-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  }
+  .stats-cell{
+    background:#fff;border-radius:10px;padding:10px 12px;
+  }
+  .sc-lbl{font-size:10.5px;color:#888;font-weight:700;letter-spacing:0.06em;margin-bottom:5px}
+  .sc-val{font-size:18px;font-weight:900;color:#1a1a1a;letter-spacing:-0.02em;line-height:1.1}
+  .sc-foot{font-size:10.5px;color:#888;font-weight:600;margin-top:3px}
+  .course-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:3px}
+  .course-list li{
+    display:flex;justify-content:space-between;
+    font-size:12px;color:#222;font-weight:600;
+    padding:1px 0;
+  }
+  .course-list li .ct{color:#888;font-weight:700;font-size:11px}
+  .course-list li.empty{color:#aaa;font-style:italic;font-weight:400}
+  .stats-foot{
+    margin-top:9px;
+    font-size:11px;color:#5a4a00;font-weight:600;line-height:1.5;
+  }
+  .stats-foot b{color:#1a1a1a;font-weight:900}
+
+  .calendar-title{
+    font-size:13px;font-weight:800;color:#1a1a1a;letter-spacing:-0.01em;
+    margin-bottom:10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .calendar-title::before{
+    content:"📅";font-size:14px;
+  }
+  .calendar{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+  .cal-row{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:12px 14px;
+    background:#f7f7f7;border-radius:10px;
+    font-size:13px;line-height:1.55;
+  }
+  .cal-row .when{
+    font-weight:900;color:#1a1a1a;flex-shrink:0;width:64px;font-size:12.5px;
+    background:#fee500;border-radius:6px;padding:3px 0;text-align:center;
+  }
+  .cal-row .what{color:#333;flex:1}
+
+  .tips-title{
+    font-size:13px;font-weight:800;color:#1a1a1a;letter-spacing:-0.01em;
+    margin-bottom:10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .tips-title::before{
+    content:"💡";font-size:14px;
+  }
+  .tips{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+  .tip{
+    font-size:13px;color:#222;line-height:1.55;
+    padding:8px 12px;border-left:3px solid #fee500;
+    background:#fffbe0;border-radius:0 8px 8px 0;
+  }
+  .tip b{color:#000;font-weight:700}
+
+  .actions{
+    background:#f7f7f7;border-radius:12px;padding:14px 16px;
+    font-size:12.5px;color:#555;line-height:1.7;
+  }
+  .actions b{color:#1a1a1a;font-weight:700}
+  .actions a{
+    color:#0e1f33;font-weight:700;text-decoration:none;border-bottom:1.5px solid #fee500;
+  }
+
+  .reset-btn{
+    width:100%;margin-top:16px;
+    background:transparent;border:1.5px solid #ddd;
+    border-radius:10px;padding:11px;
+    font-family:inherit;font-size:13px;color:#666;font-weight:600;
+    cursor:pointer;
+  }
+  .reset-btn:hover{background:#fff;color:#000}
+
+  .footer{
+    text-align:center;font-size:11.5px;color:#999;
+    margin-top:28px;line-height:1.65;
+  }
+
+  /* placeholder when no result yet */
+  .placeholder{
+    background:#fff;border:1.5px dashed #ddd;
+    border-radius:18px;
+    padding:28px 22px;
+    text-align:center;font-size:13.5px;color:#888;
+    line-height:1.7;
+  }
+  .placeholder .em{font-size:30px;display:block;margin-bottom:8px;filter:grayscale(0.3)}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ───── 헤더 ───── -->
+  <div class="topbar">
+    <span class="badge">📌 진단 매트릭스</span>
+    <h1>내게 맞는 <em>오픽 강의</em>,<br>30초 안에 찾기</h1>
+    <p>
+      현재 등급 · 목표 등급 · 가능 일수만 고르시면 바로 추천 강의와 학습 캘린더가 나옵니다.<br>
+      카톡방 누적 후기 854건 + 강지완 선생님 답변 패턴 기반.
+    </p>
+  </div>
+
+  <!-- ───── STEP 1: 현재 등급 ───── -->
+  <div class="step active" id="step1">
+    <div class="step-head">
+      <span class="step-num">1</span>
+      <span class="step-title">지금 등급은 어디인가요?</span>
+      <span class="step-hint" id="hint1">선택</span>
+    </div>
+    <div class="options three">
+      <label class="opt"><input type="radio" name="current" value="NH"><span>NL · NM · NH<small>입문</small></span></label>
+      <label class="opt"><input type="radio" name="current" value="IL"><span>IL<small>초급</small></span></label>
+      <label class="opt"><input type="radio" name="current" value="IM1"><span>IM1<small>초중급</small></span></label>
+      <label class="opt"><input type="radio" name="current" value="IM2"><span>IM2 (정체)<small>중급</small></span></label>
+      <label class="opt"><input type="radio" name="current" value="IM3"><span>IM3<small>중상급</small></span></label>
+      <label class="opt"><input type="radio" name="current" value="IH"><span>IH<small>상급</small></span></label>
+    </div>
+  </div>
+
+  <!-- ───── STEP 2: 목표 등급 ───── -->
+  <div class="step" id="step2">
+    <div class="step-head">
+      <span class="step-num">2</span>
+      <span class="step-title">목표 등급은요?</span>
+      <span class="step-hint" id="hint2">선택</span>
+    </div>
+    <div class="options three">
+      <label class="opt"><input type="radio" name="target" value="IM2"><span>IM2<small>진급/취준</small></span></label>
+      <label class="opt"><input type="radio" name="target" value="IH"><span>IH<small>가장 흔한 목표</small></span></label>
+      <label class="opt"><input type="radio" name="target" value="AL"><span>AL<small>고급</small></span></label>
+    </div>
+  </div>
+
+  <!-- ───── STEP 3: 가능 일수 ───── -->
+  <div class="step" id="step3">
+    <div class="step-head">
+      <span class="step-num">3</span>
+      <span class="step-title">시험까지 며칠 공부할 수 있나요?</span>
+      <span class="step-hint" id="hint3">선택</span>
+    </div>
+    <div class="options four">
+      <label class="opt"><input type="radio" name="days" value="short"><span>4~7일<small>단기 압축</small></span></label>
+      <label class="opt"><input type="radio" name="days" value="standard"><span>7~14일<small>표준 ★</small></span></label>
+      <label class="opt"><input type="radio" name="days" value="enough"><span>14~21일<small>충분</small></span></label>
+      <label class="opt"><input type="radio" name="days" value="plenty"><span>21~30일+<small>여유</small></span></label>
+    </div>
+  </div>
+
+  <!-- ───── 결과 영역 ───── -->
+  <div id="placeholder" class="placeholder">
+    <span class="em">🎯</span>
+    위 3가지를 모두 선택하시면<br>
+    여기에 진단 결과가 나옵니다.
+  </div>
+
+  <div id="result" class="result">
+    <div class="result-head">
+      <div class="small">YOUR RESULT</div>
+      <h2 id="resultTitle">진단 결과</h2>
+    </div>
+    <div class="result-body">
+      <div class="summary-box">
+        <div class="ipt"><div class="lbl">현재</div><div class="val" id="sumCurrent">-</div></div>
+        <div class="ipt"><div class="lbl">목표</div><div class="val" id="sumTarget">-</div></div>
+        <div class="ipt"><div class="lbl">일수</div><div class="val" id="sumDays">-</div></div>
+      </div>
+
+      <div class="recommend-box" id="recommendBox">
+        <div class="pre" id="recommendPre">RECOMMEND</div>
+        <div class="course" id="recommendCourse">-</div>
+        <div class="desc" id="recommendDesc">-</div>
+      </div>
+
+      <div class="stats-box" id="statsBox" style="display:none">
+        <div class="stats-head">
+          <span class="stats-icon">🗂</span>
+          <span class="stats-title">이 케이스 <b><span id="statsCount">-</span>건</b>의 실제 후기</span>
+          <span class="stats-sub" id="statsSubLabel">카톡방 누적</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stats-cell">
+            <div class="sc-lbl">평균 학습</div>
+            <div class="sc-val" id="statsAvg">-</div>
+            <div class="sc-foot" id="statsRange">-</div>
+          </div>
+          <div class="stats-cell">
+            <div class="sc-lbl">사용 강의 TOP 3</div>
+            <ul class="course-list" id="statsCourses"></ul>
+          </div>
+        </div>
+        <div class="stats-foot" id="statsTotalLine"></div>
+      </div>
+
+      <div class="calendar-title">학습 캘린더</div>
+      <div class="calendar" id="calendar"></div>
+
+      <div class="tips-title">핵심 포인트</div>
+      <div class="tips" id="tips"></div>
+
+      <div class="actions" id="actions"></div>
+
+      <button class="reset-btn" onclick="resetAll()">처음부터 다시 진단받기</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    강지완 오픽 · 진단 매트릭스 v1<br>
+    더 자세한 1:1 진단은 카톡방 또는 인스타 DM으로
+  </div>
+
+</div>
+
+<script>
+  // ─────────────────────────────────────────
+  // 후기 셀 통계 (review_data.json 854건에서 집계)
+  // 출처: aggregate_cell_stats.py → cell_stats.json
+  // ─────────────────────────────────────────
+  const CELL_STATS = {"cells":{"IM1__IH":{"count":36,"durations":{"n":16,"min":2,"median":3,"max":90,"avg":13.1},"top_courses":[{"name":"4시간 오픽","count":6},{"name":"미리오픽","count":5},{"name":"올인원","count":4}]},"IM1__AL":{"count":2,"durations":{"n":1,"min":90,"median":90,"max":90,"avg":90.0},"top_courses":[]},"UNKNOWN__IH":{"count":219,"durations":{"n":73,"min":1,"median":14,"max":240,"avg":18.4},"top_courses":[{"name":"미리오픽","count":22},{"name":"핵심전략","count":13},{"name":"4시간 오픽","count":12}]},"IL__IH":{"count":8,"durations":{"n":4,"min":14,"median":14,"max":30,"avg":18.0},"top_courses":[{"name":"미리오픽","count":4},{"name":"핵심전략","count":1},{"name":"4시간 오픽","count":1}]},"IM2__IH":{"count":32,"durations":{"n":15,"min":3,"median":14,"max":180,"avg":45.7},"top_courses":[{"name":"미리오픽","count":6},{"name":"4시간 강의","count":2},{"name":"4시간 오픽","count":2}]},"UNKNOWN__IM2":{"count":56,"durations":{"n":14,"min":2,"median":14,"max":26,"avg":12.6},"top_courses":[{"name":"미리오픽","count":8},{"name":"4시간 오픽","count":5},{"name":"패스트트랙","count":3}]},"IM3__IH":{"count":6,"durations":{"n":2,"min":14,"median":14,"max":14,"avg":14.0},"top_courses":[{"name":"미리오픽","count":2},{"name":"올인원","count":1}]},"UNKNOWN__AL":{"count":41,"durations":{"n":16,"min":1,"median":14,"max":120,"avg":25.2},"top_courses":[{"name":"미리오픽","count":4},{"name":"4시간 오픽","count":3},{"name":"핵심전략","count":1}]},"IM1__IM2":{"count":7,"durations":{"n":0,"min":null,"median":null,"max":null,"avg":null},"top_courses":[{"name":"미리오픽","count":2}]},"IH__AL":{"count":9,"durations":{"n":3,"min":4,"median":4,"max":14,"avg":7.3},"top_courses":[{"name":"올인원","count":1}]},"IL__IM2":{"count":3,"durations":{"n":1,"min":3,"median":3,"max":3,"avg":3.0},"top_courses":[]},"NH__IH":{"count":3,"durations":{"n":2,"min":22,"median":22,"max":22,"avg":22.0},"top_courses":[{"name":"4시간 오픽","count":2}]},"IM3__AL":{"count":2,"durations":{"n":2,"min":14,"median":14,"max":14,"avg":14.0},"top_courses":[]}},"totals_by_target":{"IM2":66,"IH":304,"AL":54},"parsed_with_pair":108,"only_target":316,"source_total":854};
+
+  // ─────────────────────────────────────────
+  // 추천 룰: 현재 × 목표 → 강의
+  // ─────────────────────────────────────────
+  const rules = {
+    // current: { target: { course, desc, hot } }
+    NH: {
+      IM2: { course:'핵심전략 IM2', desc:'기초부터 IM2 채점 기준에 맞는 답변 패턴을 잡아드립니다. 묘사·습관 중심 답변 훈련.' },
+      IH: { course:'패스트트랙 IM2+IH', desc:'기초가 부족한 분들에게 가장 많이 추천되는 조합. 핵심전략(전략) + 실제수업편(실전)을 같이 듣는 풀패키지.' },
+      AL: { type:'stage', course:'단계 권장 — 먼저 IH 달성', desc:'AL은 정교함을 측정하는 등급입니다. NH 단계에서 바로 AL은 무리이고, IH 패키지로 IH 먼저 안정화한 뒤 AL 패스트트랙으로 가는 게 정석입니다.' },
+    },
+    IL: {
+      IM2: { course:'핵심전략 IM2', desc:'IM2 채점 기준에 맞는 단답·묘사 패턴 학습. IL→IM2는 보통 7~14일 안에 도달 가능합니다.' },
+      IH: { course:'패스트트랙 IM2+IH', hot:true, desc:'★ 가장 많이 추천되는 조합. IL→IH 7일 합격 후기도 카톡방에 다수. 핵심전략(이론) + 실제수업편(IH 8회 연속 학생 수업 그대로) 풀패키지.' },
+      AL: { type:'stage', course:'단계 권장 — 먼저 IH 달성', desc:'IL→AL 직행은 어렵습니다. 패스트트랙 IM2+IH로 IH 먼저 만들고, 이후 패스트트랙 IH+AL로 가는 2단계 권장.' },
+    },
+    IM1: {
+      IM2: { course:'핵심전략 IM2', desc:'IM1에서 IM2는 단문 정확도와 11번 롤플레이만 잡아도 도달. 핵심전략 단독으로 충분합니다.' },
+      IH: { course:'패스트트랙 IM2+IH', hot:true, desc:'★ 카톡방에서 가장 많이 추천되는 조합. 강사님 답변: "im1에서는 연속적인 발화가 어렵다고 보고 있어 패스트트랙 추천드립니다."' },
+      AL: { type:'stage', course:'단계 권장 — 먼저 IH 달성', desc:'IM1에서 AL 직행은 비효율적. 패스트트랙 IM2+IH로 IH 안착 → 패스트트랙 IH+AL의 2단계가 결과 빠릅니다.' },
+    },
+    IM2: {
+      IM2: { type:'enough', course:'이미 IM2입니다', desc:'재시험 전략만 점검하시면 됩니다. 14·15번을 5단계로 푸셨다면 AL측정 문항이라 어려웠을 수 있어요. 3-3·4-4 난이도 추천.' },
+      IH: { course:'IH 핵심전략편', desc:'IM2에서 정체 중이라면 단문 → 복문 전환이 결정 요소. IH 핵심전략편으로 IH 채점 기준 학습. 말이 잘 안 나오는 케이스라면 패스트트랙 IM2+IH 추가 권장.' },
+      AL: { course:'패스트트랙 IH+AL', desc:'IM2에서 AL은 단계가 큽니다만, 시간이 충분하다면 패스트트랙 IH+AL로 한 번에 가는 학생들도 있습니다. 정교함 훈련이 핵심.' },
+    },
+    IM3: {
+      IM2: { type:'enough', course:'이미 IM3입니다', desc:'IM2는 이미 충분히 넘기는 등급. 이제 IH 또는 AL을 목표로 잡으세요.' },
+      IH: { course:'IH 핵심전략편 + 미리오픽', desc:'IM3는 IH 코앞입니다. 13번 이전에서 IH 점수가 나오게 만드는 게 관건.' },
+      AL: { course:'패스트트랙 IH+AL', desc:'IM3에서 AL은 정교함 훈련 중심. 패스트트랙 IH+AL 권장.' },
+    },
+    IH: {
+      IM2: { type:'enough', course:'이미 IH입니다', desc:'IM2는 이미 통과한 등급입니다. 더 위로 가시는 게 좋습니다.' },
+      IH: { type:'enough', course:'이미 IH입니다', desc:'재시험으로 IH 유지가 목표라면 약점 단원만 점검. 더 위(AL) 도전을 권장합니다.' },
+      AL: { course:'패스트트랙 IH+AL', hot:true, desc:'★ IH→AL 정석 코스. AL은 소통이 아닌 "정교함"을 측정합니다. AL 채점 기준에 맞는 표현 훈련이 핵심.' },
+    },
+  };
+
+  // ─────────────────────────────────────────
+  // 학습 캘린더 생성기
+  // ─────────────────────────────────────────
+  function buildCalendar(target, days, current) {
+    const stage = (rules[current][target] || {}).type;
+    if (stage === 'enough') {
+      return [
+        { when:'점검', what:'시험 직전 약점 단원 회독 + 미리오픽 5회 + 한글 에피소드 흐름 정리.' },
+      ];
+    }
+    if (stage === 'stage') {
+      return [
+        { when:'1단계', what:'먼저 IH 도달이 목표. 패스트트랙 IM2+IH 1회독 + 미리오픽 1일 2회.' },
+        { when:'2단계', what:'IH 안착 후 패스트트랙 IH+AL로 정교함 훈련 시작.' },
+        { when:'전체', what:'AL은 단기간 비추. 최소 3~4주 이상의 학습 기간을 권장합니다.' },
+      ];
+    }
+
+    // 일반 학습 캘린더
+    if (target === 'IM2') {
+      if (days === 'short') return [
+        { when:'D-7~D-4', what:'핵심전략 IM2 1회독 (4시간 강의 / 1일 1챕터)' },
+        { when:'D-3~D-1', what:'미리오픽 1일 2회 + 한글 키워드 정리 + 11번 롤플레이 답변 만들기' },
+        { when:'시험 당일', what:'한글로 에피소드 흐름 빠르게 복습 → 음향 체크 후 입실' },
+      ];
+      return [
+        { when:'1주차', what:'핵심전략 IM2 1회독 + 묘사·습관 답변 만들기' },
+        { when:'2주차', what:'2회독 + 미리오픽 1일 2회 + 약점 답변 녹음 점검' },
+        { when:'D-1', what:'한글 에피소드 흐름 복습 + 시험 당일 체크리스트' },
+      ];
+    }
+
+    if (target === 'IH') {
+      if (days === 'short') return [
+        { when:'D-7~D-5', what:'IH 핵심전략편 집중 1회독 + 11번 롤플레이 답변 만들기 (★ 절대 스킵 X)' },
+        { when:'D-4~D-2', what:'복문 템플릿 적용 + 미리오픽 1일 2회 + 묘사 만능 템플릿 외우기' },
+        { when:'D-1', what:'한글로 에피소드 흐름 복습 + 어려운 질문 첫 멘트("Oh that\'s a tough question") 연습' },
+      ];
+      if (days === 'standard') return [
+        { when:'1주차', what:'패스트트랙 1회독: 핵심전략(전략) → 실제수업편(실전) 순서로 빠르게 본다' },
+        { when:'2주차', what:'미리오픽 1일 2회 + 단문 → 복문 전환 훈련 + 11번 롤플레이 집중' },
+        { when:'D-1', what:'한글 에피소드 흐름 복습 + 시험 당일 행동 체크리스트' },
+      ];
+      if (days === 'enough') return [
+        { when:'1주차', what:'패스트트랙 핵심전략편 1회독 + 답변 만들기' },
+        { when:'2주차', what:'실제수업편 + 답변 녹음 + 셀프 첨삭' },
+        { when:'3주차', what:'2회독 + 미리오픽 1일 2회 + 약점 단원 반복 + 13번 이전에서 점수 만들기' },
+      ];
+      return [
+        { when:'1~2주', what:'패스트트랙 1회독 + 답변 만들기' },
+        { when:'3주', what:'실제수업편 정독 + 답변 녹음 분석 + 약점 보강' },
+        { when:'4주+', what:'2회독 + 묘사 만능 템플릿 + 셀프 첨삭 + 미리오픽 마무리' },
+      ];
+    }
+
+    if (target === 'AL') {
+      if (days === 'short') return [
+        { when:'경고', what:'AL은 정교함 훈련이 핵심이라 단기간(7일 이하) 권장하지 않습니다. 일정을 늘리거나 IH 목표로 조정하세요.' },
+      ];
+      if (days === 'standard') return [
+        { when:'1주차', what:'IH 올인원 또는 패스트트랙 IH+AL 1회독 + AL 채점기준 학습' },
+        { when:'2주차', what:'정교함 표현 5종(rather, in particular, what i mean is 등) 답변에 박아넣기 + 14·15번 5단계 훈련' },
+        { when:'D-1', what:'녹음 셀프 첨삭 + 한글 에피소드 흐름 정리' },
+      ];
+      if (days === 'enough') return [
+        { when:'1주차', what:'패스트트랙 IH+AL 1회독' },
+        { when:'2주차', what:'14·15번 5단계 훈련 + 정교함 표현 적용 + 답변 녹음' },
+        { when:'3주차', what:'2회독 + 셀프 첨삭 + AL 채점기준 정교화' },
+      ];
+      return [
+        { when:'1~2주', what:'패스트트랙 IH+AL 1회독 + AL 채점기준 학습' },
+        { when:'3주', what:'14·15번 5단계 답변 + 정교함 표현 적용 + 답변 녹음' },
+        { when:'4주+', what:'2회독 + 약점 보강 + 셀프 첨삭으로 정교화 마무리' },
+      ];
+    }
+
+    return [];
+  }
+
+  // ─────────────────────────────────────────
+  // 케이스별 핵심 포인트 (Tips)
+  // ─────────────────────────────────────────
+  function buildTips(current, target) {
+    const tips = [];
+    // 공통: 11번 롤플레이
+    if (['NH','IL','IM1','IM2'].includes(current) && (target === 'IH' || target === 'IM2')) {
+      tips.push('<b>11번 롤플레이는 절대 스킵 X.</b> IM1 이상을 가르는 분기점 문항입니다. 스킵하면 NH~IL 구간으로 떨어질 수 있어요.');
+    }
+    // IH 목표 공통
+    if (target === 'IH') {
+      tips.push('<b>단문 → 복문 전환이 IH의 결정 요소.</b> 단문은 아무리 잘 써도 IM2까지가 한계입니다.');
+      tips.push('<b>13번 이전에서 IH 점수가 나와야 합니다.</b> 14·15번은 AL 측정 문항이라 거기서 점수 받으려는 전략은 비추.');
+    }
+    // IM2 목표
+    if (target === 'IM2') {
+      tips.push('<b>2·5·8번 묘사 답변은 비슷해도 OK.</b> "10분 거리, well-maintained"처럼 표현이 반복돼도 문제없습니다.');
+    }
+    // AL 목표
+    if (target === 'AL') {
+      tips.push('<b>AL은 "소통"이 아니라 "정교함"을 측정합니다.</b> rather, in particular, what i mean is 같은 정교함 표현을 답변에 박아넣는 훈련이 핵심.');
+      tips.push('<b>14·15번 5단계 풀이가 필수.</b> 3-3, 4-4 난이도는 롤플레이 출제를 유발해서 비추, 5-5 또는 6-6을 권장.');
+    }
+    // 발음 관련
+    if (current === 'IL' || current === 'NH') {
+      tips.push('<b>발음 감점은 "강도"가 아니라 "발생 여부".</b> 잘못된 발음이 지속되면 표기되어 최고점이 하락합니다. 구글 번역기에 잡히게 연습하기 추천.');
+    }
+    // IM2 정체
+    if (current === 'IM2' && target === 'IH') {
+      tips.push('<b>IM2 정체는 보통 단문 한계 때문.</b> 강의 한 번 더 들으시기보다, 복문 사용 의식적으로 늘리는 게 빠릅니다.');
+    }
+    return tips.slice(0, 3);
+  }
+
+  // ─────────────────────────────────────────
+  // 액션 안내문
+  // ─────────────────────────────────────────
+  function buildActions(rule) {
+    if (rule && rule.type === 'enough') {
+      return '<b>이미 등급이 충분합니다.</b> 더 위 등급에 도전하시거나, 재시험 점검만 하셔도 됩니다. 자세한 점검은 카톡방에 [현재/목표/일수] 양식으로 남겨주세요.';
+    }
+    return '<b>강의 선택 / 결제 문의</b>는 강지완 오픽 공식 사이트 또는 카톡방에서. 카톡방에 [현재 / 목표 / 일수] 양식으로 댓글 남겨주시면 1:1 학습 캘린더 받으실 수 있어요.';
+  }
+
+  // ─────────────────────────────────────────
+  // 셀 통계 표시
+  // ─────────────────────────────────────────
+  // current 등급을 셀 키 형식으로 변환 (NL/NM/NH → NH)
+  function currentToCellKey(c) {
+    if (['NL','NM','NH'].includes(c)) return 'NH';
+    return c;
+  }
+  // target 등급을 셀 키 형식으로 변환 (IM2/IH/AL 그대로)
+  function targetToCellKey(t) { return t; }
+
+  function renderStatsBox(current, target, ruleType) {
+    const box = document.getElementById('statsBox');
+    // "충분" 케이스는 stats-box 숨김 (의미 없음)
+    if (ruleType === 'enough') {
+      box.style.display = 'none';
+      return;
+    }
+    const row = currentToCellKey(current);
+    const col = targetToCellKey(target);
+    const cellKey = `${row}__${col}`;
+    const cellStat = CELL_STATS.cells[cellKey];
+    const totalForTarget = CELL_STATS.totals_by_target[col] || 0;
+
+    box.style.display = 'block';
+
+    // 셀 직접 매칭 데이터가 너무 적은 경우(<3) → 폴백 메시지
+    if (!cellStat || cellStat.count < 3) {
+      const c = cellStat ? cellStat.count : 0;
+      document.getElementById('statsCount').textContent = c;
+      document.getElementById('statsSubLabel').textContent = '데이터 표본 적음';
+      document.getElementById('statsAvg').textContent = '-';
+      document.getElementById('statsRange').textContent = '직접 매칭 후기 부족';
+      document.getElementById('statsCourses').innerHTML = '<li class="empty">표본이 적어 생략</li>';
+      document.getElementById('statsTotalLine').innerHTML =
+        `다만 동일 <b>${col}</b> 도달 후기는 카톡방에 총 <b>${totalForTarget}건</b>이 있어요. (시작 등급이 명시 안 된 후기 포함)`;
+      return;
+    }
+
+    // 정상 케이스
+    document.getElementById('statsCount').textContent = cellStat.count;
+    document.getElementById('statsSubLabel').textContent = '카톡방 누적';
+
+    const d = cellStat.durations;
+    if (d && d.median != null) {
+      document.getElementById('statsAvg').textContent = d.median + '일';
+      const rangeLabel = (d.min === d.max) ? `${d.min}일` : `최단 ${d.min}일 ~ 최장 ${d.max}일`;
+      document.getElementById('statsRange').textContent = `중앙값 / ${rangeLabel}`;
+    } else {
+      document.getElementById('statsAvg').textContent = '-';
+      document.getElementById('statsRange').textContent = '학습 일수 미기재';
+    }
+
+    const ul = document.getElementById('statsCourses');
+    if (cellStat.top_courses && cellStat.top_courses.length) {
+      ul.innerHTML = cellStat.top_courses
+        .map(c => `<li><span>${c.name}</span><span class="ct">${c.count}건</span></li>`)
+        .join('');
+    } else {
+      ul.innerHTML = '<li class="empty">강의 언급 없음</li>';
+    }
+
+    // 전체 도달자 라인 (시작 등급 미명시 후기 포함)
+    document.getElementById('statsTotalLine').innerHTML =
+      `+ 시작 등급이 명시되지 않은 <b>${col}</b> 도달 후기까지 합치면 총 <b>${totalForTarget}건</b>`;
+  }
+
+  // ─────────────────────────────────────────
+  // 화면 갱신
+  // ─────────────────────────────────────────
+  const labelMap = {
+    NH:'NH 이하', IL:'IL', IM1:'IM1', IM2:'IM2', IM3:'IM3', IH:'IH',
+    short:'4~7일', standard:'7~14일', enough:'14~21일', plenty:'21~30일+',
+  };
+
+  function getValues() {
+    const c = document.querySelector('input[name="current"]:checked');
+    const t = document.querySelector('input[name="target"]:checked');
+    const d = document.querySelector('input[name="days"]:checked');
+    return [c?.value, t?.value, d?.value];
+  }
+
+  function updateUI() {
+    const [c, t, d] = getValues();
+
+    // 단계별 active/done 상태
+    document.getElementById('step1').classList.toggle('done', !!c);
+    document.getElementById('step1').classList.toggle('active', !c);
+    document.getElementById('step2').classList.toggle('done', !!t);
+    document.getElementById('step2').classList.toggle('active', !!c && !t);
+    document.getElementById('step3').classList.toggle('done', !!d);
+    document.getElementById('step3').classList.toggle('active', !!c && !!t && !d);
+
+    // 힌트
+    document.getElementById('hint1').textContent = c ? labelMap[c] : '선택';
+    document.getElementById('hint2').textContent = t ? labelMap[t] : '선택';
+    document.getElementById('hint3').textContent = d ? labelMap[d] : '선택';
+
+    // 라디오 .checked 클래스 동기화
+    document.querySelectorAll('.opt').forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.toggle('checked', input.checked);
+    });
+
+    // 결과 표시 여부
+    if (c && t && d) {
+      const rule = rules[c]?.[t];
+      if (!rule) return;
+
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('result').classList.add('show');
+
+      document.getElementById('sumCurrent').textContent = c === 'NH' ? 'NH-' : c;
+      document.getElementById('sumTarget').textContent = t;
+      document.getElementById('sumDays').textContent = labelMap[d];
+
+      // 추천 박스
+      const box = document.getElementById('recommendBox');
+      box.classList.toggle('warn', rule.type === 'stage');
+      document.getElementById('recommendPre').textContent =
+        rule.type === 'enough' ? 'STATUS' :
+        rule.type === 'stage'  ? '⚠ 단계 권장' :
+        rule.hot               ? '★ MOST RECOMMEND' :
+                                 'RECOMMEND';
+      document.getElementById('recommendCourse').textContent = rule.course;
+      document.getElementById('recommendDesc').textContent = rule.desc;
+
+      // 결과 헤더
+      document.getElementById('resultTitle').textContent =
+        rule.type === 'enough' ? '점검만 하시면 됩니다' :
+        rule.type === 'stage'  ? '단계로 가는 게 정석입니다' :
+                                 c + ' → ' + t + ' 진단 결과';
+
+      // 캘린더
+      const cal = buildCalendar(t, d, c);
+      const calEl = document.getElementById('calendar');
+      calEl.innerHTML = cal.map(r =>
+        `<div class="cal-row"><div class="when">${r.when}</div><div class="what">${r.what}</div></div>`
+      ).join('');
+
+      // 팁
+      const tipsArr = buildTips(c, t);
+      const tipsEl = document.getElementById('tips');
+      tipsEl.innerHTML = tipsArr.map(s => `<div class="tip">${s}</div>`).join('');
+
+      // 액션
+      document.getElementById('actions').innerHTML = buildActions(rule);
+
+      // 셀 통계
+      renderStatsBox(c, t, rule.type);
+
+      // 결과로 부드럽게 스크롤
+      setTimeout(() => {
+        document.getElementById('result').scrollIntoView({ behavior:'smooth', block:'start' });
+      }, 100);
+    } else {
+      document.getElementById('placeholder').style.display = 'block';
+      document.getElementById('result').classList.remove('show');
+    }
+  }
+
+  // 모든 라디오에 이벤트 바인딩
+  document.querySelectorAll('input[type=radio]').forEach(r => {
+    r.addEventListener('change', updateUI);
+  });
+
+  function resetAll() {
+    document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+    updateUI();
+    document.getElementById('step1').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+</script>
+
+</body>
+</html>
