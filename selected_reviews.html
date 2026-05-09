@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⭐ 선정한 후기 — 콘텐츠 후보</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+  :root{
+    --bg:#fff8e7;--card:#ffffff;--ink:#0f1d2b;--muted:#5a6473;--line:#e6d9b5;
+    --accent:#0d6e63;--star:#f5b945;--star-bg:#fff5d6;--alert:#c0392b;--alert-bg:#fceeec;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:var(--ink);font-size:14px;line-height:1.55;display:flex;flex-direction:column}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);padding:12px 24px;flex-shrink:0}
+  .topbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .topbar h1{font-size:18px;font-weight:700;letter-spacing:-0.01em;display:flex;align-items:center;gap:6px}
+  .topbar h1 .star{color:var(--star)}
+  .topbar .count{font-size:13px;color:var(--muted)}
+  .topbar .topbtns{margin-left:auto;display:flex;gap:8px}
+  .topbar .btn{
+    padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;
+    cursor:pointer;font-family:inherit;border:1px solid var(--line);background:#fff;
+  }
+  .topbar .btn.copy-all{background:#0f1d2b;color:#fff;border-color:#0f1d2b}
+  .topbar .btn.copy-all:hover{background:#1a2b3d}
+  .topbar .btn.back{color:var(--muted)}
+  .topbar .btn.back:hover{color:var(--ink)}
+
+  /* 상단: 선정 후기 리스트 (가로 pills) */
+  .toplist{
+    background:#fff8e7;border-bottom:1px solid var(--line);padding:12px 24px;flex-shrink:0;
+  }
+  .toplist-inner{max-width:1400px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+  .toplist-inner::-webkit-scrollbar{height:6px}
+  .toplist-inner::-webkit-scrollbar-thumb{background:#d6c4a8;border-radius:3px}
+  .pill{
+    flex-shrink:0;background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:10px 14px;cursor:pointer;transition:all 0.15s;
+    display:flex;align-items:center;gap:8px;
+  }
+  .pill:hover{border-color:#c8b88a;background:#fffbf0}
+  .pill.active{background:var(--star);border-color:#d99c2a;color:#0f1d2b}
+  .pill .num{font-weight:700;font-size:13px}
+  .pill .summary{font-size:12px;color:#444;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pill.active .summary{color:#0f1d2b}
+
+  /* 메인 split */
+  .splitview{
+    flex:1;display:grid;grid-template-columns:1.6fr 1fr;gap:16px;
+    max-width:1400px;width:100%;margin:0 auto;padding:16px 24px 24px;
+    min-height:0;
+  }
+  .panel{
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;display:flex;flex-direction:column;
+  }
+  .panel-head{
+    padding:12px 18px;border-bottom:1px solid #f0e9d4;
+    display:flex;align-items:center;gap:8px;
+    background:linear-gradient(180deg,#fff,#fffbf0);flex-shrink:0;
+  }
+  .panel-head h2{font-size:14px;font-weight:700;color:var(--ink)}
+  .panel-head .meta{font-size:12px;color:var(--muted);margin-left:auto}
+  .panel-body{padding:18px 22px;overflow-y:auto;flex:1}
+
+  /* 좌하: 본문 */
+  .detail .badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .badge{font-size:10px;font-weight:700;letter-spacing:0.05em;padding:4px 10px;border-radius:999px;text-transform:uppercase}
+  .badge.score{background:#0f1d2b;color:#fff}
+  .badge.cat{background:#e8f5f3;color:var(--accent)}
+  .badge.cat.미리오픽{background:#e8f5d4;color:#3f7e1e}
+  .badge.cat.강의{background:#e0eaf5;color:#1a4783}
+  .badge.cat.점수합격{background:#fbe9c0;color:#7a4e0a}
+  .detail .meta-line{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .detail .meta-line b{color:var(--ink);font-weight:500}
+  .detail .sender{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .detail .title{font-size:18px;font-weight:700;line-height:1.4;color:var(--ink);background:linear-gradient(transparent 60%,#fff5b8 60%);display:inline;padding:0 2px;margin-bottom:14px}
+  .detail .body-text{
+    margin-top:14px;font-size:14px;line-height:1.75;color:#222;
+    white-space:pre-wrap;word-break:break-word;
+  }
+
+  /* 우하: SNS 가이드 */
+  .guide-section{margin-bottom:18px}
+  .guide-section:last-child{margin-bottom:0}
+  .guide-section h3{
+    font-size:12px;font-weight:700;color:var(--ink);
+    margin-bottom:8px;display:flex;align-items:center;gap:6px;
+    padding-bottom:6px;border-bottom:1px solid #f0e9d4;
+  }
+  .guide-section h3 .icon{font-size:14px}
+  .meta-table{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12px}
+  .meta-table dt{color:var(--muted);font-weight:500}
+  .meta-table dd{color:var(--ink);font-weight:600}
+  .meta-table dd.empty{color:#aaa;font-weight:400}
+  .strength-list{list-style:none;padding:0;font-size:12px;color:var(--ink);line-height:1.8}
+  .strength-list li{padding:3px 0}
+  .strength-list .empty{color:#aaa;font-style:italic}
+  .quote{
+    background:#fffbf0;border-left:3px solid var(--star);
+    padding:8px 12px;margin-bottom:6px;border-radius:0 6px 6px 0;
+    font-size:13px;line-height:1.6;color:#333;
+    display:flex;align-items:flex-start;gap:8px;
+  }
+  .quote .label{
+    flex-shrink:0;font-size:10px;font-weight:700;color:var(--star);
+    text-transform:uppercase;letter-spacing:0.04em;padding-top:2px;min-width:62px;
+  }
+  .quote .text{flex:1;cursor:pointer}
+  .quote .text:hover{color:#000}
+  .mask-list{display:flex;flex-direction:column;gap:5px}
+  .mask-item{
+    display:flex;align-items:center;gap:8px;
+    background:var(--alert-bg);border:1px solid #e8c2bd;
+    padding:6px 10px;border-radius:6px;font-size:12px;
+  }
+  .mask-item .label{color:var(--alert);font-weight:600;font-size:10px;min-width:60px}
+  .mask-item .text{flex:1;color:#333;font-weight:500}
+  .empty-line{font-size:12px;color:#aaa;font-style:italic}
+
+  /* 액션 버튼 (panel 하단) */
+  .panel-foot{padding:12px 18px;border-top:1px solid #f0e9d4;background:#fafafa;flex-shrink:0;display:flex;gap:8px;flex-wrap:wrap}
+  .panel-foot .btn{
+    padding:8px 14px;background:#fff;border:1px solid var(--line);
+    border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);
+    cursor:pointer;font-family:inherit;
+  }
+  .panel-foot .btn:hover{background:#f5efd9;color:var(--ink)}
+  .panel-foot .btn.primary{background:#0f1d2b;color:#fff;border-color:#0f1d2b}
+  .panel-foot .btn.primary:hover{background:#1a2b3d}
+
+  /* 빈 상태 */
+  .empty-state{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:80px 20px;color:var(--muted);
+  }
+  .empty-state h2{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:10px}
+  .empty-state p{font-size:14px;line-height:1.7}
+
+  /* future placeholder */
+  .future{
+    margin-top:20px;background:#fff;border:1px dashed #c8b88a;border-radius:10px;
+    padding:16px;font-size:12px;color:#7a6645;line-height:1.7;
+  }
+  .future b{color:#5a4a25}
+  .future .placeholder{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+  .future .placeholder span{
+    background:#fafafa;border:1px solid var(--line);padding:5px 10px;
+    border-radius:6px;font-size:11px;color:#aaa;
+  }
+
+  .toast{
+    position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+    background:#0f1d2b;color:#fff;padding:12px 20px;border-radius:10px;
+    font-size:13px;font-weight:500;z-index:300;
+    opacity:0;transition:opacity 0.3s;pointer-events:none;
+  }
+  .toast.on{opacity:1}
+
+  @media (max-width: 900px) {
+    .splitview{grid-template-columns:1fr;height:auto}
+    .panel{height:auto;max-height:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <h1><span class="star">⭐</span> 선정한 후기</h1>
+    <span class="count" id="count">0건</span>
+    <div class="topbtns">
+      <button class="btn copy-all" onclick="copyAll()">📋 전체 텍스트 복사</button>
+      <button class="btn back" onclick="window.close()">← 검토로</button>
+    </div>
+  </div>
+</div>
+
+<div class="toplist" id="toplist-wrap" style="display:none">
+  <div class="toplist-inner" id="toplist"></div>
+</div>
+
+<div class="splitview" id="splitview">
+  <div class="panel detail-panel">
+    <div class="panel-head">
+      <h2>📌 후기 본문</h2>
+      <span class="meta" id="detail-meta"></span>
+    </div>
+    <div class="panel-body" id="detail-body">
+      <div class="empty-state">
+        <h2>선정한 후기가 없어요</h2>
+        <p>검토 화면에서 ⭐ 선정 버튼으로 골라주세요.</p>
+      </div>
+    </div>
+    <div class="panel-foot" id="detail-foot" style="display:none">
+      <button class="btn" onclick="copyOneText()">📋 본문만 복사</button>
+      <button class="btn primary" onclick="copyOneFull()">📋 메타+본문 복사</button>
+    </div>
+  </div>
+
+  <div class="panel guide-panel">
+    <div class="panel-head">
+      <h2>🧰 SNS 콘텐츠 가이드</h2>
+    </div>
+    <div class="panel-body" id="guide-body">
+      <div class="empty-state" style="padding:30px 20px">
+        <p>후기를 선택하면 SNS 활용 가이드가 보입니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); }, 1800);
+}
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+let selected = [];
+try {
+  const m = window.location.hash.match(/data=(.+)/);
+  if (m) {
+    const json = decodeURIComponent(escape(atob(m[1])));
+    selected = JSON.parse(json);
+  }
+} catch(e) { console.error('hash 파싱 실패', e); }
+
+let currentIdx = 0;
+
+// ===== SNS 가이드 분석 함수들 =====
+
+function metaInfo(t){
+  const f = t.facts || {};
+  const rows = [];
+  if (f.grade_change) rows.push(['등급 변화', f.grade_change]);
+  else if (f.achieved) rows.push(['달성 등급', f.achieved]);
+  if (f.study_duration) rows.push(['공부 기간', f.study_duration]);
+  if (f.course_mention) rows.push(['언급 강의', f.course_mention]);
+  rows.push(['카테고리', (t.categories||[]).join(', ') || '-']);
+  rows.push(['Total 점수', t.total_score + '점']);
+  return rows;
+}
+
+const FLAG_LABELS = {
+  'title-bracket-grade': ['📌', '대괄호+등급변화 타이틀 (강한 후킹)'],
+  'title-bracket': ['📌', '대괄호 타이틀 있음'],
+  'title-grade': ['📌', '등급변화 타이틀'],
+  'reader-cta-multi': ['👉', '독자 향 명령형 다수 (들으세요/보세요)'],
+  'reader-cta': ['👉', '독자 향 명령형 있음'],
+  'strong-claim': ['💪', '강한 클레임 ("정말 됩니다", "강추")'],
+  'feature-callout-multi': ['🎯', '강의 강점 콕집기 (여러 번)'],
+  'feature-callout': ['🎯', '강의 강점 콕집기'],
+  'frustration-arc': ['🎢', '좌절-반복 서사 (드라마틱)'],
+  'frustration': ['😩', '좌절 표현 있음'],
+  'turning-point': ['🔄', '결정의 순간 묘사'],
+  'emotional-multi': ['💧', '감정 임팩트 강함'],
+  'emotional': ['💧', '감정 표현 있음'],
+  'repeated-emphasis-multi': ['🔁', '반복 강조 패턴'],
+  'multi-para': ['📝', '잘 구조화된 문단'],
+  'len-sweet': ['📏', '가독성 좋은 길이'],
+  'method': ['📚', '구체 학습법 묘사'],
+  'progression': ['📈', '등급 변화 명시'],
+  'success': ['🎉', '과거형 합격 표현'],
+  'gratitude': ['🙏', '감사 표현'],
+};
+
+function whyGood(t){
+  return (t.flags||[]).filter(f => FLAG_LABELS[f]).map(f => FLAG_LABELS[f]);
+}
+
+function splitSentences(text){
+  return text.split(/[\.!?]+|\n+/).map(s=>s.trim()).filter(s=>s.length>=4);
+}
+
+function extractQuotes(t){
+  const text = t.anchor_text || '';
+  const quotes = [];
+  const seen = new Set();
+  function add(label, s){
+    s = s.trim();
+    if (s.length === 0 || s.length > 120 || seen.has(s)) return;
+    seen.add(s); quotes.push({label, text: s});
+  }
+  // 첫 줄 (타이틀)
+  const firstLine = text.split('\n')[0].trim();
+  if (firstLine.length >= 6 && firstLine.length <= 80) add('타이틀/첫줄', firstLine);
+
+  const sentences = splitSentences(text);
+  // 강한 클레임
+  const claimRe = /(정말\s*됩니다|진짜\s*됩니다|강추|강력추천|강력\s*추천|후회\s*없|진짜\s*최고|진짜\s*도움|장담|확신|완전\s*강추)/;
+  for (const s of sentences){ if (claimRe.test(s)) { add('강한 클레임', s); break; } }
+  // 감정 임팩트
+  const emoRe = /(눈물|소리\s*질렀|소리질렀|벅찼|간절|감격|기적|꿈\s*같|믿기지\s*않|울컥)/;
+  for (const s of sentences){ if (emoRe.test(s)) { add('감정 임팩트', s); break; } }
+  // 등급 변화
+  const progRe = /(NL|NM|NH|IL|IM[1-3]?)\s*[-→>]+\s*(IM[1-3]?|IH|AL)/i;
+  for (const s of sentences){ if (progRe.test(s)) { add('등급 변화', s); break; } }
+  // 독자 CTA
+  const ctaRe = /(들으세요|들어보세요|해보세요|등록하세요|믿어\s*보|꼭\s*들으|꼭\s*해|고민하지\s*마|망설이지\s*마)/;
+  for (const s of sentences){ if (ctaRe.test(s)) { add('독자 향 CTA', s); break; } }
+  // 강의 강점 콕집기
+  const featRe = /(시험\s*구성|채점\s*기준|채점기준|롤플레이|만능\s*답변|만능답변|발화\s*전략|문단\s*전략)/;
+  for (const s of sentences){ if (featRe.test(s)) { add('강의 강점', s); break; } }
+  return quotes;
+}
+
+function findMaskingCandidates(text){
+  const cands = [];
+  const seen = new Set();
+  function add(label, m){
+    const key = label + ':' + m;
+    if (seen.has(key)) return;
+    seen.add(key); cands.push({label, text: m});
+  }
+  // 회사·기업 추정
+  let m;
+  const companyRe = /(공채|취준|취직|입사|면접|회사|기업|연구소|병원|학원|승진\s*요건|학회|구두\s*발표|호주\s*워홀|미국|유학|어학|취업)/g;
+  while ((m = companyRe.exec(text)) !== null) add('직무/배경', m[0]);
+  // 학교/학과
+  const schoolRe = /([가-힯A-Za-z]{2,8}(대학교|대학원|대학|학과|전공|석사|박사|학번))/g;
+  while ((m = schoolRe.exec(text)) !== null) add('학교/학과', m[0]);
+  // 구체 일자 (월/일 또는 X월 Y일)
+  const dateRe1 = /\b(\d{1,2})[\/\.\-](\d{1,2})\b/g;
+  while ((m = dateRe1.exec(text)) !== null) add('구체 날짜', m[0]);
+  const dateRe2 = /(\d{1,2})월\s*(\d{1,2})일/g;
+  while ((m = dateRe2.exec(text)) !== null) add('구체 날짜', m[0]);
+  // 산업/업종
+  const industryRe = /(반도체|제약\s*회사|금융|마케팅|영업|개발|디자인|전기|기계|화학)/g;
+  while ((m = industryRe.exec(text)) !== null) add('산업/직군', m[0]);
+  return cands;
+}
+
+// ===== 텍스트 빌드 (복사용) =====
+
+function buildSingleText(t){
+  return (t.anchor_text || '').trim();
+}
+function buildSingleFull(t){
+  const lines = [];
+  if (t.title) lines.push('[' + t.title + ']');
+  lines.push('— ' + t.anchor_sender + ' / ' + t.date + (t.time?' '+t.time:''));
+  if (t.facts && t.facts.grade_change) lines.push('등급 변화: ' + t.facts.grade_change);
+  if (t.facts && t.facts.study_duration) lines.push('공부 기간: ' + t.facts.study_duration);
+  if (t.facts && t.facts.course_mention) lines.push('언급 강의: ' + t.facts.course_mention);
+  if (t.categories && t.categories.length) lines.push('카테고리: ' + t.categories.join(', '));
+  lines.push('');
+  lines.push(t.anchor_text);
+  return lines.join('\n');
+}
+function buildAllText(items){
+  const out = [];
+  items.forEach(function(t,i){
+    out.push('━'.repeat(48));
+    out.push('[ 선정 후기 #' + (i+1) + ' ]');
+    out.push(buildSingleFull(t));
+    out.push('');
+  });
+  out.push('━'.repeat(48));
+  return out.join('\n');
+}
+
+function copyOneText(){
+  const t = selected[currentIdx]; if (!t) return;
+  navigator.clipboard.writeText(buildSingleText(t)).then(function(){ showToast('본문 복사됨'); });
+}
+function copyOneFull(){
+  const t = selected[currentIdx]; if (!t) return;
+  navigator.clipboard.writeText(buildSingleFull(t)).then(function(){ showToast('메타+본문 복사됨'); });
+}
+function copyAll(){
+  if (selected.length === 0){ showToast('선정한 후기가 없어요.'); return; }
+  navigator.clipboard.writeText(buildAllText(selected)).then(function(){ showToast(selected.length + '건 텍스트 복사 완료'); });
+}
+function copyText(s){
+  navigator.clipboard.writeText(s).then(function(){ showToast('인용 복사됨'); });
+}
+
+// ===== 렌더링 =====
+
+function summaryFor(t){
+  if (t.title && t.title.length <= 40) return t.title;
+  const f = t.facts || {};
+  const parts = [];
+  if (f.grade_change) parts.push(f.grade_change);
+  if (f.study_duration) parts.push(f.study_duration);
+  parts.push(t.anchor_sender);
+  return parts.join(' · ');
+}
+
+function renderToplist(){
+  if (selected.length === 0){
+    document.getElementById('toplist-wrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('toplist-wrap').style.display = 'block';
+  const html = selected.map(function(t, i){
+    const cls = 'pill' + (i === currentIdx ? ' active' : '');
+    return '<div class="' + cls + '" onclick="selectIdx(' + i + ')">' +
+      '<span class="num">#' + (i+1) + '</span>' +
+      '<span class="summary">' + escapeHtml(summaryFor(t)) + '</span>' +
+    '</div>';
+  }).join('');
+  document.getElementById('toplist').innerHTML = html;
+}
+
+function renderDetail(){
+  const t = selected[currentIdx];
+  if (!t){
+    document.getElementById('detail-body').innerHTML = '<div class="empty-state"><h2>선정한 후기가 없어요</h2><p>검토 화면에서 ⭐ 선정 버튼으로 골라주세요.</p></div>';
+    document.getElementById('detail-meta').textContent = '';
+    document.getElementById('detail-foot').style.display = 'none';
+    return;
+  }
+  document.getElementById('detail-meta').textContent = '#' + (currentIdx+1) + ' / ' + selected.length;
+  document.getElementById('detail-foot').style.display = 'flex';
+
+  const cats = (t.categories||[]).map(function(c){return '<span class="badge cat ' + c + '">' + c + '</span>';}).join('');
+  const titleHtml = t.title ? '<div class="title">' + escapeHtml(t.title) + '</div>' : '';
+
+  let html = '<div class="detail">';
+  html += '<div class="badges"><span class="badge score">' + (t.total_score||0) + '점</span>' + cats + '</div>';
+  html += '<div class="meta-line"><b>' + t.date + '</b> ' + (t.time||'') + ' · ' + (t.room||'') + '</div>';
+  html += '<div class="sender">' + escapeHtml(t.anchor_sender) + '</div>';
+  html += titleHtml;
+  html += '<div class="body-text">' + escapeHtml(t.anchor_text) + '</div>';
+  html += '</div>';
+  document.getElementById('detail-body').innerHTML = html;
+}
+
+function renderGuide(){
+  const t = selected[currentIdx];
+  if (!t){
+    document.getElementById('guide-body').innerHTML = '<div class="empty-state" style="padding:30px 20px"><p>후기를 선택하면 SNS 활용 가이드가 보입니다.</p></div>';
+    return;
+  }
+  let html = '';
+
+  // A. 메타
+  html += '<div class="guide-section"><h3><span class="icon">🏷️</span>메타 정보</h3>';
+  const meta = metaInfo(t);
+  html += '<dl class="meta-table">';
+  meta.forEach(function(row){
+    html += '<dt>' + escapeHtml(row[0]) + '</dt><dd>' + escapeHtml(row[1]) + '</dd>';
+  });
+  html += '</dl></div>';
+
+  // B. 왜 좋은가
+  html += '<div class="guide-section"><h3><span class="icon">✨</span>왜 좋은 후기?</h3>';
+  const why = whyGood(t);
+  if (why.length === 0){
+    html += '<div class="empty-line">분석 가능한 강점 시그널이 적습니다.</div>';
+  } else {
+    html += '<ul class="strength-list">';
+    why.forEach(function(item){ html += '<li>' + item[0] + ' ' + escapeHtml(item[1]) + '</li>'; });
+    html += '</ul>';
+  }
+  html += '</div>';
+
+  // C. 핵심 인용
+  html += '<div class="guide-section"><h3><span class="icon">🔍</span>핵심 인용 (자동 추출)</h3>';
+  const quotes = extractQuotes(t);
+  if (quotes.length === 0){
+    html += '<div class="empty-line">자동 추출된 인용이 없습니다.</div>';
+  } else {
+    quotes.forEach(function(q){
+      html += '<div class="quote">' +
+        '<span class="label">' + escapeHtml(q.label) + '</span>' +
+        '<span class="text" onclick="copyText(\'' + q.text.replace(/'/g, "\\'") + '\')">' + escapeHtml(q.text) + '</span>' +
+      '</div>';
+    });
+    html += '<div style="font-size:11px;color:var(--muted);margin-top:6px">인용 클릭 시 복사됩니다</div>';
+  }
+  html += '</div>';
+
+  // E. 마스킹
+  html += '<div class="guide-section"><h3><span class="icon">⚠️</span>마스킹 후보 (개인정보 의심)</h3>';
+  const masks = findMaskingCandidates(t.anchor_text || '');
+  if (masks.length === 0){
+    html += '<div class="empty-line">자동 감지된 마스킹 후보가 없습니다.</div>';
+  } else {
+    html += '<div class="mask-list">';
+    masks.forEach(function(m){
+      html += '<div class="mask-item">' +
+        '<span class="label">' + escapeHtml(m.label) + '</span>' +
+        '<span class="text">' + escapeHtml(m.text) + '</span>' +
+      '</div>';
+    });
+    html += '</div>';
+    html += '<div style="font-size:11px;color:var(--muted);margin-top:6px">캐러셀 만들 때 가릴 후보. 실제 식별 정보인지 한 번 더 확인해주세요.</div>';
+  }
+  html += '</div>';
+
+  // 미래 자리
+  html += '<div class="future"><b>다음 단계 (예정)</b><br>이 후기 기준으로 SNS별 콘텐츠 자동 생성 예정.<div class="placeholder"><span>🎨 캐러셀 PNG</span><span>📝 인스타 캡션</span><span>🎬 숏츠 스크립트</span><span>🎯 채널별 톤</span></div></div>';
+
+  document.getElementById('guide-body').innerHTML = html;
+}
+
+function selectIdx(i){
+  currentIdx = i;
+  renderToplist();
+  renderDetail();
+  renderGuide();
+}
+
+function init(){
+  document.getElementById('count').textContent = selected.length + '건';
+  if (selected.length === 0){
+    document.getElementById('toplist-wrap').style.display = 'none';
+    renderDetail();
+    renderGuide();
+    return;
+  }
+  currentIdx = 0;
+  renderToplist();
+  renderDetail();
+  renderGuide();
+}
+init();
+</script>
+</body>
+</html>
