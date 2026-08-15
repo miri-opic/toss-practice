@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오픽(OPIc) 자주 묻는 질문 | 미리오픽 FAQ</title>
+<meta name="description" content="오픽 시험 형식, 등급·채점 기준, 롤플레이·돌발주제 대응 전략, 미리오픽 서비스 이용법까지 강지완쌤 오픽 커뮤니티 Q&amp;A를 바탕으로 정리한 자주 묻는 질문 모음입니다.">
+<meta property="og:title" content="오픽(OPIc) 자주 묻는 질문 | 미리오픽 FAQ">
+<meta property="og:description" content="오픽 시험 형식, 등급·채점 기준, 문제 유형별 전략, 미리오픽 서비스 이용법을 한 곳에서 확인하세요.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#1a1d29; --ink-soft:#5b6072;
+    --line:#e6e8ee; --brand:#2851d8; --brand-soft:#eef2ff;
+    --star3:#c8720b; --star3-bg:#fff4e5;
+    --star2:#2a6f4d; --star2-bg:#eaf6ef;
+    --star1:#5b6072; --star1-bg:#f1f2f5;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14161f; --card:#1c1f2b; --ink:#eef0f5; --ink-soft:#a7abc0;
+      --line:#2b2f3f; --brand:#7c9bff; --brand-soft:#222a4a;
+      --star3:#e2a04b; --star3-bg:#332008;
+      --star2:#5fcf98; --star2-bg:#0f2b1f;
+      --star1:#a7abc0; --star1-bg:#242737;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6;
+  }
+  header{
+    padding:40px 24px 28px; text-align:center; border-bottom:1px solid var(--line);
+    background:var(--card);
+  }
+  header h1{ margin:0 0 8px; font-size:1.6rem; }
+  header p{ margin:0; color:var(--ink-soft); font-size:0.95rem; }
+  .wrap{ max-width:820px; margin:0 auto; padding:28px 20px 80px; }
+  .search{
+    width:100%; padding:12px 16px; border-radius:999px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); font-size:0.95rem; margin-bottom:20px;
+    outline:none;
+  }
+  .search:focus{ border-color:var(--brand); }
+  .tabs{
+    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px;
+  }
+  .tab{
+    padding:8px 14px; border-radius:999px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink-soft); font-size:0.85rem; cursor:pointer;
+    user-select:none; transition:all .15s ease;
+  }
+  .tab.active{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  .cat-block{ margin-bottom:36px; }
+  .cat-title{
+    font-size:1.05rem; font-weight:700; margin:0 0 4px; display:flex; align-items:center; gap:8px;
+  }
+  .cat-desc{ color:var(--ink-soft); font-size:0.85rem; margin:0 0 14px; }
+  details{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:10px; overflow:hidden;
+  }
+  summary{
+    padding:14px 46px 14px 16px; cursor:pointer; font-weight:600; font-size:0.95rem;
+    list-style:none; position:relative;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{
+    content:"+"; position:absolute; right:16px; top:50%; transform:translateY(-50%);
+    color:var(--ink-soft); font-size:1.2rem; font-weight:400;
+  }
+  details[open] summary::after{ content:"\2013"; }
+  .answer{ padding:0 16px 16px; color:var(--ink-soft); font-size:0.92rem; }
+  .badge{
+    display:inline-block; font-size:0.68rem; font-weight:700; padding:2px 8px;
+    border-radius:999px; margin-left:8px; vertical-align:middle;
+  }
+  .p3{ color:var(--star3); background:var(--star3-bg); }
+  .p2{ color:var(--star2); background:var(--star2-bg); }
+  .p1{ color:var(--star1); background:var(--star1-bg); }
+  .legend{
+    display:flex; gap:14px; flex-wrap:wrap; font-size:0.78rem; color:var(--ink-soft);
+    margin-bottom:22px; padding:12px 16px; background:var(--brand-soft); border-radius:10px;
+  }
+  .legend b{ color:var(--ink); }
+  .hidden{ display:none !important; }
+  .no-result{ text-align:center; color:var(--ink-soft); padding:40px 0; display:none; }
+  .src-note{ text-align:center; color:var(--ink-soft); font-size:0.78rem; padding:10px 0 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>오픽(OPIc) 자주 묻는 질문</h1>
+  <p>강지완쌤 오픽 커뮤니티 Q&amp;A 기반 · 카테고리별 정리 (정적 렌더링 버전)</p>
+</header>
+
+<div class="wrap">
+  <input class="search" id="searchBox" type="text" placeholder="궁금한 내용을 검색해보세요 (예: 웨이버, 롤플레이, 등급)">
+
+  <div class="legend">
+    <span><b>★★★</b> 미리오픽만의 고유 데이터·기법</span>
+    <span><b>★★</b> 오픽 시험에 대한 구체적 정보</span>
+    <span><b>★</b> 일반 학습 조언</span>
+  </div>
+
+  <div class="tabs" id="tabs">
+  <div class="tab active" data-cat="basic">오픽 시험 기본 이해</div>
+  <div class="tab" data-cat="grade">등급(IH·AL·IM)과 채점 기준</div>
+  <div class="tab" data-cat="roleplay">롤플레이 전략</div>
+  <div class="tab" data-cat="surprise">돌발 주제 대응</div>
+  <div class="tab" data-cat="script">답변 작성 & 스크립트 전략</div>
+  <div class="tab" data-cat="topic">소재별 답변 팁</div>
+  <div class="tab" data-cat="examday">시험 당일 정보</div>
+  <div class="tab" data-cat="miriopic">미리오픽 서비스 이용 가이드</div>
+  </div>
+
+  <div id="content">
+  <div class="cat-block" data-cat="basic">
+    <h2 class="cat-title">오픽 시험 기본 이해 (형식·제도)</h2>
+    <p class="cat-desc">콤보 구성, 난이도 선택, 조기성적 발표, 웨이버 같은 시험 운영 전반에 대한 질문</p>
+    <details>
+      <summary>오픽 서베이를 선택하면 콤보(문항)는 몇 개나 나오나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">서베이에서 선택한 주제 중 3개 정도가 선택주제로, 선택하지 않은 주제 중 2개 정도가 돌발주제로 출제되는 구조입니다. 대략 9개 문항이 선택한 서베이에서, 나머지 6개 정도가 고르지 않은 돌발주제에서 출제된다고 보면 됩니다.</div>
+    </details>
+    <details>
+      <summary>오픽 난이도(1~6단계) 선택이 등급에 영향을 주나요? 5-5와 6-6 중 뭐가 유리한가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">난이도 선택 자체가 성적 향상과 직접적인 관련은 없습니다. 6단계를 선택하면 비교 문항이 하나 더 출제되는데, 그 문항까지 자신 있게 답할 수 있다면 6단계를, 오히려 답변이 무너지거나 스킵할 가능성이 크다면 5단계를 선택하는 게 좋습니다. 난이도 숫자보다 실제 출제된 문항에 얼마나 잘 답하는지가 중요합니다.</div>
+    </details>
+    <details>
+      <summary>조기성적 발표를 신청하면 시험이 더 어렵게 나오거나 채점이 후해지나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">아닙니다. 조기성적 발표와 일반 발표는 채점 기준을 구분하지 않고 동일하게 진행됩니다. 출제는 선택한 서베이를 바탕으로 중앙 서버에서 랜덤 생성되고 채점은 별도 채점자가 진행하는데, 조기성적 발표는 성적 제공 시점만 앞당기는 행정 서비스일 뿐 출제·채점 방식과는 무관합니다.</div>
+    </details>
+    <details>
+      <summary>오픽 웨이버(재응시 제도)는 어떻게 적용되나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">웨이버는 시험 주관사 중앙 서버에서 통합 관리되며, 대학오픽연합 시험이든 일반 정규시험이든 동일하게 적용됩니다. 한 번 사용하면 150일 후 다시 충전되고, 시험 응시 후에는 25일 재응시 제한이 있어 26일째부터 재사용할 수 있습니다. 참고로 이 웨이버 제도는 국내 OPIc 운영을 위해 강지완쌤이 직접 만든 제도로, 원래 OPI 시험에는 웨이버가 없고 90일에 한 번만 응시할 수 있습니다.</div>
+    </details>
+    <details>
+      <summary>저번 시험에서 나온 문제가 이번에도 다시 나올 수 있나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">평균적으로 약 15~25%의 문항이 이전 시험과 겹쳐 출제되는 편입니다. 다만 출제 시 개인의 이전 응시 이력은 반영되지 않으며, 같은 서베이(선택 주제)를 유지할수록 비슷한 주제군에서 문항이 겹칠 가능성이 있는 정도로 이해하면 됩니다.</div>
+    </details>
+    <details>
+      <summary>시험을 언제(요일·시간대) 보는지에 따라 점수가 달라지나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">문항 출제는 중앙 서버에서 이뤄지므로 주중·주말, 요일에 따른 차이는 없습니다. 채점 기준도 동일합니다. 다만 응시 인원이 많은 시간대에는 주변 소음이나 긴장감에 더 영향을 받는 사람이라면 체감 난이도가 달라질 수는 있습니다.</div>
+    </details>
+    <details>
+      <summary>답이 생각나지 않을 때 억지로 채우는 게 나을까요, 스킵하는 게 나을까요?<span class="badge p2">★★</span></summary>
+      <div class="answer">아무 말 없이 공백을 길게 끄는 것보다는 스킵하는 편이 낫습니다. 다만 롤플레이 문항은 스킵하지 않는 것이 좋습니다. 특히 IH·AL에서는 롤플레이 비중이 크기 때문에 약속 잡기, 문의하기 같은 기본 패턴은 미리 준비해 두는 것이 중요합니다.</div>
+    </details>
+    <details>
+      <summary>재활용(recycle) 같은 디스커션 주제는 어떤 난이도에서 나오나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">디스커션 주제는 4, 5단계에서 Superior(AL)까지 등급을 구별하기 위해 출제되는 문항입니다. 재활용 주제는 원래 3단계에서 나오는 디스커션과는 무관하게, AL까지 측정하기 위한 문항으로 출제됩니다.</div>
+    </details>
+    <details>
+      <summary>한 문제 안에 여러 개의 세부 질문이 있을 때, 전부 답해야 하나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">오픽 문제는 메인(Main) 질문과 서브(Subordinate) 질문으로 구성됩니다. 메인 질문이 핵심이고, 서브 질문은 답변을 떠올리도록 돕는 보조 질문이기 때문에 모든 서브 질문에 반드시 답할 필요는 없습니다. 메인 질문을 중심으로, 필요한 만큼만 서브 질문 내용을 참고해 자유롭게 답하면 됩니다.</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="grade">
+    <h2 class="cat-title">등급(IH·AL·IM)과 채점 기준</h2>
+    <p class="cat-desc">등급이 왜 이렇게 나왔는지, 다른 시험과 어떻게 비교되는지에 대한 질문</p>
+    <details>
+      <summary>오픽 채점은 발화속도·발음·억양까지 다 분석하나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">음성이 텍스트로 변환되기 전에 발화속도, 발음, 인토네이션을 빅테크 AI API로 먼저 분석합니다. 단순히 잘했다/못했다가 아니라, 목표 등급 기준 대비 얼마나 부족한지를 구체적으로 측정합니다. 이후 음성을 텍스트로 변환해 내용·문법·답변 구성·채점기준 충족 여부까지 추가로 분석하는 방식입니다. (미리오픽 자체 분석 시스템 기준)</div>
+    </details>
+    <details>
+      <summary>오픽 등급이 시험 볼 때마다 IM1과 IM2를 왔다갔다 해요. 왜 그런가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">성적이 두 등급 사이를 오간다는 것은 실력이 등급 경계(border)에 있다는 뜻입니다. 실력이 충분히 안정되면 여러 번 봐도 비슷한 등급이 나오지만, 경계에 있으면 답변 완성도나 컨디션에 따라 한 단계 위아래로 갈립니다. 전체 실력 부족보다는 등급을 가르는 핵심 답변 몇 개를 안정화하는 것이 우선입니다.</div>
+    </details>
+    <details>
+      <summary>토익스피킹 등급과 오픽 등급은 서로 대응되나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">일반적인 경향으로 토익스피킹 AL(160점) 취득자는 오픽에서 IM1~IM3, 170점 취득자는 IM2~IH가 나오는 경우가 많습니다. 다만 오픽은 즉흥성, 답변 구성, 연속 발화, 롤플레이 등 토익스피킹과 다른 채점 요소를 보기 때문에 완전히 같은 수준으로 이어지지는 않습니다. 제출처에서 둘 다 인정한다면 유리하게 나온 성적을 제출하는 것이 효율적입니다.</div>
+    </details>
+    <details>
+      <summary>"답변을 외운 것 같다"는 판정은 어떤 기준으로 이뤄지나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">억양의 단조로움, 답변의 자연스러움, 질문과의 관련성(Off-topic 여부) 등을 종합적으로 봅니다. 특히 같은 표현을 반복하는 self-correction(자기수정) 습관은 채점기준표에도 감점 요소로 명시되어 있어서, 필러를 줄이고 소재를 빠르게 이어가는 연습이 도움이 됩니다.</div>
+    </details>
+    <details>
+      <summary>답변한 문항 수(응답률)가 등급에 영향을 주나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">응답한 문항 수 자체는 성적과 직접적인 관련이 없습니다. 답변한 문항만 채점 대상이 되며, 답변 개수가 늘거나 줄었다고 점수가 오르내리지 않습니다. 중요한 것은 답변한 문항의 질입니다.</div>
+    </details>
+    <details>
+      <summary>AL을 측정하는 '비교' 유형 문항은 어떤 키워드로 알아챌 수 있나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">compare, differences between the past and now, have changed 같은 표현이 문제에 들어있다면 과거-현재를 비교하는 AL 평가 문항일 가능성이 큽니다. 단순한 경험 묘사 문항과 구분해서, 비교 구조로 답변을 준비하는 것이 중요합니다.</div>
+    </details>
+    <details>
+      <summary>"한글영향"이라는 평가 항목은 무엇인가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">모국어(한국어)의 영향을 많이 받은 영어를 구사하는 것으로 평가되었다는 의미입니다. 영어 자체는 전달되지만, 발음·강세·리듬·억양 등이 모국어의 영향을 받아 자연스러운 영어 발화와는 다소 차이가 있다고 평가받았다는 뜻입니다.</div>
+    </details>
+    <details>
+      <summary>토플 스피킹은 잘 나오는데 오픽에서는 "외운 티가 난다"는 감점을 받았어요. 오픽만의 채점 요소가 있나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">ETS 계열 시험에서 좋은 결과가 있다는 것은 성실하게 답변을 준비했다는 뜻이지만, 창의적이고 회화적으로 들리는 말투나 어투에서는 부족할 수 있습니다. 특히 롤플레이의 질문 영역에서 감점이 발생하는 경우가 많으므로, 오픽만의 채점 기준(즉흥성, 자연스러운 대화 전개 등)을 알고 별도로 준비하는 것이 도움이 됩니다.</div>
+    </details>
+    <details>
+      <summary>웨이버를 써도 똑같은 등급(IL 등)이 반복해서 나와요. 실력 차이가 없는데 왜 그런가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">스크립트를 사용하지 않았다면 스크립트 판정을 받을 가능성은 없습니다. IL 등급은 주로 롤플레이의 질문하기 문항에서 "질문을 어려워함" 판정이 나올 때 발생합니다. 등급이 반복된다면 롤플레이 질문 구성을 더 자연스럽게 준비하는 것이 핵심입니다.</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="roleplay">
+    <h2 class="cat-title">문제 유형별 전략 — 롤플레이</h2>
+    <p class="cat-desc">14~15번, 11~12번처럼 롤플레이 문항을 어떻게 준비할지에 대한 질문</p>
+    <details>
+      <summary>오픽 14번, 15번 문제는 항상 같은 주제로 나오나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">네, 14번과 15번은 같은 주제(대개 롤플레이 관련 상황)로 이어서 출제됩니다.</div>
+    </details>
+    <details>
+      <summary>롤플레이에서 "약속(appointment)" 관련 문제가 나오면 어떻게 준비해야 하나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">appointments·differences 같은 키워드가 함께 나오면, 과거와 현재의 약속 문화를 비교하는 AL 유형 문항일 가능성이 큽니다. "예전엔 전화로 약속을 잡았지만 요즘은 메신저·앱으로 잡는다"처럼 과거-현재 대비 구조로 답변을 준비하면 좋습니다.</div>
+    </details>
+    <details>
+      <summary>서베이에서 선택하지 않은 항목과 관련된 롤플레이가 출제될 수도 있나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">원칙적으로는 선택하지 않은 주제에서 롤플레이가 출제되지 않습니다. 다만 예외적으로 운동 관련 항목은 헬스장을 선택하지 않았더라도 다른 운동을 체크했다면 출제될 수 있으니 주의가 필요합니다.</div>
+    </details>
+    <details>
+      <summary>롤플레이 11번, 12번에서 질문(제안)을 몇 개나 해야 좋은 평가를 받나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">2~3가지 이상 질문하라는 기준은 '최소량'을 의미하는 것으로, 그 이하로는 판독 불가 처리될 수 있습니다. 최소량만 채운다고 최고 등급을 받기는 어렵고, 본인이 할 수 있는 최대한을 보여줘야 합니다.</div>
+    </details>
+    <details>
+      <summary>IM1이 목표라면 롤플레이(11, 12번)를 꼭 대답해야 유리할까요?<span class="badge p2">★★</span></summary>
+      <div class="answer">11번 롤플레이는 IM 등급의 최종 스펙트럼을 결정짓는 핵심 문항입니다. 얼마나 자연스럽게 질문을 이어가고 상황에 맞게 대화를 전개하느냐에 따라 IM 등급 내 평가가 크게 달라지므로, 다양한 롤플레이 유형을 반복 연습하는 것이 중요합니다.</div>
+    </details>
+    <details>
+      <summary>서베이에서 선택한 항목(예: 친척 집 봐주기)의 롤플레이 유형은 요즘도 출제되나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">네, 이런 유형은 현재도 꾸준히 출제되고 있습니다. 서베이에서 선택하는 항목은 실제 시험에서 출제될 수 있도록 고르는 것이기 때문에, 오래된 유형이라고 준비 범위에서 제외하지 말고 계속 대비해 두는 것이 좋습니다.</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="surprise">
+    <h2 class="cat-title">문제 유형별 전략 — 돌발 주제</h2>
+    <p class="cat-desc">예상치 못한 소재가 나왔을 때 어떻게 대응할지에 대한 질문</p>
+    <details>
+      <summary>오픽에서 가장 자주 나오는 돌발 주제는 무엇인가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">은행이 여지껏 가장 많이 출제된 돌발 주제 중 하나로 꼽힙니다. 돌발 주제는 고득점자를 가려내는 역할을 하기 때문에, 평소 익숙하지 않은 소재라도 기본적인 설명 틀은 준비해 두는 것이 좋습니다.</div>
+    </details>
+    <details>
+      <summary>IM1이 목표인데 돌발 주제 대비에 시간을 많이 써야 하나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">돌발 주제는 주로 IH 이상을 가르는 변별 요소로 활용됩니다. IM1 단계에서는 돌발 대비보다 기본적인 답변 구성과 표현력을 갖추는 것이 우선입니다.</div>
+    </details>
+    <details>
+      <summary>돌발 주제 중 "이슈(Issue)" 유형 문항은 어떻게 준비해야 하나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">이슈 문항은 AL을 측정하는 문항으로, 예를 들어 음식 오염 같은 사회적 이슈에 대한 의견을 묻는 형태로 출제됩니다. 단순히 좋아하는지 아닌지가 아니라, 문제점·원인·해결 방안 또는 본인의 의견을 중심으로 답변을 준비해야 합니다.</div>
+    </details>
+    <details>
+      <summary>돌발 주제와 14·15번을 모두 스킵해도 IM1을 받을 수 있나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">선택주제의 묘사 문항과 롤플레이 답변을 중심으로 준비하면 IM 시리즈 등급은 달성이 가능합니다. 다만 그 이상(IH·AL)을 목표로 한다면 돌발 주제 대비가 필요해집니다.</div>
+    </details>
+    <details>
+      <summary>돌발 주제(지형 등)에서 15번 질문을 잘하면 가산점을 받을 수 있나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">돌발 주제는 IH를 측정하기 위한 문항이라 14번 자체는 가산과 무관합니다. 다만 15번에서 질문을 얼마나 잘 구성했는지에 따라 NH부터 IM3까지 폭넓게 갈릴 수 있습니다. 질문을 전혀 못 하는 수준부터 어려운 질문까지 가능한 수준 사이 어디에 위치하느냐로 최종 성적이 결정됩니다.</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="script">
+    <h2 class="cat-title">답변 작성 & 스크립트 전략</h2>
+    <p class="cat-desc">암기, 스크립트 작성, 문법 공부 순서 등 답변을 준비하는 방법에 대한 질문</p>
+    <details>
+      <summary>Self-correction(자기수정)이 왜 감점 요인이 되나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">Self-correction은 실제 채점기준표에서도 감점 요소로 체크되는 항목입니다. 말을 떠올리는 과정에서 같은 표현을 반복하는 경우가 많은데, 필러를 줄이고 소재를 빠르게 이어서 말할 수 있도록 준비하는 것이 중요합니다. 특히 IM2 구간에서는 속도·답변량 측면의 유창성 부족이 흔한 원인입니다.</div>
+    </details>
+    <details>
+      <summary>문장을 완벽하게 암기해서 답변해야 하나요?<span class="badge p1">★</span></summary>
+      <div class="answer">이미 기본 문법을 알고 있다면 문장을 통째로 외우기보다, 방향성과 핵심 키워드를 잡고 자연스럽게 이어 말하는 연습이 더 중요합니다. 반대로 말이 거의 나오지 않는 상태라면 스크립트를 꼼꼼히 작성해 어느 정도 익숙해질 때까지 반복 연습이 필요합니다.</div>
+    </details>
+    <details>
+      <summary>오픽에서 "스크립트(암기한 답변)"라는 판정은 어떻게 이뤄지나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">반복적인 답변으로 판정될 만한 근거는 주로 경험 기반 답변에서 나옵니다. 현재 시제의 묘사 답변은 일반적인 표현을 쓰기 때문에 판정이 어렵지만, 타인의 경험을 그대로 인용한 듯한 반복적 표현은 데이터로 누적되어 부자연스러움으로 평가될 수 있습니다.</div>
+    </details>
+    <details>
+      <summary>문법이 부족한 편인데 오픽 공부와 문법 공부를 같이 해야 할까요?<span class="badge p1">★</span></summary>
+      <div class="answer">문법을 잘 아는 사람도 말할 때는 어려움을 겪는 경우가 많습니다. 문법 지식이 새로운 표현을 배울 때 도움이 되긴 하지만, 문법을 먼저 완성한 뒤에 오픽을 시작해야 하는 것은 아닙니다.</div>
+    </details>
+    <details>
+      <summary>3일 정도 시간을 내서 4시간 강의를 듣고 시험을 준비할 수 있을까요?<span class="badge p1">★</span></summary>
+      <div class="answer">단기간에 수강 후 목표 성적을 얻는 사례도 있지만, 강의는 배운 내용을 자신의 것으로 만들 시간이 확보됐을 때 효과가 큽니다. 시간이 부족하다면 강의보다 실전 연습(모의고사·말하기 트레이너) 비중을 늘려 시험에 임하는 방법을 추천합니다.</div>
+    </details>
+    <details>
+      <summary>미용실 예약은 appointment인가요, reservation인가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">미용실은 보통 담당자(hairdresser)와 만나는 개념이라 appointment가 더 자연스럽습니다. 반면 특정 사람보다 자리나 시간 확보에 초점을 두면 reservation도 사용할 수 있습니다. 예: "I made an appointment with my hairdresser"(미용사와 예약을 잡았다, 사람 중심) vs "I made a reservation at a hair salon"(미용실을 예약했다, 장소 중심).</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="topic">
+    <h2 class="cat-title">소재별 답변 팁</h2>
+    <p class="cat-desc">여행, TV, 선택주제/돌발주제 구성처럼 특정 소재에 대한 세부 질문</p>
+    <details>
+      <summary>TV 시청 관련 질문에 영화 답변을 재활용해도 되나요?<span class="badge p1">★</span></summary>
+      <div class="answer">TV 주제는 좋아하는 프로그램, 최근 본 프로그램, 기억에 남는 프로그램, 어릴 적 프로그램 형태로 출제됩니다. "영화를 TV로 본다"는 방식으로 준비하면 다른 주제와 겹치지 않게 활용할 수 있는 전략이 될 수 있습니다.</div>
+    </details>
+    <details>
+      <summary>해외여행 주제 답변은 과거형과 현재형 중 어떤 시제를 써야 하나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">여행 주제는 방문한 도시·나라를 대상으로 하기 때문에 현재시제와 과거시제 모두 사용할 수 있습니다. 중요한 것은 시제 선택보다, 답변 안에서 일관성 있고 자연스럽게 유지하는 것입니다.</div>
+    </details>
+    <details>
+      <summary>선택주제와 돌발주제는 각각 몇 개씩 출제되나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">선택주제는 서베이에서 고른 집, 취미, 여가활동, 운동, 여행 등에서 3개 정도, 돌발주제는 서베이에서 선택하지 않은 주제 중 2개 정도가 출제됩니다.</div>
+    </details>
+    <details>
+      <summary>문제를 정확히 못 알아들어서 다른 질문으로 답했다면 감점이 클까요?<span class="badge p2">★★</span></summary>
+      <div class="answer">14, 15번 답변 내용은 IH 등급까지는 크게 영향을 주지 않는 편입니다. 너무 걱정하지 않아도 됩니다.</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="examday">
+    <h2 class="cat-title">시험 당일 실전 정보</h2>
+    <p class="cat-desc">부정행위 규정, 답변 시간 제한, 국내외 시험 인정 범위 등 실전에서 궁금한 것들</p>
+    <details>
+      <summary>오픽 시험 중 컴퓨터 화면에 필기할 수 있는 창이 뜬다는 게 사실인가요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">사실이 아닙니다. 오픽 시험 중 필기는 금지되어 있으며, 필기도구나 메모 사용이 적발되면 최대 5년간 NH 등급 처리 및 응시 금지 조치까지 내려질 수 있습니다.</div>
+    </details>
+    <details>
+      <summary>답변하다 "time for the next question" 알림을 자주 보고 다음 문제로 넘어가는데 괜찮은가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">답변 시간이 길어졌다는 것은 오히려 말을 잘하고 있다는 신호일 수 있습니다. 국내 오픽 시험은 녹음이 끝까지 진행되지만, 미국 오픽은 제한 시간 사인이 뜨면 녹음이 그 시점에서 끊기는 차이가 있습니다.</div>
+    </details>
+    <details>
+      <summary>국내에서 오픽 IH만 있는데 해외에서 OPI 시험에 접수가 되는 이유는 무엇인가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">OPI는 국내외를 구분하지 않고 동일하게 인정됩니다. 국내에서 OPI 응시를 제한해온 것은, 오픽만으로도 NH부터 AL까지 충분히 측정 가능하기 때문에 마련된 정책적인 제한일 뿐입니다.</div>
+    </details>
+  </div>
+
+  <div class="cat-block hidden" data-cat="miriopic">
+    <h2 class="cat-title">미리오픽 서비스 이용 가이드</h2>
+    <p class="cat-desc">미리오픽 모의고사·실전연습·독립팩 등 서비스 자체 이용법에 대한 질문 (일반 오픽 FAQ와 분리 추천)</p>
+    <details>
+      <summary>미리오픽 모의고사는 실제 오픽 시험과 얼마나 비슷한가요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">문항 수와 출제 방식을 실제 시험과 동일하게 설계했고, 점수에 인위적인 가중치나 왜곡을 주지 않습니다. 실제 시험 데이터를 지속적으로 분석해 최신 출제 경향도 반영합니다. 오픽 시험 주관사에서도 삼성전자 행사에 미리오픽 서비스를 구매해 활용한 사례가 있을 정도로 신뢰성을 인정받고 있습니다.</div>
+    </details>
+    <details>
+      <summary>미리오픽에서 응답률(답변한 문항 수)이 성적에 영향을 주나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">응답률과 성적은 직접적인 관련이 없습니다. 미리오픽은 실제 오픽과 동일하게 답변한 문항만 채점하며, AL 도달 기준에 해당하는 답변이 나오면 결과가 AL로 산출되도록 설계되어 있습니다.</div>
+    </details>
+    <details>
+      <summary>미리오픽 0원(무료) 모의고사에서도 예상 등급이 나오나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">0원 체험팩에서는 예상 등급이 제공되지 않습니다. 시험 환경 체험, 샘플 문제 유형 확인 용도이며, 예상 성적·AI 채점·상세 피드백·목표 등급 대비 분석(Gap Analysis)은 유료 모의고사(진단팩)에서 제공됩니다.</div>
+    </details>
+    <details>
+      <summary>미리오픽 독립팩은 무엇이고 어떻게 활용하나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">독립팩은 실제 출제 데이터를 기반으로 우선순위가 높은 핵심 문제 238개를 선별한 문제집입니다. 이 TOP 10 주제만 집중 학습해도 실제 시험 문항의 평균 약 75%를 대비할 수 있어, 전체 기출문항(약 1,400개)을 모두 준비하는 것보다 효율적입니다. 5회 이상 응시하면 주제별·돌발별 스크립트를 자동 정리해주는 '마이오픽Book'도 발행됩니다.</div>
+    </details>
+    <details>
+      <summary>미리오픽 응시 중 끊기면 처음부터 다시 봐야 하나요?<span class="badge p2">★★</span></summary>
+      <div class="answer">마이존 &gt; 이어보기로 들어가면 이전에 풀던 문제 번호부터 이어서 진행할 수 있습니다. 크롬 브라우저 환경이 기술적으로 더 안정적입니다.</div>
+    </details>
+    <details>
+      <summary>미리오픽 예상 등급과 실제 오픽 성적은 얼마나 차이가 나나요?<span class="badge p3">★★★</span></summary>
+      <div class="answer">통계적으로 일관성 있게 나오는 편이며, 미리오픽 예측 등급과 실제 성적의 차이는 ±0.38등급 이내에 응시자의 약 81%가 위치합니다.</div>
+    </details>
+    <details>
+      <summary>'4시간 오픽' 강의는 정말 4시간짜리 강의인가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">4시간 오픽은 실제로 진행됐던 4시간짜리 1:1 수업을 기반으로 제작된 강의로, 핵심전략편 4시간과 실제수업편 4시간으로 구성됩니다. 단순 압축 강의가 아니라 실제 목표 성적을 취득한 수업 내용을 그대로 인강화한 콘텐츠이며, 오픽 출제 흐름이 바뀔 때마다 업데이트됩니다.</div>
+    </details>
+    <details>
+      <summary>실전연습(말하기 트레이너)과 미리오픽 무제한 모의고사는 무엇이 다른가요?<span class="badge p2">★★</span></summary>
+      <div class="answer">실전말하기 트레이너는 실전 연습의 사전 단계로, 실제 시험처럼 반복해서 말하기 연습을 할 수 있는 기능입니다. 다만 AI 교정, 채점, 점수 예측, 세부 리포트는 제공되지 않습니다. AI 피드백과 채점까지 함께 원한다면 미리오픽 무제한 실전연습을 추가로 이용하는 것이 좋습니다.</div>
+    </details>
+  </div>
+  </div>
+
+  <p class="no-result" id="noResult">검색 결과가 없어요. 다른 키워드로 찾아보세요.</p>
+  <p class="src-note">이 페이지의 모든 질문·답변은 정적 HTML로 렌더링되어 있어, JavaScript를 실행하지 않는 크롤러도 전체 내용을 읽을 수 있습니다.</p>
+</div>
+
+<script>
+
+// 이 스크립트는 이미 HTML에 존재하는 콘텐츠를 "보여주고 숨기는" 용도로만 사용됩니다.
+// FAQ 문항 자체는 전부 정적 HTML로 이미 렌더링되어 있어, JS를 실행하지 않는
+// 크롤러/AI 봇도 모든 질문·답변 텍스트와 schema.org 마크업을 그대로 읽을 수 있습니다.
+const tabs = document.querySelectorAll('.tab');
+const blocks = document.querySelectorAll('.cat-block');
+const searchBox = document.getElementById('searchBox');
+const noResult = document.getElementById('noResult');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    blocks.forEach(b => b.classList.toggle('hidden', b.dataset.cat !== tab.dataset.cat));
+    searchBox.value = '';
+    noResult.style.display = 'none';
+    blocks.forEach(b => b.querySelectorAll('details').forEach(d => d.classList.remove('hidden')));
+  });
+});
+
+searchBox.addEventListener('input', () => {
+  const q = searchBox.value.trim().toLowerCase();
+  tabs.forEach(t => t.classList.remove('active'));
+  if(!q){
+    tabs[0].classList.add('active');
+    blocks.forEach((b,i) => b.classList.toggle('hidden', i !== 0));
+    blocks.forEach(b => b.querySelectorAll('details').forEach(d => d.classList.remove('hidden')));
+    noResult.style.display = 'none';
+    return;
+  }
+  let anyVisible = false;
+  blocks.forEach(block => {
+    let blockHasMatch = false;
+    block.querySelectorAll('details').forEach(det => {
+      const match = det.textContent.toLowerCase().includes(q);
+      det.classList.toggle('hidden', !match);
+      if(match) blockHasMatch = true;
+    });
+    block.classList.toggle('hidden', !blockHasMatch);
+    if(blockHasMatch) anyVisible = true;
+  });
+  noResult.style.display = anyVisible ? 'none' : 'block';
+});
+
+</script>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "오픽 서베이를 선택하면 콤보(문항)는 몇 개나 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "서베이에서 선택한 주제 중 3개 정도가 선택주제로, 선택하지 않은 주제 중 2개 정도가 돌발주제로 출제되는 구조입니다. 대략 9개 문항이 선택한 서베이에서, 나머지 6개 정도가 고르지 않은 돌발주제에서 출제된다고 보면 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "오픽 난이도(1~6단계) 선택이 등급에 영향을 주나요? 5-5와 6-6 중 뭐가 유리한가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "난이도 선택 자체가 성적 향상과 직접적인 관련은 없습니다. 6단계를 선택하면 비교 문항이 하나 더 출제되는데, 그 문항까지 자신 있게 답할 수 있다면 6단계를, 오히려 답변이 무너지거나 스킵할 가능성이 크다면 5단계를 선택하는 게 좋습니다. 난이도 숫자보다 실제 출제된 문항에 얼마나 잘 답하는지가 중요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "조기성적 발표를 신청하면 시험이 더 어렵게 나오거나 채점이 후해지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "아닙니다. 조기성적 발표와 일반 발표는 채점 기준을 구분하지 않고 동일하게 진행됩니다. 출제는 선택한 서베이를 바탕으로 중앙 서버에서 랜덤 생성되고 채점은 별도 채점자가 진행하는데, 조기성적 발표는 성적 제공 시점만 앞당기는 행정 서비스일 뿐 출제·채점 방식과는 무관합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "오픽 웨이버(재응시 제도)는 어떻게 적용되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "웨이버는 시험 주관사 중앙 서버에서 통합 관리되며, 대학오픽연합 시험이든 일반 정규시험이든 동일하게 적용됩니다. 한 번 사용하면 150일 후 다시 충전되고, 시험 응시 후에는 25일 재응시 제한이 있어 26일째부터 재사용할 수 있습니다. 참고로 이 웨이버 제도는 국내 OPIc 운영을 위해 강지완쌤이 직접 만든 제도로, 원래 OPI 시험에는 웨이버가 없고 90일에 한 번만 응시할 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "저번 시험에서 나온 문제가 이번에도 다시 나올 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "평균적으로 약 15~25%의 문항이 이전 시험과 겹쳐 출제되는 편입니다. 다만 출제 시 개인의 이전 응시 이력은 반영되지 않으며, 같은 서베이(선택 주제)를 유지할수록 비슷한 주제군에서 문항이 겹칠 가능성이 있는 정도로 이해하면 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "시험을 언제(요일·시간대) 보는지에 따라 점수가 달라지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "문항 출제는 중앙 서버에서 이뤄지므로 주중·주말, 요일에 따른 차이는 없습니다. 채점 기준도 동일합니다. 다만 응시 인원이 많은 시간대에는 주변 소음이나 긴장감에 더 영향을 받는 사람이라면 체감 난이도가 달라질 수는 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "답이 생각나지 않을 때 억지로 채우는 게 나을까요, 스킵하는 게 나을까요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "아무 말 없이 공백을 길게 끄는 것보다는 스킵하는 편이 낫습니다. 다만 롤플레이 문항은 스킵하지 않는 것이 좋습니다. 특히 IH·AL에서는 롤플레이 비중이 크기 때문에 약속 잡기, 문의하기 같은 기본 패턴은 미리 준비해 두는 것이 중요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "재활용(recycle) 같은 디스커션 주제는 어떤 난이도에서 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "디스커션 주제는 4, 5단계에서 Superior(AL)까지 등급을 구별하기 위해 출제되는 문항입니다. 재활용 주제는 원래 3단계에서 나오는 디스커션과는 무관하게, AL까지 측정하기 위한 문항으로 출제됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "한 문제 안에 여러 개의 세부 질문이 있을 때, 전부 답해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "오픽 문제는 메인(Main) 질문과 서브(Subordinate) 질문으로 구성됩니다. 메인 질문이 핵심이고, 서브 질문은 답변을 떠올리도록 돕는 보조 질문이기 때문에 모든 서브 질문에 반드시 답할 필요는 없습니다. 메인 질문을 중심으로, 필요한 만큼만 서브 질문 내용을 참고해 자유롭게 답하면 됩니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "오픽 채점은 발화속도·발음·억양까지 다 분석하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "음성이 텍스트로 변환되기 전에 발화속도, 발음, 인토네이션을 빅테크 AI API로 먼저 분석합니다. 단순히 잘했다/못했다가 아니라, 목표 등급 기준 대비 얼마나 부족한지를 구체적으로 측정합니다. 이후 음성을 텍스트로 변환해 내용·문법·답변 구성·채점기준 충족 여부까지 추가로 분석하는 방식입니다. (미리오픽 자체 분석 시스템 기준)"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "오픽 등급이 시험 볼 때마다 IM1과 IM2를 왔다갔다 해요. 왜 그런가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "성적이 두 등급 사이를 오간다는 것은 실력이 등급 경계(border)에 있다는 뜻입니다. 실력이 충분히 안정되면 여러 번 봐도 비슷한 등급이 나오지만, 경계에 있으면 답변 완성도나 컨디션에 따라 한 단계 위아래로 갈립니다. 전체 실력 부족보다는 등급을 가르는 핵심 답변 몇 개를 안정화하는 것이 우선입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "토익스피킹 등급과 오픽 등급은 서로 대응되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "일반적인 경향으로 토익스피킹 AL(160점) 취득자는 오픽에서 IM1~IM3, 170점 취득자는 IM2~IH가 나오는 경우가 많습니다. 다만 오픽은 즉흥성, 답변 구성, 연속 발화, 롤플레이 등 토익스피킹과 다른 채점 요소를 보기 때문에 완전히 같은 수준으로 이어지지는 않습니다. 제출처에서 둘 다 인정한다면 유리하게 나온 성적을 제출하는 것이 효율적입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "\"답변을 외운 것 같다\"는 판정은 어떤 기준으로 이뤄지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "억양의 단조로움, 답변의 자연스러움, 질문과의 관련성(Off-topic 여부) 등을 종합적으로 봅니다. 특히 같은 표현을 반복하는 self-correction(자기수정) 습관은 채점기준표에도 감점 요소로 명시되어 있어서, 필러를 줄이고 소재를 빠르게 이어가는 연습이 도움이 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "답변한 문항 수(응답률)가 등급에 영향을 주나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "응답한 문항 수 자체는 성적과 직접적인 관련이 없습니다. 답변한 문항만 채점 대상이 되며, 답변 개수가 늘거나 줄었다고 점수가 오르내리지 않습니다. 중요한 것은 답변한 문항의 질입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "AL을 측정하는 '비교' 유형 문항은 어떤 키워드로 알아챌 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "compare, differences between the past and now, have changed 같은 표현이 문제에 들어있다면 과거-현재를 비교하는 AL 평가 문항일 가능성이 큽니다. 단순한 경험 묘사 문항과 구분해서, 비교 구조로 답변을 준비하는 것이 중요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "\"한글영향\"이라는 평가 항목은 무엇인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "모국어(한국어)의 영향을 많이 받은 영어를 구사하는 것으로 평가되었다는 의미입니다. 영어 자체는 전달되지만, 발음·강세·리듬·억양 등이 모국어의 영향을 받아 자연스러운 영어 발화와는 다소 차이가 있다고 평가받았다는 뜻입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "토플 스피킹은 잘 나오는데 오픽에서는 \"외운 티가 난다\"는 감점을 받았어요. 오픽만의 채점 요소가 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ETS 계열 시험에서 좋은 결과가 있다는 것은 성실하게 답변을 준비했다는 뜻이지만, 창의적이고 회화적으로 들리는 말투나 어투에서는 부족할 수 있습니다. 특히 롤플레이의 질문 영역에서 감점이 발생하는 경우가 많으므로, 오픽만의 채점 기준(즉흥성, 자연스러운 대화 전개 등)을 알고 별도로 준비하는 것이 도움이 됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "웨이버를 써도 똑같은 등급(IL 등)이 반복해서 나와요. 실력 차이가 없는데 왜 그런가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "스크립트를 사용하지 않았다면 스크립트 판정을 받을 가능성은 없습니다. IL 등급은 주로 롤플레이의 질문하기 문항에서 \"질문을 어려워함\" 판정이 나올 때 발생합니다. 등급이 반복된다면 롤플레이 질문 구성을 더 자연스럽게 준비하는 것이 핵심입니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "오픽 14번, 15번 문제는 항상 같은 주제로 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "네, 14번과 15번은 같은 주제(대개 롤플레이 관련 상황)로 이어서 출제됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "롤플레이에서 \"약속(appointment)\" 관련 문제가 나오면 어떻게 준비해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "appointments·differences 같은 키워드가 함께 나오면, 과거와 현재의 약속 문화를 비교하는 AL 유형 문항일 가능성이 큽니다. \"예전엔 전화로 약속을 잡았지만 요즘은 메신저·앱으로 잡는다\"처럼 과거-현재 대비 구조로 답변을 준비하면 좋습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "서베이에서 선택하지 않은 항목과 관련된 롤플레이가 출제될 수도 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "원칙적으로는 선택하지 않은 주제에서 롤플레이가 출제되지 않습니다. 다만 예외적으로 운동 관련 항목은 헬스장을 선택하지 않았더라도 다른 운동을 체크했다면 출제될 수 있으니 주의가 필요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "롤플레이 11번, 12번에서 질문(제안)을 몇 개나 해야 좋은 평가를 받나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2~3가지 이상 질문하라는 기준은 '최소량'을 의미하는 것으로, 그 이하로는 판독 불가 처리될 수 있습니다. 최소량만 채운다고 최고 등급을 받기는 어렵고, 본인이 할 수 있는 최대한을 보여줘야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "IM1이 목표라면 롤플레이(11, 12번)를 꼭 대답해야 유리할까요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "11번 롤플레이는 IM 등급의 최종 스펙트럼을 결정짓는 핵심 문항입니다. 얼마나 자연스럽게 질문을 이어가고 상황에 맞게 대화를 전개하느냐에 따라 IM 등급 내 평가가 크게 달라지므로, 다양한 롤플레이 유형을 반복 연습하는 것이 중요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "서베이에서 선택한 항목(예: 친척 집 봐주기)의 롤플레이 유형은 요즘도 출제되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "네, 이런 유형은 현재도 꾸준히 출제되고 있습니다. 서베이에서 선택하는 항목은 실제 시험에서 출제될 수 있도록 고르는 것이기 때문에, 오래된 유형이라고 준비 범위에서 제외하지 말고 계속 대비해 두는 것이 좋습니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "오픽에서 가장 자주 나오는 돌발 주제는 무엇인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "은행이 여지껏 가장 많이 출제된 돌발 주제 중 하나로 꼽힙니다. 돌발 주제는 고득점자를 가려내는 역할을 하기 때문에, 평소 익숙하지 않은 소재라도 기본적인 설명 틀은 준비해 두는 것이 좋습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "IM1이 목표인데 돌발 주제 대비에 시간을 많이 써야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "돌발 주제는 주로 IH 이상을 가르는 변별 요소로 활용됩니다. IM1 단계에서는 돌발 대비보다 기본적인 답변 구성과 표현력을 갖추는 것이 우선입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "돌발 주제 중 \"이슈(Issue)\" 유형 문항은 어떻게 준비해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "이슈 문항은 AL을 측정하는 문항으로, 예를 들어 음식 오염 같은 사회적 이슈에 대한 의견을 묻는 형태로 출제됩니다. 단순히 좋아하는지 아닌지가 아니라, 문제점·원인·해결 방안 또는 본인의 의견을 중심으로 답변을 준비해야 합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "돌발 주제와 14·15번을 모두 스킵해도 IM1을 받을 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "선택주제의 묘사 문항과 롤플레이 답변을 중심으로 준비하면 IM 시리즈 등급은 달성이 가능합니다. 다만 그 이상(IH·AL)을 목표로 한다면 돌발 주제 대비가 필요해집니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "돌발 주제(지형 등)에서 15번 질문을 잘하면 가산점을 받을 수 있나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "돌발 주제는 IH를 측정하기 위한 문항이라 14번 자체는 가산과 무관합니다. 다만 15번에서 질문을 얼마나 잘 구성했는지에 따라 NH부터 IM3까지 폭넓게 갈릴 수 있습니다. 질문을 전혀 못 하는 수준부터 어려운 질문까지 가능한 수준 사이 어디에 위치하느냐로 최종 성적이 결정됩니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Self-correction(자기수정)이 왜 감점 요인이 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Self-correction은 실제 채점기준표에서도 감점 요소로 체크되는 항목입니다. 말을 떠올리는 과정에서 같은 표현을 반복하는 경우가 많은데, 필러를 줄이고 소재를 빠르게 이어서 말할 수 있도록 준비하는 것이 중요합니다. 특히 IM2 구간에서는 속도·답변량 측면의 유창성 부족이 흔한 원인입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "문장을 완벽하게 암기해서 답변해야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "이미 기본 문법을 알고 있다면 문장을 통째로 외우기보다, 방향성과 핵심 키워드를 잡고 자연스럽게 이어 말하는 연습이 더 중요합니다. 반대로 말이 거의 나오지 않는 상태라면 스크립트를 꼼꼼히 작성해 어느 정도 익숙해질 때까지 반복 연습이 필요합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "오픽에서 \"스크립트(암기한 답변)\"라는 판정은 어떻게 이뤄지나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "반복적인 답변으로 판정될 만한 근거는 주로 경험 기반 답변에서 나옵니다. 현재 시제의 묘사 답변은 일반적인 표현을 쓰기 때문에 판정이 어렵지만, 타인의 경험을 그대로 인용한 듯한 반복적 표현은 데이터로 누적되어 부자연스러움으로 평가될 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "문법이 부족한 편인데 오픽 공부와 문법 공부를 같이 해야 할까요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "문법을 잘 아는 사람도 말할 때는 어려움을 겪는 경우가 많습니다. 문법 지식이 새로운 표현을 배울 때 도움이 되긴 하지만, 문법을 먼저 완성한 뒤에 오픽을 시작해야 하는 것은 아닙니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "3일 정도 시간을 내서 4시간 강의를 듣고 시험을 준비할 수 있을까요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "단기간에 수강 후 목표 성적을 얻는 사례도 있지만, 강의는 배운 내용을 자신의 것으로 만들 시간이 확보됐을 때 효과가 큽니다. 시간이 부족하다면 강의보다 실전 연습(모의고사·말하기 트레이너) 비중을 늘려 시험에 임하는 방법을 추천합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미용실 예약은 appointment인가요, reservation인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "미용실은 보통 담당자(hairdresser)와 만나는 개념이라 appointment가 더 자연스럽습니다. 반면 특정 사람보다 자리나 시간 확보에 초점을 두면 reservation도 사용할 수 있습니다. 예: \"I made an appointment with my hairdresser\"(미용사와 예약을 잡았다, 사람 중심) vs \"I made a reservation at a hair salon\"(미용실을 예약했다, 장소 중심)."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "TV 시청 관련 질문에 영화 답변을 재활용해도 되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "TV 주제는 좋아하는 프로그램, 최근 본 프로그램, 기억에 남는 프로그램, 어릴 적 프로그램 형태로 출제됩니다. \"영화를 TV로 본다\"는 방식으로 준비하면 다른 주제와 겹치지 않게 활용할 수 있는 전략이 될 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "해외여행 주제 답변은 과거형과 현재형 중 어떤 시제를 써야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "여행 주제는 방문한 도시·나라를 대상으로 하기 때문에 현재시제와 과거시제 모두 사용할 수 있습니다. 중요한 것은 시제 선택보다, 답변 안에서 일관성 있고 자연스럽게 유지하는 것입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "선택주제와 돌발주제는 각각 몇 개씩 출제되나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "선택주제는 서베이에서 고른 집, 취미, 여가활동, 운동, 여행 등에서 3개 정도, 돌발주제는 서베이에서 선택하지 않은 주제 중 2개 정도가 출제됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "문제를 정확히 못 알아들어서 다른 질문으로 답했다면 감점이 클까요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "14, 15번 답변 내용은 IH 등급까지는 크게 영향을 주지 않는 편입니다. 너무 걱정하지 않아도 됩니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "오픽 시험 중 컴퓨터 화면에 필기할 수 있는 창이 뜬다는 게 사실인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "사실이 아닙니다. 오픽 시험 중 필기는 금지되어 있으며, 필기도구나 메모 사용이 적발되면 최대 5년간 NH 등급 처리 및 응시 금지 조치까지 내려질 수 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "답변하다 \"time for the next question\" 알림을 자주 보고 다음 문제로 넘어가는데 괜찮은가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "답변 시간이 길어졌다는 것은 오히려 말을 잘하고 있다는 신호일 수 있습니다. 국내 오픽 시험은 녹음이 끝까지 진행되지만, 미국 오픽은 제한 시간 사인이 뜨면 녹음이 그 시점에서 끊기는 차이가 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "국내에서 오픽 IH만 있는데 해외에서 OPI 시험에 접수가 되는 이유는 무엇인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "OPI는 국내외를 구분하지 않고 동일하게 인정됩니다. 국내에서 OPI 응시를 제한해온 것은, 오픽만으로도 NH부터 AL까지 충분히 측정 가능하기 때문에 마련된 정책적인 제한일 뿐입니다."
+   }
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "미리오픽 모의고사는 실제 오픽 시험과 얼마나 비슷한가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "문항 수와 출제 방식을 실제 시험과 동일하게 설계했고, 점수에 인위적인 가중치나 왜곡을 주지 않습니다. 실제 시험 데이터를 지속적으로 분석해 최신 출제 경향도 반영합니다. 오픽 시험 주관사에서도 삼성전자 행사에 미리오픽 서비스를 구매해 활용한 사례가 있을 정도로 신뢰성을 인정받고 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미리오픽에서 응답률(답변한 문항 수)이 성적에 영향을 주나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "응답률과 성적은 직접적인 관련이 없습니다. 미리오픽은 실제 오픽과 동일하게 답변한 문항만 채점하며, AL 도달 기준에 해당하는 답변이 나오면 결과가 AL로 산출되도록 설계되어 있습니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미리오픽 0원(무료) 모의고사에서도 예상 등급이 나오나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "0원 체험팩에서는 예상 등급이 제공되지 않습니다. 시험 환경 체험, 샘플 문제 유형 확인 용도이며, 예상 성적·AI 채점·상세 피드백·목표 등급 대비 분석(Gap Analysis)은 유료 모의고사(진단팩)에서 제공됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미리오픽 독립팩은 무엇이고 어떻게 활용하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "독립팩은 실제 출제 데이터를 기반으로 우선순위가 높은 핵심 문제 238개를 선별한 문제집입니다. 이 TOP 10 주제만 집중 학습해도 실제 시험 문항의 평균 약 75%를 대비할 수 있어, 전체 기출문항(약 1,400개)을 모두 준비하는 것보다 효율적입니다. 5회 이상 응시하면 주제별·돌발별 스크립트를 자동 정리해주는 '마이오픽Book'도 발행됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미리오픽 응시 중 끊기면 처음부터 다시 봐야 하나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "마이존 &gt; 이어보기로 들어가면 이전에 풀던 문제 번호부터 이어서 진행할 수 있습니다. 크롬 브라우저 환경이 기술적으로 더 안정적입니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "미리오픽 예상 등급과 실제 오픽 성적은 얼마나 차이가 나나요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "통계적으로 일관성 있게 나오는 편이며, 미리오픽 예측 등급과 실제 성적의 차이는 ±0.38등급 이내에 응시자의 약 81%가 위치합니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "'4시간 오픽' 강의는 정말 4시간짜리 강의인가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "4시간 오픽은 실제로 진행됐던 4시간짜리 1:1 수업을 기반으로 제작된 강의로, 핵심전략편 4시간과 실제수업편 4시간으로 구성됩니다. 단순 압축 강의가 아니라 실제 목표 성적을 취득한 수업 내용을 그대로 인강화한 콘텐츠이며, 오픽 출제 흐름이 바뀔 때마다 업데이트됩니다."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "실전연습(말하기 트레이너)과 미리오픽 무제한 모의고사는 무엇이 다른가요?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "실전말하기 트레이너는 실전 연습의 사전 단계로, 실제 시험처럼 반복해서 말하기 연습을 할 수 있는 기능입니다. 다만 AI 교정, 채점, 점수 예측, 세부 리포트는 제공되지 않습니다. AI 피드백과 채점까지 함께 원한다면 미리오픽 무제한 실전연습을 추가로 이용하는 것이 좋습니다."
+   }
+  }
+ ]
+}
+</script>
+
+</body>
+</html>

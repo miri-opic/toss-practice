@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오픽 웨이버(재응시 제도) 완벽 가이드 — 25일·150일 규정과 배경 | 미리오픽</title>
+<meta name="description" content="오픽 웨이버(재응시 제한 25일, 재충전 150일) 규정을 만든 사람이 직접 설명합니다. 도입 배경, 소진 기준, 대학오픽연합·SAIL 적용 여부, 내 재응시 가능일 계산까지 한 페이지에 정리했습니다.">
+<meta property="og:title" content="오픽 웨이버(재응시 제도) 완벽 가이드 | 미리오픽">
+<meta property="og:description" content="웨이버 제도를 직접 설계한 강지완쌤이 25일·150일 규정의 배경과 헷갈리는 케이스를 정리했습니다.">
+<meta property="og:type" content="article">
+<style>
+  .viz-root{
+    color-scheme: light;
+    --surface-1:#fcfcfb; --surface-2:#ffffff; --page:#f9f9f7;
+    --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#898781;
+    --line:#e1e0d9; --line-strong:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --blue:#2a78d6; --blue-100:#cde2fb; --blue-150:#b7d3f6; --blue-400:#3987e5; --blue-700:#0d366b;
+    --good:#0ca30c; --good-text:#006300; --good-bg:#eaf6ea;
+    --orange:#eb6834; --orange-bg:#fdece4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:where(:not([data-theme="light"])) .viz-root{
+      color-scheme: dark;
+      --surface-1:#1a1a19; --surface-2:#201f1e; --page:#0d0d0d;
+      --text-primary:#ffffff; --text-secondary:#c3c2b7; --text-muted:#898781;
+      --line:#2c2c2a; --line-strong:#383835; --border:rgba(255,255,255,0.10);
+      --blue:#3987e5; --blue-100:#184f95; --blue-150:#1c5cab; --blue-400:#3987e5; --blue-700:#cde2fb;
+      --good:#0ca30c; --good-text:#0ca30c; --good-bg:#10230f;
+      --orange:#d95926; --orange-bg:#2a1712;
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--page); font-family:system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif; }
+  .viz-root{ color:var(--text-primary); }
+  a{ color:var(--blue); }
+
+  .breadcrumb{ max-width:720px; margin:0 auto; padding:24px 20px 0; font-size:0.8rem; color:var(--text-muted); }
+  .breadcrumb a{ text-decoration:none; }
+
+  .hero{ max-width:720px; margin:0 auto; padding:20px 20px 8px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; font-weight:700;
+    color:var(--blue); background:var(--blue-100); padding:5px 12px; border-radius:999px; margin-bottom:16px;
+  }
+  h1{ font-size:1.9rem; line-height:1.4; margin:0 0 14px; }
+  .dek{ font-size:1.02rem; color:var(--text-secondary); line-height:1.65; margin:0 0 18px; }
+  .byline{ display:flex; align-items:center; gap:10px; font-size:0.82rem; color:var(--text-muted); padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:28px; }
+  .byline .avatar{ width:30px; height:30px; border-radius:50%; background:var(--blue-100); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex:none; }
+  .byline b{ color:var(--text-primary); }
+
+  .wrap{ max-width:720px; margin:0 auto; padding:0 20px 90px; }
+
+  .summary-box{
+    background:var(--blue-100); border-radius:16px; padding:22px 24px; margin-bottom:32px;
+  }
+  .summary-box .s-label{ font-size:0.72rem; font-weight:800; color:var(--blue-700); letter-spacing:0.03em; margin-bottom:10px; }
+  .summary-box ul{ margin:0; padding-left:20px; color:var(--blue-700); font-size:0.94rem; line-height:1.8; }
+  .summary-box li b{ font-weight:800; }
+
+  section{ margin-bottom:44px; }
+  h2{ font-size:1.28rem; margin:0 0 16px; padding-top:6px; }
+  h3{ font-size:1.02rem; margin:22px 0 8px; }
+  p{ font-size:0.96rem; line-height:1.75; color:var(--text-secondary); margin:0 0 16px; }
+  p b, li b{ color:var(--text-primary); }
+
+  /* Timeline (reused) */
+  .timeline{ margin:24px 0 8px; }
+  .t-track{ position:relative; height:4px; background:var(--line); border-radius:2px; }
+  .t-fill{ position:absolute; top:0; left:0; height:100%; background:var(--blue); border-radius:2px; width:100%; }
+  .t-nodes{ display:flex; justify-content:space-between; margin-top:-2px; }
+  .t-node{ display:flex; flex-direction:column; align-items:center; width:110px; }
+  .t-dot{ width:14px; height:14px; border-radius:50%; background:var(--surface-1); border:3px solid var(--blue); margin-top:-9px; }
+  .t-day{ font-size:0.7rem; font-weight:800; color:var(--blue-700); margin-top:10px; }
+  .t-label{ font-size:0.75rem; color:var(--text-secondary); text-align:center; margin-top:2px; line-height:1.4; }
+
+  blockquote{
+    margin:20px 0; padding:18px 20px; background:var(--surface-2); border-left:4px solid var(--blue);
+    border-radius:0 12px 12px 0; font-size:0.94rem; color:var(--text-primary); line-height:1.7;
+  }
+  blockquote footer{ margin-top:10px; font-size:0.8rem; color:var(--text-muted); }
+  .quip{ font-style:italic; color:var(--blue-700); }
+
+  .example{
+    background:var(--surface-2); border:1px solid var(--border); border-radius:14px; padding:18px 20px; margin:18px 0;
+  }
+  .example .e-label{ font-size:0.72rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; }
+
+  /* CTA card */
+  .cta{
+    background:linear-gradient(135deg, var(--blue), var(--blue-700));
+    border-radius:18px; padding:26px 26px; color:#fff; margin:36px 0;
+  }
+  .cta h4{ font-size:1.05rem; margin:0 0 8px; }
+  .cta p{ color:rgba(255,255,255,0.88); margin:0 0 16px; font-size:0.9rem; }
+  .cta-btn{
+    display:inline-block; background:#fff; color:var(--blue-700); font-weight:700; font-size:0.88rem;
+    padding:10px 20px; border-radius:999px; text-decoration:none;
+  }
+  .cta.soft{ background:var(--surface-2); border:1px solid var(--border); color:var(--text-primary); }
+  .cta.soft p{ color:var(--text-secondary); }
+  .cta.soft .cta-btn{ background:var(--blue); color:#fff; }
+
+  /* Calculator */
+  .calc{
+    background:var(--surface-1); border:1px solid var(--border); border-radius:18px; padding:26px;
+  }
+  .calc-row{ display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:18px; }
+  .calc-field{ flex:1; min-width:200px; }
+  .calc-field label{ display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px; }
+  .calc-field input{
+    width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--line-strong);
+    background:var(--surface-2); color:var(--text-primary); font-size:0.95rem;
+  }
+  .calc-btn{
+    padding:11px 22px; border-radius:10px; border:none; background:var(--blue); color:#fff;
+    font-weight:700; font-size:0.92rem; cursor:pointer; flex:none;
+  }
+  .calc-result{ display:none; }
+  .calc-result.show{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .calc-stat{ background:var(--blue-100); border-radius:12px; padding:16px; text-align:center; }
+  .calc-stat .cs-date{ font-size:1.3rem; font-weight:800; color:var(--blue-700); }
+  .calc-stat .cs-label{ font-size:0.76rem; color:var(--blue-700); opacity:0.85; margin-top:4px; }
+  .calc-note{ font-size:0.78rem; color:var(--text-muted); margin-top:14px; margin-bottom:0; }
+
+  /* FAQ accordion */
+  details{
+    background:var(--surface-1); border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden;
+  }
+  summary{ padding:15px 42px 15px 18px; cursor:pointer; font-weight:700; font-size:0.94rem; list-style:none; position:relative; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:"+"; position:absolute; right:16px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:1.2rem; }
+  details[open] summary::after{ content:"\\2013"; }
+  .d-answer{ padding:0 18px 16px; color:var(--text-secondary); font-size:0.9rem; line-height:1.7; }
+
+  .author-box{
+    display:flex; gap:16px; background:var(--surface-1); border:1px solid var(--border); border-radius:16px; padding:22px;
+  }
+  .author-box .a-avatar{ flex:none; width:56px; height:56px; border-radius:50%; background:var(--blue-100); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.3rem; }
+  .author-box h4{ margin:0 0 6px; font-size:1rem; }
+  .author-box p{ margin:0; font-size:0.86rem; }
+
+  footer.page-footer{ max-width:720px; margin:0 auto; padding:0 20px 70px; }
+  .footer-meta{ font-size:0.78rem; color:var(--text-muted); border-top:1px solid var(--line); padding-top:18px; line-height:1.8; }
+  .related{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .related a{ font-size:0.82rem; text-decoration:none; background:var(--surface-2); border:1px solid var(--border); padding:8px 14px; border-radius:999px; }
+
+  @media (max-width:520px){
+    h1{ font-size:1.5rem; }
+    .t-nodes{ flex-wrap:wrap; gap:16px 0; }
+    .t-node{ width:47%; }
+    .calc-result.show{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="viz-root">
+
+  <div class="breadcrumb"><a href="/faq">FAQ</a> › <a href="/faq/시험-기본">오픽 시험 기본 이해</a> › 웨이버(재응시 제도)</div>
+
+  <div class="hero">
+    <span class="eyebrow">MIRIOPIC · 시험 기본 이해</span>
+    <h1>오픽 웨이버(재응시 제도), 25일과 150일의 의미를 정확히 알려드립니다</h1>
+    <p class="dek">"웨이버 다시 됐나요?", "취소하면 웨이버 없어지나요?" — 커뮤니티에서 가장 많이 반복된 질문입니다. 이 규정을 직접 만든 강지완쌤이 도입 배경부터 헷갈리는 케이스까지 한 번에 정리했습니다.</p>
+    <div class="byline">
+      <div class="avatar">강</div>
+      <div>글쓴이 <b>강지완</b> · 국내 OPIc 웨이버 제도 설계자 · 미리오픽 대표강사 · 최종 업데이트 2026-08-14</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="summary-box">
+      <div class="s-label">핵심 요약 (3줄)</div>
+      <ul>
+        <li>웨이버를 <b>사용(=실제 응시)</b>하면 그 다음 정규 재응시는 <b>26일째</b>부터 가능합니다.</li>
+        <li>사용한 웨이버는 <b>150일 후 자동으로 재충전</b>되며, 별도 안내 없이 재응시 신청이 가능해지는 방식으로 확인됩니다.</li>
+        <li>웨이버는 <b>대학오픽연합·일반 정규시험 통합 관리</b>되지만, <b>SAIL은 별도 시스템</b>으로 관리됩니다.</li>
+      </ul>
+    </div>
+
+    <section id="timeline">
+      <h2>웨이버 한 번 쓰면, 일정이 어떻게 되나요</h2>
+      <div class="timeline">
+        <div class="t-track"><div class="t-fill"></div></div>
+        <div class="t-nodes">
+          <div class="t-node"><div class="t-dot"></div><div class="t-day">Day 0</div><div class="t-label">웨이버 사용<br>(실제 응시)</div></div>
+          <div class="t-node"><div class="t-dot"></div><div class="t-day">Day 1–25</div><div class="t-label">정규 재응시<br>제한 기간</div></div>
+          <div class="t-node"><div class="t-dot"></div><div class="t-day">Day 26</div><div class="t-label">정규 재응시<br>가능 시작</div></div>
+          <div class="t-node"><div class="t-dot"></div><div class="t-day">Day 150</div><div class="t-label">웨이버<br>재충전</div></div>
+        </div>
+      </div>
+      <p>웨이버는 시험 주관사 중앙 서버에서 통합 관리되며, 대학오픽연합 시험이든 일반 정규시험이든 동일하게 적용됩니다. 한 번 사용하면 <b>150일 후 다시 충전</b>되고, 시험 응시 후에는 <b>25일간 재응시가 제한</b>되어 26일째부터 다시 사용할 수 있습니다.</p>
+    </section>
+
+    <section id="origin">
+      <h2>왜 하필 25일·150일인가 — 웨이버 제도가 만들어진 배경</h2>
+      <p>오픽(OPIc)에는 원래 웨이버라는 제도 자체가 없었습니다. 대면 인터뷰 방식인 OPI 시험은 동일 응시자의 재응시를 <b>90일 동안 제한</b>하는 규정이 있었고, 당시 시험 주관사 ACTFL은 "90일 이내에는 실력 향상 폭이 크지 않다"는 판단을 근거로 이 규정을 운영했습니다.</p>
+      <p>OPIc이 국내에 도입될 당시, 강지완쌤이 이 쿨다운 기간이 한국 수험 환경과 맞지 않는다는 의견을 주관사에 직접 전달했습니다.</p>
+      <blockquote>
+        "한국 학습자의 실제 학습 패턴을 반영할 필요가 있다." "90일은 국내 수험 환경에서는 지나치게 길고 비현실적이다." 라는 의견을 전달하며 쿨다운 기간 단축을 제안했습니다. 이후 주관사에서 이를 검토한 결과, OPIc 웨이버의 재응시 제한 기간은 기존 OPI의 90일이 아닌 <b>25일</b>로 운영되게 되었습니다.
+        <footer>— 강지완쌤, 커뮤니티 Q&amp;A 중</footer>
+      </blockquote>
+      <p>즉 지금 우리가 아는 "25일 제한 · 150일 재충전"이라는 웨이버 규정은 처음부터 정해져 있던 게 아니라, 국내 수험생들의 학습 속도에 맞춰 별도로 협의된 결과입니다.</p>
+    </section>
+
+    <div class="cta soft">
+      <h4>웨이버를 다시 쓰기 전에, 지금 실력부터 확인해보세요</h4>
+      <p>재응시 기회는 한정적입니다. 같은 결과를 또 받지 않으려면, 실제 시험처럼 채점되는 미리오픽 모의고사로 부족한 부분을 먼저 확인해보세요.</p>
+      <a class="cta-btn" href="#calculator">내 재응시 가능일 계산해보기 ↓</a>
+    </div>
+
+    <section id="consumption">
+      <h2>웨이버는 정확히 언제 "소진"되나요</h2>
+      <p>가장 많이 헷갈리는 부분입니다. 웨이버는 <b>신청 기준이 아니라 응시 기준</b>으로 소진됩니다. 즉 시험을 신청만 해두고 실제로 응시하지 않으면, 웨이버는 사용되지 않은 것으로 간주됩니다.</p>
+      <div class="example">
+        <div class="e-label">실제 사례로 보면</div>
+        <p style="margin:0">"웨이버 사용해서 시험 접수 했는데 취소하면 바로 웨이버가 복구되나요?"라는 질문에, 강지완쌤은 "웨이버 사용은 응시 기준으로 결정됩니다. 응시하지 않으면 신청한 시험에서도 웨이버는 사용되지 않은 것으로 간주됩니다. 해당 건은 응시 자체도 하지 않고 취소를 했기 때문에 웨이버 사용을 하지 않은 것으로 됩니다."라고 답했습니다. <b>정리하면, 신청 후 취소는 웨이버 소진과 무관하고, 실제로 시험을 보는 순간에만 웨이버가 차감됩니다.</b></p>
+      </div>
+    </section>
+
+    <section id="calculator">
+      <h2>내 재응시 가능일 계산해보기</h2>
+      <p>최근에 웨이버를 사용해 시험을 본 날짜를 입력하면, 정규 재응시 가능일과 다음 웨이버 재충전일을 바로 계산해드립니다.</p>
+      <div class="calc">
+        <div class="calc-row">
+          <div class="calc-field">
+            <label for="examDate">최근 시험(웨이버 사용) 날짜</label>
+            <input type="date" id="examDate">
+          </div>
+          <button class="calc-btn" id="calcBtn" type="button">계산하기</button>
+        </div>
+        <div class="calc-result" id="calcResult">
+          <div class="calc-stat">
+            <div class="cs-date" id="resRegular">–</div>
+            <div class="cs-label">정규 재응시 가능일 (26일째)</div>
+          </div>
+          <div class="calc-stat">
+            <div class="cs-date" id="resWaiver">–</div>
+            <div class="cs-label">다음 웨이버 재충전일 (150일째)</div>
+          </div>
+        </div>
+        <p class="calc-note">※ 응시하지 않고 취소한 경우 이 계산은 적용되지 않습니다(웨이버가 복원됩니다). 실제 반영 여부는 오픽 홈페이지의 본인 계정에서 최종 확인해주세요.</p>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>헷갈리는 케이스 모음</h2>
+
+      <details>
+        <summary>대학오픽연합 시험도 일반 정규시험과 웨이버를 같이 쓰나요?</summary>
+        <div class="d-answer">네, 웨이버는 시험 주관사의 중앙 서버에서 통합 관리되기 때문에 대학오픽연합 시험이든 일반 정규시험이든 관계없이 동일하게 적용됩니다. 두 시험 종류를 구분해서 별도로 관리하지 않습니다.</div>
+      </details>
+
+      <details>
+        <summary>SAIL 시험도 오픽 웨이버가 같이 적용되나요?</summary>
+        <div class="d-answer">아닙니다. SAIL과 오픽은 채점 체계는 같지만, 웨이버와 성적을 별도로 관리하는 이원화된 시스템입니다. 오픽에서 웨이버를 사용했다고 SAIL 응시 자격에 영향을 주지 않습니다.</div>
+      </details>
+
+      <details>
+        <summary>웨이버를 사용한 시험을 취소하면 웨이버가 복구되나요?</summary>
+        <div class="d-answer">응시하지 않고 취소했다면 복구됩니다. 웨이버 소진은 신청이 아니라 실제 응시 여부로 결정되기 때문에, 시험을 보지 않고 취소한 경우 웨이버는 사용되지 않은 것으로 처리됩니다.</div>
+      </details>
+
+      <details>
+        <summary>웨이버가 재충전됐는지 어떻게 확인하나요?</summary>
+        <div class="d-answer">별도의 안내 문자나 알림은 오지 않습니다. 마지막 웨이버 사용 후 150일이 지나면 자동으로 재충전되며, 25일 제한 기간 내에 시험을 접수할 수 있다면 웨이버가 재충전된 것으로 확인하면 됩니다. 오픽 홈페이지의 본인 계정에서도 확인할 수 있습니다.</div>
+      </details>
+
+      <details>
+        <summary>웨이버 없이는 얼마 만에 재응시할 수 있나요?</summary>
+        <div class="d-answer">웨이버를 사용한 이후에는 정기적으로 26일째부터 재응시가 가능합니다. 웨이버는 이 26일 제한을 예외적으로 한 번 당겨주는 "찬스권" 개념이며, 웨이버가 없는 상태에서 기본 규정을 벗어날 수는 없습니다.</div>
+      </details>
+    </section>
+
+    <div class="cta">
+      <h4>웨이버 계산은 끝났고, 이제 실력을 확인할 차례입니다</h4>
+      <p>같은 등급이 반복되는 이유를 모른 채 재응시하면 결과도 반복됩니다. 미리오픽 모의고사는 실제 시험과 동일한 방식으로 설계되어, 재응시 전 마지막 점검에 활용하기 좋습니다.</p>
+      <a class="cta-btn" href="/miriopic/trial">미리오픽 모의고사 확인해보기</a>
+    </div>
+
+    <section id="author-section">
+      <div class="author-box">
+        <div class="a-avatar">강</div>
+        <div>
+          <h4>강지완 · 미리오픽 대표강사</h4>
+          <p>국내 OPIc 웨이버 제도(25일 재응시 제한 규정) 설계에 직접 참여했으며, 다수의 실제 응시 데이터를 기반으로 미리오픽 채점 시스템과 커리큘럼을 개발했습니다.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="page-footer">
+    <div class="footer-meta">
+      최종 업데이트: 2026-08-14 · 이 페이지의 규정 설명은 강지완쌤이 커뮤니티에서 직접 답변한 내용을 바탕으로 정리했으며, 시험 주관사의 정책 변경 시 내용이 달라질 수 있습니다. 정확한 개인별 웨이버 반영 여부는 오픽 공식 홈페이지에서 최종 확인하시기 바랍니다.
+      <div class="related">
+        <a href="/faq/시험-기본">오픽 시험 기본 이해로 돌아가기</a>
+        <a href="/faq">전체 FAQ 보기</a>
+        <a href="/miriopic/trial">미리오픽 무료 체험</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  document.getElementById('calcBtn').addEventListener('click', function(){
+    const val = document.getElementById('examDate').value;
+    if(!val) return;
+    const base = new Date(val + 'T00:00:00');
+    const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    const regular = new Date(base); regular.setDate(regular.getDate() + 26);
+    const waiver = new Date(base); waiver.setDate(waiver.getDate() + 150);
+    document.getElementById('resRegular').textContent = fmt(regular);
+    document.getElementById('resWaiver').textContent = fmt(waiver);
+    document.getElementById('calcResult').classList.add('show');
+  });
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "오픽 웨이버(재응시 제도) 완벽 가이드 — 25일·150일 규정과 배경",
+  "description": "오픽 웨이버(재응시 제한 25일, 재충전 150일) 규정의 도입 배경, 소진 기준, 대학오픽연합·SAIL 적용 여부를 정리한 가이드",
+  "datePublished": "2026-08-14",
+  "dateModified": "2026-08-14",
+  "author": { "@type": "Person", "name": "강지완", "jobTitle": "미리오픽 대표강사 · 국내 OPIc 웨이버 제도 설계자" },
+  "publisher": { "@type": "Organization", "name": "미리오픽" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "오픽 웨이버(재응시 제도)는 정확히 어떻게 적용되나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "웨이버는 시험 주관사 중앙 서버에서 통합 관리되며, 대학오픽연합 시험이든 일반 정규시험이든 동일하게 적용됩니다. 한 번 사용하면 150일 후 다시 충전되고, 시험 응시 후에는 25일간 재응시가 제한되어 26일째부터 다시 사용할 수 있습니다. 원래 OPI 시험에는 웨이버가 없고 90일에 한 번만 응시할 수 있었으나, 강지완쌤이 국내 수험 환경에 맞게 25일로 단축을 제안해 도입되었습니다." }
+    },
+    {
+      "@type": "Question",
+      "name": "대학오픽연합 시험도 일반 정규시험과 웨이버를 같이 쓰나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "네, 웨이버는 시험 주관사의 중앙 서버에서 통합 관리되기 때문에 대학오픽연합 시험이든 일반 정규시험이든 관계없이 동일하게 적용됩니다." }
+    },
+    {
+      "@type": "Question",
+      "name": "SAIL 시험도 오픽 웨이버가 같이 적용되나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. SAIL과 오픽은 채점 체계는 같지만, 웨이버와 성적을 별도로 관리하는 이원화된 시스템입니다." }
+    },
+    {
+      "@type": "Question",
+      "name": "웨이버를 사용한 시험을 취소하면 웨이버가 복구되나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "응시하지 않고 취소했다면 복구됩니다. 웨이버 소진은 신청이 아니라 실제 응시 여부로 결정되기 때문입니다." }
+    },
+    {
+      "@type": "Question",
+      "name": "웨이버가 재충전됐는지 어떻게 확인하나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "별도의 안내는 오지 않습니다. 마지막 웨이버 사용 후 150일이 지나면 자동으로 재충전되며, 25일 제한 기간 내에 시험을 접수할 수 있다면 재충전된 것으로 확인하면 됩니다." }
+    },
+    {
+      "@type": "Question",
+      "name": "웨이버 없이는 얼마 만에 재응시할 수 있나요?",
+      "acceptedAnswer": { "@type": "Answer", "text": "웨이버를 사용한 이후에는 정기적으로 26일째부터 재응시가 가능합니다." }
+    }
+  ]
+}
+</script>
+
+</body>
+</html>
