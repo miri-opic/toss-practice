@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미리오픽 · 4시간오픽 이용 고객센터</title>
+<meta name="description" content="미리오픽 모의고사, 4시간오픽 강의 이용 중 발생하는 결제·환불·기술 문제를 빠르게 확인하세요.">
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#181b22; --ink-soft:#5a6072;
+    --line:#e3e6ec; --brand:#1f5fd6; --brand-soft:#eaf1ff;
+    --ok:#1a7f4e; --ok-bg:#e9f9f1;
+    --warn:#b45309; --warn-bg:#fff4e5;
+    --radius:12px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12141b; --card:#1b1e28; --ink:#eef0f5; --ink-soft:#a4a9bc;
+      --line:#2a2e3c; --brand:#7ea2ff; --brand-soft:#1c2740;
+      --ok:#4fd493; --ok-bg:#0f2a1e;
+      --warn:#e8a54b; --warn-bg:#2d1f0c;
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  header{ background:var(--card); border-bottom:1px solid var(--line); padding:36px 24px 26px; text-align:center; }
+  header .kicker{ font-size:0.78rem; font-weight:700; color:var(--brand); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
+  header h1{ margin:0 0 8px; font-size:1.5rem; }
+  header p{ margin:0; color:var(--ink-soft); font-size:0.92rem; }
+  .wrap{ max-width:800px; margin:0 auto; padding:28px 20px 80px; }
+
+  .search{
+    width:100%; padding:12px 16px; border-radius:999px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); font-size:0.95rem; margin-bottom:24px; outline:none;
+  }
+  .search:focus{ border-color:var(--brand); }
+
+  .quick-links{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-bottom:32px; }
+  .quick-link{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px;
+    text-decoration:none; color:var(--ink); font-size:0.85rem; font-weight:600; display:flex; align-items:center; gap:8px;
+  }
+  .quick-link .ico{ font-size:1.1rem; }
+
+  .group{ margin-bottom:34px; }
+  .group-head{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .group-head h2{ font-size:1.02rem; margin:0; }
+  .group-head .count{ font-size:0.72rem; color:var(--ink-soft); background:var(--brand-soft); padding:2px 9px; border-radius:999px; font-weight:700; }
+
+  .ticket{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius); margin-bottom:8px; overflow:hidden;
+  }
+  .ticket summary{
+    padding:14px 44px 14px 16px; cursor:pointer; font-weight:600; font-size:0.92rem; list-style:none; position:relative;
+    display:flex; align-items:baseline; gap:10px;
+  }
+  .ticket summary::-webkit-details-marker{ display:none; }
+  .ticket summary::after{ content:"+"; position:absolute; right:16px; top:50%; transform:translateY(-50%); color:var(--ink-soft); font-size:1.15rem; }
+  .ticket[open] summary::after{ content:"–"; }
+  .ticket .tag{ font-size:0.66rem; font-weight:800; padding:2px 8px; border-radius:999px; flex:none; }
+  .ticket .tag.miriopic{ background:var(--brand-soft); color:var(--brand); }
+  .ticket .tag.class4h{ background:var(--warn-bg); color:var(--warn); }
+  .ticket-body{ padding:0 16px 16px 16px; }
+  .ticket-body .step{
+    display:flex; gap:10px; align-items:flex-start; padding:8px 0; font-size:0.88rem; color:var(--ink-soft);
+  }
+  .ticket-body .step .n{ flex:none; width:20px; height:20px; border-radius:50%; background:var(--brand-soft); color:var(--brand); font-size:0.72rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+  .ticket-body p.plain{ margin:0; font-size:0.88rem; color:var(--ink-soft); line-height:1.7; }
+  .resolved-note{ margin-top:10px; font-size:0.78rem; color:var(--ok); background:var(--ok-bg); padding:6px 10px; border-radius:8px; display:inline-block; }
+
+  .contact-box{
+    background:var(--brand-soft); border-radius:16px; padding:22px 24px; margin-top:40px; text-align:center;
+  }
+  .contact-box h3{ margin:0 0 8px; font-size:1rem; }
+  .contact-box p{ margin:0 0 14px; font-size:0.88rem; color:var(--ink-soft); }
+  .contact-box a.btn{
+    display:inline-block; background:var(--brand); color:#fff; text-decoration:none; font-weight:700;
+    font-size:0.86rem; padding:10px 22px; border-radius:999px;
+  }
+
+  .no-result{ text-align:center; color:var(--ink-soft); padding:40px 0; display:none; font-size:0.9rem; }
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">고객센터</div>
+  <h1>미리오픽 · 4시간오픽 이용 가이드</h1>
+  <p>결제, 환불, 마이크·재생 오류 같은 이용 중 문제를 빠르게 확인하세요. 오픽 시험 자체에 대한 질문은 <a href="miriopic-faq-integrated-v2.html">FAQ 허브</a>에서 찾아보실 수 있습니다.</p>
+</header>
+
+<div class="wrap">
+
+  <input class="search" id="searchBox" type="text" placeholder="검색 (예: 환불, 마이크, 로그인, 재신청)">
+
+  <div class="quick-links">
+    <a class="quick-link" href="#billing"><span class="ico">💳</span>결제·환불</a>
+    <a class="quick-link" href="#access"><span class="ico">🔑</span>수강·이용권</a>
+    <a class="quick-link" href="#tech"><span class="ico">🛠️</span>기술 문제</a>
+    <a class="quick-link" href="#product"><span class="ico">📊</span>서비스 이해</a>
+  </div>
+
+  <div id="content"></div>
+  <p class="no-result" id="noResult">검색 결과가 없어요. 다른 키워드로 찾아보시거나 아래 1:1 문의를 이용해주세요.</p>
+
+  <div class="contact-box">
+    <h3>원하는 답을 못 찾으셨나요?</h3>
+    <p>결제·환불·수강 관련 개인 문의는 1:1 카카오톡 채널로 연락 주시면 빠르게 도와드립니다.</p>
+    <a class="btn" href="https://open.kakao.com/o/sZ1pHqoi">1:1 문의하기</a>
+  </div>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"4시간오픽 강의를 결제한 뒤 환불이 가능한가요?","acceptedAnswer":{"@type":"Answer","text":"가능합니다. 별도의 맛보기 강의는 제공되지 않지만, 다운로드 이력이 없는 경우에 한해 1강까지 수강한 뒤 환불을 요청하면 전액 환불해줍니다."}},
+    {"@type":"Question","name":"미리오픽 0원(무료) 모의고사에서도 예상 등급이 나오나요?","acceptedAnswer":{"@type":"Answer","text":"0원 체험팩에서는 예상 등급이 제공되지 않습니다. 시험 환경 체험, 샘플 문제 유형 확인 용도이며, 예상 성적·AI 채점·상세 피드백·목표 등급 대비 분석은 유료 모의고사(진단팩)에서 제공됩니다."}},
+    {"@type":"Question","name":"미리오픽에서 마이크 테스트 시 녹음이 되지 않으면 어떻게 해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"대부분 브라우저 문제인 경우가 많습니다. 크롬(Chrome) 브라우저로 접속해 마이크 테스트를 다시 시도해보는 것을 먼저 확인해보길 추천합니다."}},
+    {"@type":"Question","name":"미리오픽 응시 중 끊기면 처음부터 다시 봐야 하나요?","acceptedAnswer":{"@type":"Answer","text":"마이존 > 이어보기로 들어가면 이전에 풀던 문제 번호부터 이어서 진행할 수 있습니다. 크롬 브라우저 환경이 기술적으로 더 안정적입니다."}},
+    {"@type":"Question","name":"원하는 강의 회차가 마감되었는데 다시 신청할 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"마감 이후에도 인원을 다시 열어주는 경우가 있습니다. 마감되었다면 문의를 통해 재오픈 여부를 확인해볼 수 있습니다."}}
+  ]
+}
+</script>
+
+<script>
+const GROUPS = [
+  {
+    id: "billing", title: "결제 · 환불", icon: "💳",
+    items: [
+      { tag: "class4h", q: "4시간오픽 강의를 결제한 뒤 환불이 가능한가요?",
+        a: "가능합니다. 별도의 맛보기 강의는 제공되지 않지만, 다운로드 이력이 없는 경우에 한해 1강까지 수강한 뒤 환불을 요청하면 전액 환불해줍니다. 강의를 먼저 들어보고 수강 여부를 결정할 수 있는 구조입니다." },
+      { tag: "class4h", q: "4시간오픽(오픽.com) 사이트에서 결제했는데 강의 영상이 안 보이고 후기만 보입니다. 어떻게 봐야 하나요?",
+        a: "'후기'가 실제로는 강의(클래스) 형태로 제작되어 있어 그 콘텐츠를 수강하면 됩니다. 4시간오픽에는 유료 콘텐츠(패스트트랙, 올인원, 메가클래스, 울트라클래스 등 강의)와 무료 콘텐츠(주로 PDF 자료)가 있으며, 성공수기 역시 별도 신청 없이 강의 형태로 바로 이용할 수 있습니다." },
+      { tag: "class4h", q: "4시간오픽 강의 교재는 따로 구매해야 하나요?",
+        a: "아니요. 별도 구매 없이 강의 교안이 수강 중인 커리큘럼 상단에서 부가자료와 함께 PDF로 제공됩니다." }
+    ]
+  },
+  {
+    id: "access", title: "수강 · 이용권", icon: "🔑",
+    items: [
+      { tag: "miriopic", q: "미리오픽 0원(무료) 모의고사에서도 예상 등급이 나오나요?",
+        a: "0원 체험팩에서는 예상 등급이 제공되지 않습니다. 시험 환경 체험, 샘플 문제 유형 확인 용도이며, 예상 성적·AI 채점·상세 피드백·목표 등급 대비 분석(Gap Analysis)은 유료 모의고사(진단팩)에서 제공됩니다." },
+      { tag: "miriopic", q: "미리오픽 독립팩은 무엇이고 어떻게 활용하나요?",
+        a: "독립팩은 실제 출제 데이터를 기반으로 우선순위가 높은 핵심 문제 238개를 선별한 문제집입니다. 이 TOP 10 주제만 집중 학습해도 실제 시험 문항의 평균 약 75%를 대비할 수 있습니다. 5회 이상 응시하면 주제별·돌발별 스크립트를 자동 정리해주는 '마이오픽Book'도 발행됩니다." },
+      { tag: "class4h", q: "원하는 강의 회차가 마감되었는데 다시 신청할 수 있나요?",
+        a: "마감 이후에도 인원을 다시 열어주는 경우가 있습니다. 마감되었다면 문의를 통해 재오픈 여부를 확인해볼 수 있습니다." },
+      { tag: "miriopic", q: "실전연습(말하기 트레이너)과 미리오픽 무제한 모의고사는 무엇이 다른가요?",
+        a: "실전말하기 트레이너는 실전 연습의 사전 단계로, 실제 시험처럼 반복해서 말하기 연습을 할 수 있는 기능입니다. 다만 AI 교정, 채점, 점수 예측, 세부 리포트는 제공되지 않습니다. AI 피드백과 채점까지 함께 원한다면 미리오픽 무제한 실전연습을 추가로 이용하는 것이 좋습니다." }
+    ]
+  },
+  {
+    id: "tech", title: "기술 문제", icon: "🛠️",
+    items: [
+      { tag: "miriopic", q: "미리오픽에서 마이크 테스트 시 녹음이 되지 않으면 어떻게 해야 하나요?",
+        steps: [
+          "크롬(Chrome) 브라우저로 접속해보세요 — 다른 브라우저보다 마이크 인식이 안정적입니다.",
+          "브라우저 주소창 왼쪽 자물쇠 아이콘에서 마이크 권한이 허용되어 있는지 확인하세요.",
+          "그래도 안 되면 마이크 테스트 화면을 캡쳐해 1:1 문의로 보내주세요."
+        ] },
+      { tag: "miriopic", q: "미리오픽 응시 중 끊기면 처음부터 다시 봐야 하나요?",
+        a: "아니요. 마이존 > 이어보기로 들어가면 이전에 풀던 문제 번호부터 이어서 진행할 수 있습니다. 크롬 브라우저 환경이 기술적으로 더 안정적입니다." },
+      { tag: "class4h", q: "스피킹 트레이너가 휴대폰에서 잘 작동하지 않고 STT(음성 인식) 텍스트가 나오지 않을 때는 어떻게 하나요?",
+        steps: [
+          "마이크 설정을 다시 확인해보세요.",
+          "가능하다면 휴대폰 대신 노트북·태블릿·PC 등 다른 기기로 접속해보세요.",
+          "그래도 해결되지 않으면 임시로 구글 번역기나 카카오톡 STT 기능을 활용하세요.",
+          "문제가 계속되면 화면을 캡쳐해 1:1 문의로 보내주시면 기술 지원을 받을 수 있습니다."
+        ] }
+    ]
+  },
+  {
+    id: "product", title: "서비스 이해", icon: "📊",
+    items: [
+      { tag: "miriopic", q: "미리오픽 모의고사는 실제 오픽 시험과 얼마나 비슷한가요?",
+        a: "문항 수와 출제 방식을 실제 시험과 동일하게 설계했고, 점수에 인위적인 가중치나 왜곡을 주지 않습니다. 실제 시험 데이터를 지속적으로 분석해 최신 출제 경향도 반영합니다." },
+      { tag: "miriopic", q: "미리오픽은 오픽 시험 주관사와 공식적으로 연계된 서비스인가요?",
+        a: "네. 미리오픽은 오픽 시험 주관사와 연계되어 있으며, 삼성전자가 주관하는 SSAFY(삼성 청년 SW·AI 아카데미) 과정에도 실제로 납품·운영되고 있는 서비스입니다." },
+      { tag: "miriopic", q: "미리오픽에서 응답률(답변한 문항 수)이 성적에 영향을 주나요?",
+        a: "응답률과 성적은 직접적인 관련이 없습니다. 미리오픽은 실제 오픽과 동일하게 답변한 문항만 채점하며, AL 도달 기준에 해당하는 답변이 나오면 결과가 AL로 산출되도록 설계되어 있습니다." },
+      { tag: "miriopic", q: "미리오픽 예상 등급과 실제 오픽 성적은 얼마나 차이가 나나요?",
+        a: "통계적으로 일관성 있게 나오는 편이며, 미리오픽 예측 등급과 실제 성적의 차이는 ±0.38등급 이내에 응시자의 약 87%가 위치합니다." },
+      { tag: "class4h", q: "'4시간 오픽' 강의는 정말 4시간짜리 강의인가요?",
+        a: "4시간 오픽은 실제로 진행됐던 4시간짜리 1:1 수업을 기반으로 제작된 강의로, 핵심전략편 4시간과 실제수업편 4시간으로 구성됩니다. 단순 압축 강의가 아니라 실제 목표 성적을 취득한 수업 내용을 그대로 인강화한 콘텐츠이며, 오픽 출제 흐름이 바뀔 때마다 업데이트됩니다." }
+    ]
+  }
+];
+
+const contentEl = document.getElementById('content');
+const searchBox = document.getElementById('searchBox');
+const noResult = document.getElementById('noResult');
+
+function tagLabel(tag){ return tag === 'class4h' ? '4시간오픽' : '미리오픽'; }
+
+GROUPS.forEach(group => {
+  const block = document.createElement('div');
+  block.className = 'group';
+  block.dataset.group = group.id;
+  block.id = group.id;
+
+  const head = document.createElement('div');
+  head.className = 'group-head';
+  head.innerHTML = `<h2>${group.icon} ${group.title}</h2><span class="count">${group.items.length}건</span>`;
+  block.appendChild(head);
+
+  group.items.forEach(item => {
+    const det = document.createElement('details');
+    det.className = 'ticket';
+    const sum = document.createElement('summary');
+    sum.innerHTML = `<span class="tag ${item.tag}">${tagLabel(item.tag)}</span><span>${item.q}</span>`;
+    const body = document.createElement('div');
+    body.className = 'ticket-body';
+    if (item.steps) {
+      body.innerHTML = item.steps.map((s, i) => `<div class="step"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+    } else {
+      body.innerHTML = `<p class="plain">${item.a}</p>`;
+    }
+    det.appendChild(sum);
+    det.appendChild(body);
+    block.appendChild(det);
+  });
+
+  contentEl.appendChild(block);
+});
+
+searchBox.addEventListener('input', () => {
+  const q = searchBox.value.trim().toLowerCase();
+  let anyVisible = false;
+  document.querySelectorAll('.group').forEach(block => {
+    let blockHasMatch = false;
+    block.querySelectorAll('.ticket').forEach(t => {
+      const match = !q || t.textContent.toLowerCase().includes(q);
+      t.classList.toggle('hidden', !match);
+      if (match) blockHasMatch = true;
+    });
+    block.classList.toggle('hidden', !blockHasMatch);
+    if (blockHasMatch) anyVisible = true;
+  });
+  noResult.style.display = (q && !anyVisible) ? 'block' : 'none';
+});
+</script>
+
+</body>
+</html>
