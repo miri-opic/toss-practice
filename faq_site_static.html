@@ -59,6 +59,14 @@
     user-select:none; transition:all .15s ease;
   }
   .tab.active{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  .pillar-tabs{ margin-bottom:10px; }
+  .pillar-tabs .tab{
+    font-size:0.95rem; font-weight:700; padding:11px 18px; border-radius:12px;
+    background:var(--brand-soft); border-color:transparent; color:var(--ink);
+  }
+  .pillar-tabs .tab.active{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .sub-tabs{ margin-bottom:20px; padding-left:2px; }
+  .sub-tabs .tab{ font-size:0.82rem; }
   .cat-block{ margin-bottom:36px; }
   .cat-title{
     font-size:1.05rem; font-weight:700; margin:0 0 4px; display:flex; align-items:center; gap:8px;
@@ -119,14 +127,14 @@
 
 <header>
   <h1>오픽, 강쌤한테 다 물어봤습니다</h1>
-  <p>강지완쌤 오픽 커뮤니티 Q&amp;A 기반 · 통합 카테고리 v2 (기존 목업 8개 + 신규 2개 카테고리)</p>
+  <p>강지완쌤 오픽 커뮤니티 Q&amp;A 기반 · 3대 영역 · 11개 세부 카테고리로 재구성</p>
 </header>
 
 <div class="wrap">
 
   <details class="change-note">
     <summary>🛠 작업 메모 (v3 구조 개편 · GEO 전략 반영)</summary>
-    <div class="cn-body">이 허브는 "일반 규칙은 공개해 AI가 인용할 수 있게 하되, 내 상황에 대한 개인화된 답은 사이트에서만 얻도록" 설계합니다. 딥다이브 페이지가 있는 <b>웨이버</b>, <b>등급/채점기준</b> 항목은 답변을 일반 규칙 요약으로 줄이고, 실제 계산·전체 사례·인용구는 해당 딥다이브 페이지로 연결(🔗)했습니다. <b>미리오픽·4시간오픽</b> 카테고리는 신뢰·제품이해용 문항 8개만 남기고, 결제·환불·기술지원 같은 순수 고객지원 문항 7개는 별도 <a href="miriopic-help-center.html">고객센터 페이지</a>로 이전했습니다(중복 노출 방지). 나머지 카테고리는 개인화 여지가 없는 사실형 질문이라 그대로 100% 노출합니다.</div>
+    <div class="cn-body">이 허브는 "일반 규칙은 공개해 AI가 인용할 수 있게 하되, 내 상황에 대한 개인화된 답은 사이트에서만 얻도록" 설계합니다. 딥다이브 페이지가 있는 <b>웨이버</b>, <b>등급/채점기준</b> 항목은 답변을 일반 규칙 요약으로 줄이고, 실제 계산·전체 사례·인용구는 해당 딥다이브 페이지로 연결(🔗)했습니다. <b>미리오픽·4시간오픽</b> 관련 카테고리는 신뢰·제품이해용 문항만 남기고, 결제·환불·기술지원 같은 순수 고객지원 문항은 별도 <a href="miriopic-help-center.html">고객센터 페이지</a>로 이전했습니다(중복 노출 방지). v4에서는 최상단 탭이 11개까지 늘어나 산만해진 문제를 해결하기 위해, 성격이 비슷한 카테고리들을 3개 상위 묶음(오픽 시험 이해하기 / 답변 전략 & 채점 기준 / 나에게 맞는 준비 방법)으로 다시 그룹화하고 그 안에 서브탭을 두는 2단 구조로 바꿨습니다. 학습계획 카테고리는 4시간오픽 강의 카테고리에 합쳤고(같은 "어떻게 준비할지" 질문이라), 미리오픽(모의고사)과 4시간오픽(강의)은 서로 다른 구매 결정이라 분리했습니다. 나머지 카테고리는 개인화 여지가 없는 사실형 질문이라 그대로 100% 노출합니다.</div>
   </details>
 
   <input class="search" id="searchBox" type="text" placeholder="궁금한 내용을 검색해보세요 (예: 웨이버, 롤플레이, 신분증, 환불)">
@@ -137,7 +145,8 @@
     <span><span class="badge p1">★</span> 일반 학습 조언</span>
   </div>
 
-  <div class="tabs" id="tabs"></div>
+  <div class="tabs pillar-tabs" id="pillarTabs"></div>
+  <div class="tabs sub-tabs" id="tabs"></div>
   <div id="content"></div>
   <p class="no-result" id="noResult">검색 결과가 없어요. 다른 키워드로 찾아보세요.</p>
 </div>
@@ -249,11 +258,15 @@ const DATA = [
     ]
   },
   {
-    id: "studyplan", title: "학습 계획 & 공부법", short: "학습 계획", badge:"신규 카테고리",
-    desc: "오픽을 어디서부터 시작해야 할지, 준비 기간을 얼마나 잡아야 할지에 대한 질문 (콘텐츠 볼륨이 아직 적어 확장 예정)",
+    id: "course", title: "4시간오픽 강의 & 학습 계획", short: "4시간오픽 강의", badge:"신규 카테고리",
+    desc: "오픽을 어디서부터 시작해야 할지, 4시간오픽·올인원·패스트트랙 중 뭘 들어야 할지에 대한 질문",
     items: [
       {q:"오픽을 처음 시작하는데 뭐부터 해야 하나요?", core:"오픽 스터디 로드맵으로 전체 학습 순서와 우선순위부터 잡는 것을 추천합니다.", a:"처음 시작할 때는 오픽 스터디 로드맵을 먼저 활용해보는 것을 추천합니다. 전체 학습 순서와 우선순위를 잡아주기 때문에, 많은 학습자들이 방향을 잡는 데 크게 도움이 됐다고 이야기합니다.", p:2},
-      {q:"직장을 다니면서 준비하려고 하는데, 목표 등급까지 기간을 얼마나 잡아야 할까요?", core:"목표 시점을 미리 정해두고, 여유 있게 준비하는 것이 좋습니다.", a:"목표 시점을 미리 정해두고 여유 있게 준비하는 것이 좋습니다. 실제 필요한 시점에 너무 촉박하게 준비하면 목표 등급 달성에 필요한 기간이 부족할 수 있습니다. 미리오픽 등으로 미리 목표 등급이 나오는지 확인한 뒤 실제 시험장에 가는 것이 효율적입니다.", p:2}
+      {q:"직장을 다니면서 준비하려고 하는데, 목표 등급까지 기간을 얼마나 잡아야 할까요?", core:"목표 시점을 미리 정해두고, 여유 있게 준비하는 것이 좋습니다.", a:"목표 시점을 미리 정해두고 여유 있게 준비하는 것이 좋습니다. 실제 필요한 시점에 너무 촉박하게 준비하면 목표 등급 달성에 필요한 기간이 부족할 수 있습니다. 미리오픽 등으로 미리 목표 등급이 나오는지 확인한 뒤 실제 시험장에 가는 것이 효율적입니다.", p:2},
+      {q:"'4시간 오픽' 강의는 정말 4시간짜리 강의인가요?", core:"실제 진행된 4시간짜리 1:1 수업을 그대로 인강화한 콘텐츠입니다.", a:"4시간 오픽은 실제로 진행됐던 4시간짜리 1:1 수업을 기반으로 제작된 강의로, 핵심전략편 4시간과 실제수업편 4시간으로 구성됩니다. 단순 압축 강의가 아니라 실제 목표 성적을 취득한 수업 내용을 그대로 인강화한 콘텐츠이며, 오픽 출제 흐름이 바뀔 때마다 업데이트됩니다.", p:2},
+      {q:"올인원이 뭔가요? 핵심전략·실제수업이랑 뭐가 다른가요?", core:"핵심전략(이론)과 실제수업(실전)을 하나의 목표 등급으로 묶은 패키지 강의입니다.", a:"올인원은 핵심전략(채점기준 이론) 강의와 실제수업(실전 4시간 수업) 강의를 하나로 묶은 패키지입니다. 예를 들어 올인원IH는 IH 목표에 맞춘 핵심전략+실제수업 세트로, 두 강의를 따로 듣는 것보다 하나의 목표 등급을 향해 통합적으로 준비할 수 있게 구성되어 있습니다.", p:2},
+      {q:"패스트트랙은 언제 추천되나요?", core:"인접한 두 등급의 채점기준이 70~80% 겹칠 때, 두 등급을 한 번에 준비하도록 추천되는 패키지입니다.", a:"패스트트랙은 인접한 두 등급을 동시에 준비하는 패키지 강의입니다(예: 패스트트랙 IM2+IH, 패스트트랙 IH+AL). IH와 AL처럼 채점기준이 70~80% 정도 겹치는 등급 구간이라면, 하나씩 따로 준비하는 것보다 패스트트랙으로 동시에 준비하는 것이 효율적입니다.", p:2},
+      {q:"지금 하나만 들어야 한다면 4시간오픽·올인원·패스트트랙 중 뭘 골라야 하나요?", core:"목표가 한 등급이면 올인원, 인접한 두 등급을 동시에 노리면 패스트트랙을 추천합니다.", a:"목표 등급이 하나로 명확하다면 해당 등급의 올인원(핵심전략+실제수업)을 추천합니다. IM2에서 IH처럼 인접한 두 등급을 동시에 노릴 수 있는 상황이라면 패스트트랙이 더 효율적입니다. 정확히 어떤 조합이 내 상황에 맞는지는 현재 등급·목표 등급·준비 기간에 따라 달라지므로, 진단 도구로 직접 확인해보는 것을 권장합니다.", p:3, deepLink:{href:"course-selector-tool.html", label:"내 등급·기간에 맞는 강의 30초 진단받기 →"}}
     ]
   },
   {
@@ -265,8 +278,8 @@ const DATA = [
     ]
   },
   {
-    id: "miriopic", title: "미리오픽 · 4시간오픽 서비스 이해", badge:"별도 섹션 추천",
-    desc: "미리오픽 모의고사·독립팩·4시간오픽 강의가 무엇이고 왜 신뢰할 수 있는지에 대한 질문. 결제·환불·마이크 오류 같은 이용 중 문제는 고객센터에서 확인하세요.",
+    id: "miriopic", title: "미리오픽 모의고사", short: "미리오픽 모의고사",
+    desc: "미리오픽 모의고사·독립팩이 무엇이고 왜 신뢰할 수 있는지에 대한 질문. 결제·환불·마이크 오류 같은 이용 중 문제는 고객센터에서 확인하세요.",
     deepLink: {href:"miriopic-help-center.html", label:"🛠️ 결제·환불·기술 문제는 고객센터에서 확인하기 →"},
     items: [
       {q:"미리오픽 모의고사는 실제 오픽 시험과 얼마나 비슷한가요?", core:"문항 수·출제 방식을 실제 시험과 동일하게 설계했고, 인위적인 가중치를 두지 않습니다.", a:"문항 수와 출제 방식을 실제 시험과 동일하게 설계했고, 점수에 인위적인 가중치나 왜곡을 주지 않습니다. 실제 시험 데이터를 지속적으로 분석해 최신 출제 경향도 반영합니다. 오픽 시험 주관사에서도 삼성전자 행사에 미리오픽 서비스를 구매해 활용한 사례가 있을 정도로 신뢰성을 인정받고 있습니다.", p:3},
@@ -275,35 +288,29 @@ const DATA = [
       {q:"미리오픽 0원(무료) 모의고사에서도 예상 등급이 나오나요?", core:"아니요 — 0원 체험팩은 환경 체험용이며, 예상 등급은 유료 모의고사에서 제공됩니다.", a:"0원 체험팩에서는 예상 등급이 제공되지 않습니다. 시험 환경 체험, 샘플 문제 유형 확인 용도이며, 예상 성적·AI 채점·상세 피드백·목표 등급 대비 분석(Gap Analysis)은 유료 모의고사(진단팩)에서 제공됩니다.", p:3},
       {q:"미리오픽 독립팩은 무엇이고 어떻게 활용하나요?", core:"우선순위 상위 238문항으로 실제 출제의 평균 약 75%를 대비할 수 있는 문제집입니다.", a:"독립팩은 실제 출제 데이터를 기반으로 우선순위가 높은 핵심 문제 238개를 선별한 문제집입니다. 이 TOP 10 주제만 집중 학습해도 실제 시험 문항의 평균 약 75%를 대비할 수 있어, 전체 기출문항(약 1,400개)을 모두 준비하는 것보다 효율적입니다. 5회 이상 응시하면 주제별·돌발별 스크립트를 자동 정리해주는 '마이오픽Book'도 발행됩니다.", p:3},
       {q:"미리오픽 예상 등급과 실제 오픽 성적은 얼마나 차이가 나나요?", core:"±0.38등급 이내에 응시자의 약 87%가 위치할 정도로 일관성 있게 나옵니다.", a:"통계적으로 일관성 있게 나오는 편이며, 미리오픽 예측 등급과 실제 성적의 차이는 ±0.38등급 이내에 응시자의 약 87%가 위치합니다.", p:3, deepLink:{href:"grade-scoring-deep-page.html#faq", label:"등급/채점 완벽가이드에서 자세히 →"}},
-      {q:"'4시간 오픽' 강의는 정말 4시간짜리 강의인가요?", core:"실제 진행된 4시간짜리 1:1 수업을 그대로 인강화한 콘텐츠입니다.", a:"4시간 오픽은 실제로 진행됐던 4시간짜리 1:1 수업을 기반으로 제작된 강의로, 핵심전략편 4시간과 실제수업편 4시간으로 구성됩니다. 단순 압축 강의가 아니라 실제 목표 성적을 취득한 수업 내용을 그대로 인강화한 콘텐츠이며, 오픽 출제 흐름이 바뀔 때마다 업데이트됩니다.", p:2},
       {q:"실전연습(말하기 트레이너)과 미리오픽 무제한 모의고사는 무엇이 다른가요?", core:"말하기 트레이너는 연습용 기능이고, AI 채점·피드백까지 원하면 무제한 모의고사가 필요합니다.", a:"실전말하기 트레이너는 실전 연습의 사전 단계로, 실제 시험처럼 반복해서 말하기 연습을 할 수 있는 기능입니다. 다만 AI 교정, 채점, 점수 예측, 세부 리포트는 제공되지 않습니다. AI 피드백과 채점까지 함께 원한다면 미리오픽 무제한 실전연습을 추가로 이용하는 것이 좋습니다.", p:2, deepLink:{href:"miriopic-help-center.html#access", label:"결제·이용권 관련 문의는 고객센터에서 →"}}
     ]
   }
 ];
 
+const PILLARS = [
+  {id:"exam-basics", title:"오픽 시험 이해하기", categories:["basic","examday","sail"]},
+  {id:"answer-strategy", title:"답변 전략 & 채점 기준", categories:["grade","roleplay","surprise","script","topic"]},
+  {id:"prep-plan", title:"나에게 맞는 준비 방법", categories:["course","miriopic","special"]}
+];
+
+const pillarTabsEl = document.getElementById('pillarTabs');
 const tabsEl = document.getElementById('tabs');
 const contentEl = document.getElementById('content');
 const searchBox = document.getElementById('searchBox');
 const noResult = document.getElementById('noResult');
+const catById = {};
+DATA.forEach(cat => { catById[cat.id] = cat; });
 
-DATA.forEach((cat, i) => {
-  const tab = document.createElement('div');
-  tab.className = 'tab' + (i === 0 ? ' active' : '');
-  tab.textContent = cat.short || cat.title.split(' — ')[0].split(' (')[0];
-  tab.dataset.cat = cat.id;
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    document.querySelectorAll('.cat-block').forEach(b => {
-      b.classList.toggle('hidden', b.dataset.cat !== cat.id);
-    });
-    searchBox.value = '';
-    noResult.style.display = 'none';
-  });
-  tabsEl.appendChild(tab);
-
+// ---- 카테고리별 콘텐츠 블록 생성 (탭과 무관하게 전부 미리 렌더) ----
+DATA.forEach((cat) => {
   const block = document.createElement('div');
-  block.className = 'cat-block' + (i === 0 ? '' : ' hidden');
+  block.className = 'cat-block hidden';
   block.dataset.cat = cat.id;
 
   const h = document.createElement('h2');
@@ -377,6 +384,61 @@ DATA.forEach((cat, i) => {
   document.head.appendChild(ld);
 });
 
+// ---- 2단 탭(상위 묶음 → 서브 카테고리) 상태 관리 ----
+let activePillar = PILLARS[0];
+let activeCatId = PILLARS[0].categories[0];
+
+function showCategory(catId) {
+  activeCatId = catId;
+  document.querySelectorAll('.cat-block').forEach(b => {
+    b.classList.toggle('hidden', b.dataset.cat !== catId);
+  });
+  noResult.style.display = 'none';
+}
+
+function renderSubTabs() {
+  tabsEl.innerHTML = '';
+  activePillar.categories.forEach((catId, i) => {
+    const cat = catById[catId];
+    if (!cat) return;
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (catId === activeCatId ? ' active' : '');
+    tab.textContent = cat.short || cat.title.split(' — ')[0].split(' (')[0];
+    tab.dataset.cat = cat.id;
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#tabs .tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      searchBox.value = '';
+      showCategory(cat.id);
+    });
+    tabsEl.appendChild(tab);
+  });
+}
+
+function renderPillarTabs() {
+  pillarTabsEl.innerHTML = '';
+  PILLARS.forEach(pillar => {
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (pillar.id === activePillar.id ? ' active' : '');
+    tab.textContent = pillar.title;
+    tab.dataset.pillar = pillar.id;
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#pillarTabs .tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activePillar = pillar;
+      activeCatId = pillar.categories[0];
+      searchBox.value = '';
+      renderSubTabs();
+      showCategory(activeCatId);
+    });
+    pillarTabsEl.appendChild(tab);
+  });
+}
+
+renderPillarTabs();
+renderSubTabs();
+showCategory(activeCatId);
+
 function badgeHtml(p){
   if(p===3) return '<span class="badge p3">★★★</span>';
   if(p===2) return '<span class="badge p2">★★</span>';
@@ -400,8 +462,9 @@ searchBox.addEventListener('input', () => {
     if(blockHasMatch) anyVisible = true;
   });
   if(!q){
-    document.querySelector('.tab').classList.add('active');
-    document.querySelector('.cat-block').classList.remove('hidden');
+    renderPillarTabs();
+    renderSubTabs();
+    showCategory(activeCatId);
     document.querySelectorAll('details').forEach(d => d.classList.remove('hidden'));
     noResult.style.display = 'none';
     return;
