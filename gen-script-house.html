@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미리오픽 (Miri OPIc) - 스크립트 제조기 (집 묘사 편)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tag-chip {
+            transition: all 0.2s ease-in-out;
+        }
+        .tag-chip.active {
+            background-color: #4f46e5;
+            color: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.25);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    <i class="fa-solid font-bold fa-bolt"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-extrabold bg-gradient-to-r from-brand-700 to-indigo-500 bg-clip-text text-transparent">미리오픽 (Miri OPIc)</span>
+                    <span class="hidden sm:inline-inline text-xs bg-indigo-100 text-indigo-700 font-semibold px-2 py-0.5 rounded-full ml-2">집 묘사 편</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 text-sm">
+                <span class="text-slate-500 hidden md:inline">맞춤형 OPIc 답변 자동 생성기</span>
+                <button onclick="resetForm()" class="text-slate-500 hover:text-slate-800 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left text-xs"></i> 초깃화
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+        
+        <!-- Hero Banner -->
+        <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-slate-900 rounded-2xl p-6 sm:p-8 text-white mb-8 shadow-xl relative overflow-hidden">
+            <div class="absolute right-0 top-0 -mt-8 -mr-8 w-64 h-64 rounded-full bg-brand-500/20 blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-indigo-200 text-xs font-medium mb-3 backdrop-blur-md">
+                    <i class="fa-solid fa-sparkles text-amber-300"></i> AI 스크립트 오토 마이닝
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-2">
+                    태그만 클릭하면 완성되는 나만의 OPIc 답변
+                </h1>
+                <p class="text-indigo-200 text-sm sm:text-base leading-relaxed">
+                    본인의 실제 주거 상황을 선택하세요. AI가 오픽 시험 기준에 부합하는 자연스러운 필러(Filler)와 암기 느낌 없는 고득점 스크립트를 즉시 생성합니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Side: Survey Options Form -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Target Grade Selection -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <label class="block text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-500"></i> 목표 등급을 선택하세요
+                    </label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="button" onclick="selectLevel('IM2')" id="btn-lvl-IM2" class="level-btn p-3 rounded-xl border border-slate-200 text-center hover:border-brand-500 transition active">
+                            <div class="font-bold text-sm text-slate-800">IM2</div>
+                            <div class="text-[11px] text-slate-500">안정적 문장 중심</div>
+                        </button>
+                        <button type="button" onclick="selectLevel('IH')" id="btn-lvl-IH" class="level-btn p-3 rounded-xl border border-slate-200 text-center hover:border-brand-500 transition">
+                            <div class="font-bold text-sm text-slate-800">IH</div>
+                            <div class="text-[11px] text-slate-500">풍부한 표현 & 필러</div>
+                        </button>
+                        <button type="button" onclick="selectLevel('AL')" id="btn-lvl-AL" class="level-btn p-3 rounded-xl border border-slate-200 text-center hover:border-brand-500 transition">
+                            <div class="font-bold text-sm text-slate-800">AL</div>
+                            <div class="text-[11px] text-slate-500">원어민급 억양 & 세련미</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Card wrapper -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    
+                    <!-- Q1. 집 형태 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">1</span>
+                            어떤 형태의 집에서 살고 있나요? <span class="text-xs font-normal text-slate-400">(단일 선택)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q1-options">
+                            <!-- Options injected dynamically or standard -->
+                        </div>
+                    </div>
+
+                    <!-- Q2. 동거인 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">2</span>
+                            누구와 함께 살고 있나요? <span class="text-xs font-normal text-slate-400">(단일 선택)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q2-options"></div>
+                    </div>
+
+                    <!-- Q3. 집 크기 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">3</span>
+                            집의 크기는 어떤가요? <span class="text-xs font-normal text-slate-400">(단일 선택)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q3-options"></div>
+                    </div>
+
+                    <!-- Q4. 집 느낌 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">4</span>
+                            집의 느낌은 어떤가요? <span class="text-xs font-normal text-brand-600">(복수 선택 가능)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q4-options"></div>
+                    </div>
+
+                    <!-- Q5. 가장 좋아하는 곳 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">5</span>
+                            집에서 가장 좋아하는 곳은 어디인가요? <span class="text-xs font-normal text-slate-400">(단일 선택)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q5-options"></div>
+                    </div>
+
+                    <!-- Q6. 좋아하는 이유 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">6</span>
+                            그곳을 좋아하는 이유는 무엇인가요? <span class="text-xs font-normal text-brand-600">(복수 선택 가능)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q6-options"></div>
+                    </div>
+
+                    <!-- Q7. 주변 환경 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">7</span>
+                            집 주변 환경은 어떤가요? <span class="text-xs font-normal text-brand-600">(복수 선택 가능)</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="q7-options"></div>
+                    </div>
+
+                    <!-- Q8. 직접 입력 -->
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 mb-2.5 flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-brand-100 text-brand-700 text-xs flex items-center justify-center font-bold">8</span>
+                            특별히 덧붙이고 싶은 나만의 집 특징 <span class="text-xs font-normal text-slate-400">(선택 입력)</span>
+                        </h3>
+                        <input type="text" id="q8-custom" placeholder="예: 고양이를 키워서 캣타워가 있음, 식물이 많음, 홈카페 존이 있음" 
+                               class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition">
+                    </div>
+
+                    <!-- Generate CTA Button -->
+                    <div class="pt-4 border-t border-slate-100">
+                        <button type="button" onclick="generateScript()" id="generate-btn" 
+                                class="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-brand-500/30 transition transform active:scale-[0.99] flex items-center justify-center gap-2 text-base">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 나만의 OPIc 답변 스크립트 만들기
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Side: Script Output & Practice -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Output Container -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sticky top-24 min-h-[500px] flex flex-col justify-between" id="output-box">
+                    
+                    <!-- Placeholder State -->
+                    <div id="placeholder-state" class="my-auto text-center py-12 px-4">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-50 flex items-center justify-center text-brand-600 text-2xl">
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1">스마트 맞춤형 답변 준비됨</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+                            왼쪽 항목들을 선택한 뒤 생성 버튼을 누르시면, 선택한 조건이 모두 반영된 영어 스크립트와 한글 번역이 생성됩니다.
+                        </p>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loading-state" class="hidden my-auto text-center py-16 px-4">
+                        <div class="inline-block relative w-16 h-16 mb-4">
+                            <div class="absolute top-0 left-0 w-full h-full border-4 border-brand-200 rounded-full animate-ping opacity-75"></div>
+                            <div class="absolute top-0 left-0 w-full h-full border-4 border-brand-600 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-2">AI 오픽 코치가 답변 생성 중...</h3>
+                        <p class="text-xs text-slate-500 animate-pulse">
+                            선택하신 태그를 조합하여 자연스러운 영어 문장과 필러를 구성하고 있습니다.
+                        </p>
+                    </div>
+
+                    <!-- Result View State -->
+                    <div id="result-state" class="hidden flex-col h-full space-y-4">
+                        
+                        <!-- Header Bar inside output -->
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <div class="flex items-center gap-2">
+                                <span id="result-level-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-100 text-brand-700">IH Level</span>
+                                <span class="text-xs text-slate-400">집 묘사 스크립트</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="copyToClipboard()" title="복사하기" class="p-2 text-slate-500 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition text-xs flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 복사
+                                </button>
+                                <button onclick="speakScript()" id="tts-btn" title="음성으로 듣기" class="p-2 text-slate-500 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition text-xs flex items-center gap-1">
+                                    <i class="fa-solid fa-volume-high"></i> <span id="tts-btn-text">듣기</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Content Tabs -->
+                        <div class="flex border-b border-slate-200 text-xs font-bold text-slate-500">
+                            <button onclick="switchTab('tab-en')" id="btn-tab-en" class="py-2 px-3 border-b-2 border-brand-600 text-brand-600 transition">영어 스크립트</button>
+                            <button onclick="switchTab('tab-ko')" id="btn-tab-ko" class="py-2 px-3 border-b-2 border-transparent hover:text-slate-700 transition">한글 번역</button>
+                            <button onclick="switchTab('tab-vocab')" id="btn-tab-vocab" class="py-2 px-3 border-b-2 border-transparent hover:text-slate-700 transition">주요 표현</button>
+                            <button onclick="switchTab('tab-tips')" id="btn-tab-tips" class="py-2 px-3 border-b-2 border-transparent hover:text-slate-700 transition">전략 팁</button>
+                        </div>
+
+                        <!-- Tab Contents -->
+                        <div class="flex-grow overflow-y-auto max-h-[420px] pr-1 space-y-4 text-sm leading-relaxed text-slate-700">
+                            
+                            <!-- OPIc Sample Question -->
+                            <div class="p-3 bg-indigo-50/70 border border-indigo-100 rounded-xl text-xs text-indigo-900 font-medium">
+                                <i class="fa-regular fa-circle-question text-indigo-600 mr-1"></i>
+                                <span id="opic-question-text">Tell me about your home. What does it look like and where is it located?</span>
+                            </div>
+
+                            <!-- Tab 1: English Script -->
+                            <div id="tab-en" class="tab-content">
+                                <div id="script-english-body" class="whitespace-pre-line font-normal text-slate-800 text-sm leading-relaxed">
+                                    <!-- Dynamic text -->
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Korean Translation -->
+                            <div id="tab-ko" class="tab-content hidden">
+                                <div id="script-korean-body" class="whitespace-pre-line font-normal text-slate-600 text-sm leading-relaxed">
+                                    <!-- Dynamic text -->
+                                </div>
+                            </div>
+
+                            <!-- Tab 3: Key Vocabulary -->
+                            <div id="tab-vocab" class="tab-content hidden">
+                                <ul id="vocab-list" class="space-y-2 text-xs">
+                                    <!-- Dynamic vocabulary list -->
+                                </ul>
+                            </div>
+
+                            <!-- Tab 4: Delivery Tips -->
+                            <div id="tab-tips" class="tab-content hidden">
+                                <ul id="tips-list" class="space-y-2 text-xs text-slate-600">
+                                    <!-- Dynamic tips -->
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer Voice Practice Box -->
+                        <div class="mt-auto pt-3 border-t border-slate-100 bg-slate-50 -mx-6 -mb-6 p-4 rounded-b-2xl flex items-center justify-between text-xs">
+                            <span class="text-slate-500 font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-microphone text-rose-500"></i> 직접 녹음 연습하기
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <button id="record-btn" onclick="toggleRecording()" class="px-3 py-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-lg transition font-medium flex items-center gap-1">
+                                    <i class="fa-solid fa-circle text-[10px]"></i> 녹음 시작
+                                </button>
+                                <audio id="audio-playback" controls class="hidden h-8 w-36"></audio>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-medium translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400" id="toast-icon"></i>
+        <span id="toast-message">메시지 내용</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-400 space-y-1">
+            <p>미리오픽 (Miri OPIc) - AI 기반 오픽 답변 스크립트 생성을 위한 모바일/웹 툴키트</p>
+            <p>© 2026 Miri OPIc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Survey Configuration Schema
+        const SURVEY_DATA = {
+            q1: {
+                title: '집 형태',
+                multi: false,
+                options: ['아파트', '오피스텔', '빌라', '단독주택', '원룸', '기숙사']
+            },
+            q2: {
+                title: '동거인',
+                multi: false,
+                options: ['혼자 거주', '가족과 함께', '부모님과 함께', '배우자와 함께', '룸메이트와 함께']
+            },
+            q3: {
+                title: '집 크기',
+                multi: false,
+                options: ['넓은 편', '작은 편', '적당한 크기', '방이 많음', '아담함']
+            },
+            q4: {
+                title: '집 느낌',
+                multi: true,
+                options: ['편안한', '아늑한', '조용한', '깔끔한', '넓은', '밝은', '따뜻한 느낌', '현대적인', '평범한', '오래된', '새집', '쾌적한']
+            },
+            q5: {
+                title: '가장 좋아하는 곳',
+                multi: false,
+                options: ['거실', '내 방', '침실', '주방', '베란다', '서재']
+            },
+            q6: {
+                title: '좋아하는 이유',
+                multi: true,
+                options: ['편해서', '조용해서', '전망이 좋아서', '햇빛이 잘 들어서', '넓어서', '가족과 시간 보내기 좋아서', '혼자 쉬기 좋아서']
+            },
+            q7: {
+                title: '주변 환경',
+                multi: true,
+                options: ['교통 편리', '조용한 동네', '공원이 있음', '편의시설 많음', '마트 가까움', '카페 많음', '역이 가까움']
+            }
+        };
+
+        // App State
+        let selectedAnswers = {
+            targetLevel: 'IH',
+            q1: '아파트',
+            q2: '부모님과 함께',
+            q3: '적당한 크기',
+            q4: ['편안한', '아늑한'],
+            q5: '내 방',
+            q6: ['혼자 쉬기 좋아서', '편해서'],
+            q7: ['교통 편리', '카페 많음'],
+            q8: ''
+        };
+
+        let generatedData = null;
+        let isSpeaking = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+
+        // Initialize UI on load
+        window.onload = function() {
+            renderSurveyOptions();
+            updateLevelUI('IH');
+        };
+
+        // Render Survey Tag Buttons
+        function renderSurveyOptions() {
+            Object.keys(SURVEY_DATA).forEach(key => {
+                const container = document.getElementById(`${key}-options`);
+                if (!container) return;
+
+                const config = SURVEY_DATA[key];
+                container.innerHTML = config.options.map(opt => {
+                    const isActive = config.multi 
+                        ? selectedAnswers[key].includes(opt)
+                        : selectedAnswers[key] === opt;
+
+                    return `
+                        <button type="button" 
+                                onclick="toggleTag('${key}', '${opt}', ${config.multi})"
+                                class="tag-chip px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 hover:border-brand-300 hover:bg-slate-50 transition ${isActive ? 'active' : ''}"
+                                data-key="${key}" data-value="${opt}">
+                            ${opt}
+                        </button>
+                    `;
+                }).join('');
+            });
+        }
+
+        // Tag Toggle Logic
+        function toggleTag(key, value, isMulti) {
+            if (isMulti) {
+                const arr = selectedAnswers[key];
+                const idx = arr.indexOf(value);
+                if (idx > -1) {
+                    if (arr.length > 1) { // Keep at least one
+                        arr.splice(idx, 1);
+                    } else {
+                        showToast("최소 1개 이상의 항목을 선택해 주세요.");
+                        return;
+                    }
+                } else {
+                    arr.push(value);
+                }
+            } else {
+                selectedAnswers[key] = value;
+            }
+            renderSurveyOptions();
+        }
+
+        // Target Level Selection
+        function selectLevel(level) {
+            selectedAnswers.targetLevel = level;
+            updateLevelUI(level);
+        }
+
+        function updateLevelUI(level) {
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('border-brand-600', 'bg-brand-50/50', 'ring-2', 'ring-brand-500');
+            });
+            const activeBtn = document.getElementById(`btn-lvl-${level}`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-brand-600', 'bg-brand-50/50', 'ring-2', 'ring-brand-500');
+            }
+        }
+
+        // Reset Form
+        function resetForm() {
+            selectedAnswers = {
+                targetLevel: 'IH',
+                q1: '아파트',
+                q2: '가족과 함께',
+                q3: '적당한 크기',
+                q4: ['편안한', '아늑한'],
+                q5: '내 방',
+                q6: ['혼자 쉬기 좋아서'],
+                q7: ['교통 편리'],
+                q8: ''
+            };
+            document.getElementById('q8-custom').value = '';
+            updateLevelUI('IH');
+            renderSurveyOptions();
+            showToast("선택 항목이 초기화되었습니다.");
+        }
+
+        // Main Function: Generate Script via Gemini API
+        async function generateScript() {
+            // Grab custom input
+            selectedAnswers.q8 = document.getElementById('q8-custom').value.trim();
+
+            // UI state shift
+            document.getElementById('placeholder-state').classList.add('hidden');
+            document.getElementById('result-state').classList.add('hidden');
+            document.getElementById('result-state').classList.remove('flex');
+            document.getElementById('loading-state').classList.remove('hidden');
+
+            const level = selectedAnswers.targetLevel;
+
+            // Formulate LLM Prompt
+            const systemPrompt = `You are an elite, native-speaking OPIc English exam trainer specializing in crafting highly authentic, high-scoring responses for Korean candidates.
+Create an natural, conversational spoken OPIc English script based strictly on the user's selected survey tags.
+
+Level Standards:
+- IM2: Clear sentences, good grammar, basic connectors (so, because, and then).
+- IH: Frequent natural fillers (you know, actually, I'd say, to be honest), expressive descriptors, smooth transitions, and self-correction.
+- AL: Native-like idiomatic expressions, vivid imagery, sophisticated vocabulary, dynamic intonation markers, and flawless natural flow without sounding memorized.
+
+Generate the response in strict JSON format conforming to the requested schema.`;
+
+            const userPrompt = `
+Generate an OPIc Home Description script ("집 묘사 편") for Target Level: ${level}.
+
+User Survey Answers:
+1. Housing Type: ${selectedAnswers.q1}
+2. Living with: ${selectedAnswers.q2}
+3. Size of home: ${selectedAnswers.q3}
+4. Mood/Atmosphere: ${selectedAnswers.q4.join(', ')}
+5. Favorite Place: ${selectedAnswers.q5}
+6. Reason for loving the place: ${selectedAnswers.q6.join(', ')}
+7. Neighborhood Environment: ${selectedAnswers.q7.join(', ')}
+8. Special custom feature: ${selectedAnswers.q8 || 'None'}
+
+Target Level: ${level}
+
+Make sure the English script sounds like spoken speech with realistic pauses and natural OPIc fillers.
+`;
+
+            const apiKey = ""; // Canvas runtime handles API key
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            opicQuestion: { type: "STRING" },
+                            englishScript: { type: "STRING" },
+                            koreanTranslation: { type: "STRING" },
+                            keyVocabulary: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        expression: { type: "STRING" },
+                                        meaning: { type: "STRING" }
+                                    },
+                                    required: ["expression", "meaning"]
+                                }
+                            },
+                            deliveryTips: {
+                                type: "ARRAY",
+                                items: { type: "STRING" }
+                            }
+                        },
+                        required: ["opicQuestion", "englishScript", "koreanTranslation", "keyVocabulary", "deliveryTips"]
+                    }
+                }
+            };
+
+            try {
+                const response = await fetchWithRetry(apiUrl, payload);
+                const result = await response.json();
+
+                if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                    const jsonText = result.candidates[0].content.parts[0].text;
+                    generatedData = JSON.parse(jsonText);
+                    renderGeneratedResult();
+                } else {
+                    throw new Error("Invalid response format from Gemini API");
+                }
+            } catch (error) {
+                console.error("Script Generation Error:", error);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('placeholder-state').classList.remove('hidden');
+                showToast("스크립트 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
+        }
+
+        // Fetch API with Retry mechanism
+        async function fetchWithRetry(url, payload, retries = 3, delay = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (res.ok) return res;
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                }
+                await new Promise(r => setTimeout(r, delay * (i + 1)));
+            }
+            throw new Error("Failed after maximum retries");
+        }
+
+        // Render Output Result
+        function renderGeneratedResult() {
+            if (!generatedData) return;
+
+            document.getElementById('loading-state').classList.add('hidden');
+            const resultState = document.getElementById('result-state');
+            resultState.classList.remove('hidden');
+            resultState.classList.add('flex');
+
+            // Badge
+            const badge = document.getElementById('result-level-badge');
+            badge.innerText = `${selectedAnswers.targetLevel} Target`;
+
+            // Question
+            document.getElementById('opic-question-text').innerText = generatedData.opicQuestion || "Tell me about your home. What does it look like and where is it located?";
+
+            // English Script
+            document.getElementById('script-english-body').innerText = generatedData.englishScript;
+
+            // Korean Translation
+            document.getElementById('script-korean-body').innerText = generatedData.koreanTranslation;
+
+            // Vocabulary List
+            const vocabContainer = document.getElementById('vocab-list');
+            vocabContainer.innerHTML = generatedData.keyVocabulary.map(v => `
+                <li class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex items-start justify-between gap-2">
+                    <span class="font-bold text-brand-700 font-mono text-xs">${v.expression}</span>
+                    <span class="text-slate-600 text-right text-xs">${v.meaning}</span>
+                </li>
+            `).join('');
+
+            // Delivery Tips
+            const tipsContainer = document.getElementById('tips-list');
+            tipsContainer.innerHTML = generatedData.deliveryTips.map(tip => `
+                <li class="flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5 text-xs"></i>
+                    <span>${tip}</span>
+                </li>
+            `).join('');
+
+            // Default to English tab
+            switchTab('tab-en');
+            showToast("나만의 OPIc 답변 스크립트가 완성되었습니다!");
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+
+            // Button highlights
+            ['tab-en', 'tab-ko', 'tab-vocab', 'tab-tips'].forEach(id => {
+                const btn = document.getElementById(`btn-${id}`);
+                if (btn) {
+                    if (id === tabId) {
+                        btn.classList.add('border-brand-600', 'text-brand-600');
+                        btn.classList.remove('border-transparent');
+                    } else {
+                        btn.classList.remove('border-brand-600', 'text-brand-600');
+                        btn.classList.add('border-transparent');
+                    }
+                }
+            });
+        }
+
+        // Copy Script to Clipboard
+        function copyToClipboard() {
+            if (!generatedData) return;
+            const textToCopy = `[OPIc Question]\n${generatedData.opicQuestion}\n\n[English Script]\n${generatedData.englishScript}\n\n[Korean Translation]\n${generatedData.koreanTranslation}`;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast("스크립트가 클립보드에 복사되었습니다.");
+            } catch (err) {
+                showToast("복사에 실패했습니다.");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Native Speech Synthesis (TTS)
+        function speakScript() {
+            if (!generatedData || !generatedData.englishScript) return;
+
+            if ('speechSynthesis' in window) {
+                if (isSpeaking) {
+                    window.speechSynthesis.cancel();
+                    isSpeaking = false;
+                    document.getElementById('tts-btn-text').innerText = "듣기";
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(generatedData.englishScript);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.95; // Slightly comfortable pace for learning
+
+                utterance.onstart = function() {
+                    isSpeaking = true;
+                    document.getElementById('tts-btn-text').innerText = "정지";
+                };
+
+                utterance.onend = function() {
+                    isSpeaking = false;
+                    document.getElementById('tts-btn-text').innerText = "듣기";
+                };
+
+                utterance.onerror = function() {
+                    isSpeaking = false;
+                    document.getElementById('tts-btn-text').innerText = "듣기";
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast("현재 브라우저는 음성 재생을 지원하지 않습니다.");
+            }
+        }
+
+        // Voice Recording Tool
+        async function toggleRecording() {
+            const btn = document.getElementById('record-btn');
+            const audioPlayback = document.getElementById('audio-playback');
+
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPlayback.src = audioUrl;
+                        audioPlayback.classList.remove('hidden');
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    btn.innerHTML = `<i class="fa-solid fa-square text-[10px]"></i> 녹음 중지`;
+                    btn.classList.replace('bg-rose-500', 'bg-slate-800');
+                    showToast("녹음이 시작되었습니다. 목소리를 내어 스크립트를 읽어보세요!");
+                } catch (err) {
+                    showToast("마이크 접근 권한이 필요합니다.");
+                }
+            } else {
+                if (mediaRecorder) {
+                    mediaRecorder.stop();
+                }
+                isRecording = false;
+                btn.innerHTML = `<i class="fa-solid fa-circle text-[10px]"></i> 다시 녹음`;
+                btn.classList.replace('bg-slate-800', 'bg-rose-500');
+                showToast("녹음이 완료되었습니다. 아래에서 들어보세요.");
+            }
+        }
+
+        // Toast Notification System
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = msg;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
