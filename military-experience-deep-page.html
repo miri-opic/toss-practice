@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>군대 경험, 오픽 서베이에서 선택해도 될까? | 미리오픽</title>
+<meta name="description" content="오픽(OPIc) 서베이에서 직업/군 경험을 선택하면 출제 범위가 예측하기 어려워질 수 있습니다. 군복무 경험 선택 전략부터 카투사·OPI·토익스피킹 비교까지 특수 상황 응시자를 위한 가이드입니다.">
+<meta property="og:title" content="군대 경험, 오픽 서베이에서 선택해도 될까? | 미리오픽">
+<meta property="og:description" content="파일럿테스트 데이터로 보는 군 경험 선택의 위험과, '일 경험 없음' 대안 전략.">
+<meta property="og:type" content="article">
+<style>
+  .viz-root{
+    color-scheme: light;
+    --surface-1:#ffffff; --surface-2:#ffffff; --page:#f7f8fa;
+    --text-primary:#1a1d29; --text-secondary:#5b6072; --text-muted:#8b90a0;
+    --line:#e6e8ee; --line-strong:#c7cad6; --border:rgba(26,29,41,0.10);
+    --blue:#2851d8; --blue-100:#eef2ff; --blue-150:#dde5ff; --blue-400:#5b7ce8; --blue-700:#1a35a0;
+    --good:#2a6f4d; --good-text:#1f5c3f; --good-bg:#eaf6ef;
+    --orange:#c8720b; --orange-bg:#fff4e5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:where(:not([data-theme="light"])) .viz-root{
+      color-scheme: dark;
+      --surface-1:#1c1f2b; --surface-2:#1c1f2b; --page:#14161f;
+      --text-primary:#eef0f5; --text-secondary:#a7abc0; --text-muted:#7d8299;
+      --line:#2b2f3f; --line-strong:#3a3f52; --border:rgba(255,255,255,0.10);
+      --blue:#7c9bff; --blue-100:#222a4a; --blue-150:#2a335c; --blue-400:#7c9bff; --blue-700:#dde5ff;
+      --good:#5fcf98; --good-text:#5fcf98; --good-bg:#0f2b1f;
+      --orange:#e2a04b; --orange-bg:#332008;
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--page); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif; }
+  .viz-root{ color:var(--text-primary); }
+  a{ color:var(--blue); }
+
+  .breadcrumb{ max-width:820px; margin:0 auto; padding:24px 20px 0; font-size:0.8rem; color:var(--text-muted); }
+  .breadcrumb a{ text-decoration:none; }
+
+  .hero{ max-width:820px; margin:0 auto; padding:20px 20px 8px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; font-weight:700;
+    color:var(--blue); background:var(--blue-100); padding:5px 12px; border-radius:999px; margin-bottom:16px;
+  }
+  h1{ font-size:1.9rem; line-height:1.4; margin:0 0 14px; }
+  .dek{ font-size:1.02rem; color:var(--text-secondary); line-height:1.65; margin:0 0 18px; }
+  .byline{ display:flex; align-items:center; gap:10px; font-size:0.82rem; color:var(--text-muted); padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:28px; }
+  .byline .avatar{ width:30px; height:30px; border-radius:50%; background:var(--blue-100); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex:none; }
+  .byline b{ color:var(--text-primary); }
+
+  .wrap{ max-width:820px; margin:0 auto; padding:0 20px 90px; }
+
+  .summary-box{
+    background:var(--blue-100); border-radius:16px; padding:22px 24px; margin-bottom:32px;
+  }
+  .summary-box .s-label{ font-size:0.72rem; font-weight:800; color:var(--blue-700); letter-spacing:0.03em; margin-bottom:10px; }
+  .summary-box ul{ margin:0; padding-left:20px; color:var(--blue-700); font-size:0.94rem; line-height:1.8; }
+  .summary-box li b{ font-weight:800; }
+
+  section{ margin-bottom:44px; }
+  h2{ font-size:1.28rem; margin:0 0 16px; padding-top:6px; }
+  h3{ font-size:1.02rem; margin:22px 0 8px; }
+  p{ font-size:0.96rem; line-height:1.75; color:var(--text-secondary); margin:0 0 16px; }
+  p b, li b{ color:var(--text-primary); }
+
+  blockquote{
+    margin:20px 0; padding:18px 20px; background:var(--surface-2); border-left:4px solid var(--blue);
+    border-radius:0 12px 12px 0; font-size:0.94rem; color:var(--text-primary); line-height:1.7;
+  }
+  blockquote footer{ margin-top:10px; font-size:0.8rem; color:var(--text-muted); }
+
+  .example{
+    background:var(--surface-2); border:1px solid var(--border); border-radius:14px; padding:18px 20px; margin:18px 0;
+  }
+  .example .e-label{ font-size:0.72rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; }
+
+  .warn-box{
+    background:var(--orange-bg); border:1px solid rgba(235,104,52,0.28); border-radius:14px; padding:18px 20px; margin:18px 0;
+  }
+  .warn-box .w-label{ font-size:0.72rem; font-weight:800; color:var(--orange); margin-bottom:8px; letter-spacing:0.02em; }
+  .warn-box p{ margin:0; color:var(--text-primary); font-size:0.92rem; }
+  .warn-box ul{ margin:8px 0 0; padding-left:20px; color:var(--text-primary); font-size:0.92rem; line-height:1.7; }
+
+  .good-box{
+    background:var(--good-bg); border:1px solid rgba(12,163,12,0.25); border-radius:14px; padding:18px 20px; margin:18px 0;
+  }
+  .good-box .g-label{ font-size:0.72rem; font-weight:800; color:var(--good-text); margin-bottom:8px; letter-spacing:0.02em; }
+  .good-box p{ margin:0; color:var(--text-primary); font-size:0.92rem; }
+
+  /* pilot test range viz */
+  .range-bar{ margin:18px 0; }
+  .range-track{ position:relative; height:24px; background:var(--line); border-radius:8px; overflow:hidden; }
+  .range-fill{ position:absolute; top:0; left:0; height:100%; width:100%; background:linear-gradient(90deg, var(--orange), var(--blue)); opacity:0.55; }
+  .range-labels{ display:flex; justify-content:space-between; margin-top:6px; font-size:0.72rem; color:var(--text-muted); }
+
+  .cta{
+    background:linear-gradient(135deg, var(--blue), var(--blue-700));
+    border-radius:18px; padding:26px 26px; color:#fff; margin:36px 0;
+  }
+  .cta h4{ font-size:1.05rem; margin:0 0 8px; }
+  .cta p{ color:rgba(255,255,255,0.88); margin:0 0 16px; font-size:0.9rem; }
+  .cta-btn{
+    display:inline-block; background:#fff; color:var(--blue-700); font-weight:700; font-size:0.88rem;
+    padding:10px 20px; border-radius:999px; text-decoration:none;
+  }
+  .cta.soft{ background:var(--surface-2); border:1px solid var(--border); color:var(--text-primary); }
+  .cta.soft p{ color:var(--text-secondary); }
+  .cta.soft .cta-btn{ background:var(--blue); color:#fff; }
+
+  details{
+    background:var(--surface-1); border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden;
+  }
+  summary{ padding:15px 42px 15px 18px; cursor:pointer; font-weight:700; font-size:0.94rem; list-style:none; position:relative; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:"+"; position:absolute; right:16px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:1.2rem; }
+  details[open] summary::after{ content:"\2013"; }
+  .d-answer{ padding:0 18px 16px; color:var(--text-secondary); font-size:0.9rem; line-height:1.7; }
+
+  .author-box{
+    display:flex; gap:16px; background:var(--surface-1); border:1px solid var(--border); border-radius:16px; padding:22px;
+  }
+  .author-box .a-avatar{ flex:none; width:56px; height:56px; border-radius:50%; background:var(--blue-100); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.3rem; }
+  .author-box h4{ margin:0 0 6px; font-size:1rem; }
+  .author-box p{ margin:0; font-size:0.86rem; }
+  .author-box ul{ margin:6px 0 0; padding-left:18px; font-size:0.82rem; color:var(--text-secondary); line-height:1.6; }
+
+  footer.page-footer{ max-width:820px; margin:0 auto; padding:0 20px 70px; }
+  .footer-meta{ font-size:0.78rem; color:var(--text-muted); border-top:1px solid var(--line); padding-top:18px; line-height:1.8; }
+  .related{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .related a{ font-size:0.82rem; text-decoration:none; background:var(--surface-2); border:1px solid var(--border); padding:8px 14px; border-radius:999px; }
+
+  @media (max-width:520px){
+    h1{ font-size:1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="viz-root">
+
+  <div class="breadcrumb"><a href="miriopic-faq-hub.html">오픽, 강쌤한테 다 물어봤습니다</a> › 특수 상황별 응시자</div>
+
+  <div class="hero">
+    <span class="eyebrow">MIRIOPIC · 특수 상황별 응시자</span>
+    <h1>군대 경험, 오픽 서베이에서 선택해도 될까?</h1>
+    <p class="dek">서베이에서 직업/군 관련 항목을 선택하는 순간 출제 범위가 예측하기 어려워질 수 있습니다. 실제 파일럿테스트 데이터와 "일 경험 없음" 대안 전략, 그리고 카투사·OPI·토익스피킹처럼 특수한 상황의 응시자들이 자주 묻는 질문까지 강지완쌤이 답한 내용을 정리했습니다.</p>
+    <div class="byline">
+      <div class="avatar">강</div>
+      <div>글쓴이 <b>강지완</b> · 美오픽주관사 오픽채점자스쿨 수료 · 국내 오픽 도입 총괄 · 미리오픽 채점 AI 설계자 · 최종 업데이트 2026-08-19</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="summary-box">
+      <div class="s-label">핵심 요약 (4줄)</div>
+      <ul>
+        <li>군 관련 항목을 선택하면 파일럿테스트상 관련 문항 수가 <b>0개~9개까지 크게 흔들린</b> 사례가 있습니다.</li>
+        <li>대안으로 <b>'일 경험 없음'을 선택하고, 군 이야기는 자유 답변에서 언급</b>하는 전략이 더 안전합니다.</li>
+        <li>OPI(전화 인터뷰)는 오픽보다 <b>응시료가 약 2배</b>이고 즉석 난이도 조절이 이뤄집니다.</li>
+        <li>목표 시험 선택은 <b>목표 기업·기관이 선호하는 시험</b> 기준으로 판단하는 것이 좋습니다.</li>
+      </ul>
+    </div>
+
+    <section id="military">
+      <h2>군복무 경험을 선택하면 시험 범위가 넓어지나요?</h2>
+      <p>서베이에서 직업이나 군 관련 항목을 선택할지 고민하는 응시자가 많습니다. 결론부터 말하면, 신중하게 접근해야 하는 선택입니다.</p>
+      <blockquote>
+        직업과 군을 선택하는 순간, 지뢰를 밟는 느낌이랄까요.
+        <footer>— 강지완쌤, 커뮤니티 Q&amp;A 중</footer>
+      </blockquote>
+      <div class="warn-box">
+        <div class="w-label">파일럿테스트 결과: 0~9개까지 변동</div>
+        <p>군 관련 항목을 선택했을 때 실제로 파생되는 콤보 문항 수가 파일럿테스트에서 0개부터 9개까지 크게 흔들린 사례가 확인되었습니다. 즉 어떤 응시자는 관련 질문을 거의 안 받고, 어떤 응시자는 최대 9개 문항까지 받을 수 있어 예측이 어렵습니다.</p>
+      </div>
+      <div class="range-bar">
+        <div class="range-track"><div class="range-fill"></div></div>
+        <div class="range-labels"><span>0개 (거의 안 나옴)</span><span>파일럿테스트 관측 범위</span><span>9개 (전체 콤보의 상당수)</span></div>
+      </div>
+      <div class="good-box">
+        <div class="g-label">더 안전한 대안</div>
+        <p>서베이에서는 '일 경험 없음' 쪽을 선택하고, 실제 군 관련 경험은 다른 자유 답변 문항(기억에 남는 경험, 극복한 어려움 등)에서 자연스럽게 언급하는 전략이 예측 가능성 면에서 더 안전합니다.</p>
+      </div>
+    </section>
+
+    <section id="opi">
+      <h2>OPI(전화 인터뷰) 준비도 오픽과 같은 방식인가요?</h2>
+      <p>해외 진출이나 특수 채용 트랙에서 OPI를 요구받는 경우가 있습니다. 오픽과는 운영 방식에 몇 가지 중요한 차이가 있습니다.</p>
+      <blockquote>
+        국내에서는 al이상이면 다 같은 등급처럼 쳐줘서...
+        <footer>— 강지완쌤, 커뮤니티 Q&amp;A 중</footer>
+      </blockquote>
+      <p>OPI는 전화로 진행되며 응시자의 답변 수준에 맞춰 실시간으로 난이도가 조절됩니다. 측정 범위도 Novice부터 Advanced Mid까지로 오픽과 다르고, 응시료는 오픽의 약 2배 수준이며 지정된 시험장에서만 응시할 수 있습니다. 다만 국내에서는 AL 이상이면 오픽과 OPI를 동일한 등급으로 취급하는 경우가 많아, 실질적인 활용 면에서는 큰 차이가 없는 경우도 있습니다.</p>
+    </section>
+
+    <section id="faq">
+      <h2>그 외 특수 상황 응시자 자주 묻는 질문</h2>
+
+      <details>
+        <summary>목표가 카투사 IM2라면 어떤 강의를 들어야 하나요?</summary>
+        <div class="d-answer">카투사 지원을 위해 IM2를 목표로 한다면 IM2 핵심전략 강의를 우선 추천합니다. 준비 기간이 여유롭다면 IM2와 IH를 함께 준비하는 패스트트랙(IM2+IH)을 선택해 안전 마진을 두는 것도 방법입니다.</div>
+      </details>
+
+      <details>
+        <summary>토익스피킹과 오픽 중 어떤 시험을 준비하는 게 나을까요?</summary>
+        <div class="d-answer">어떤 시험이 절대적으로 쉽다기보다, 목표로 하는 기업이나 기관이 어떤 시험 성적을 선호하는지가 우선 기준이 되어야 합니다. 대기업 채용에서는 오픽을 선호하는 경우가 많아, 목표가 대기업이라면 오픽 쪽이 더 유리한 경우가 많습니다.</div>
+      </details>
+
+      <details>
+        <summary>해외(예: 일본) 취업을 준비 중인데 오픽 성적이 도움이 되나요?</summary>
+        <div class="d-answer">오픽은 국내 기업의 영어 능력 평가 수요에 맞춰 널리 쓰이는 시험이라, 해외(예: 일본) 취업 시장에서는 인지도가 낮아 큰 메리트로 작용하지 않는 경우가 많습니다. 해외 취업이 목표라면 그 나라·업계에서 더 통용되는 시험이나 자격을 우선 확인하는 것이 좋습니다.</div>
+      </details>
+
+      <details>
+        <summary>카투사 지원 시 오픽 성적은 어떻게 제출하나요?</summary>
+        <div class="d-answer">병무청 홈페이지에서 수험번호만 입력하면 전산으로 성적이 조회되는 방식이라, 별도 서류를 첨부할 필요는 없습니다. 접수 마감과 성적 발표 시점이 촉박하게 겹치는 경우처럼 예민한 사안은 병무청(대표전화 1588-9090, 평일 09~18시)에 미리 직접 확인해보는 것을 권장합니다.</div>
+      </details>
+    </section>
+
+    <div class="cta soft">
+      <h4>서베이 선택, 미리 시뮬레이션해보고 정하세요</h4>
+      <p>미리오픽 0원 체험에서는 실제 시험과 동일한 서베이 화면에서 선택 조합을 미리 시험해볼 수 있습니다. 군 관련 항목처럼 예측이 어려운 선택은 직접 확인하고 결정하는 것이 가장 안전합니다.</p>
+      <a class="cta-btn" href="https://www.miriopic.com/free-mock-opi-intro">미리오픽 0원 체험 시작하기 →</a>
+    </div>
+
+    <section id="author-section">
+      <div class="author-box">
+        <div class="a-avatar">강</div>
+        <div>
+          <h4>강지완 · 미리오픽 대표강사</h4>
+          <p>美오픽주관사 오픽채점자스쿨을 수료하고 국내 오픽 도입을 총괄했으며, 前 삼성 멀티캠퍼스 어학연구소 소장을 역임했습니다. 오픽 채점기준을 학습시킨 AI를 직접 설계해 미리오픽 채점 시스템에 적용하고 있으며, 해당 기술력은 오픽 시험 주관사에도 납품되고 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="page-footer">
+    <div class="footer-meta">
+      최종 업데이트: 2026-08-19 · 이 페이지의 설명과 인용문은 강지완쌤이 오픽 정보공유 오픈채팅방(강지완오픽#1, #2, 2026년 4~8월)에서 직접 답변한 내용을 원문 그대로 또는 근접하게 정리했습니다. 파일럿테스트 수치는 커뮤니티에 공유된 사례를 근거로 하며, 개인별 서베이 조합에 따라 달라질 수 있습니다.
+      <div class="related">
+        <a href="miriopic-faq-hub.html">오픽, 강쌤한테 다 물어봤습니다 (전체 FAQ)로 돌아가기</a>
+        <a href="grade-scoring-deep-page.html">등급/채점 기준 완벽 가이드</a>
+        <a href="https://www.miriopic.com/free-mock-opi-intro">미리오픽 무료 체험</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "군대 경험, 오픽 서베이에서 선택해도 될까?",
+  "description": "오픽(OPIc) 서베이에서 군 관련 항목 선택의 위험과 대안 전략, OPI·카투사·토익스피킹 관련 특수 상황 응시자 가이드.",
+  "datePublished": "2026-08-19",
+  "dateModified": "2026-08-19",
+  "author": { "@type": "Person", "name": "강지완", "jobTitle": "미리오픽 대표강사 · 美오픽주관사 오픽채점자스쿨 수료 · 국내 오픽 도입 총괄" },
+  "publisher": { "@type": "Organization", "name": "미리오픽" },
+  "mainEntityOfPage": "https://miriopic.com/faq/military-experience"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "군복무 경험을 선택하면 시험 범위가 넓어지나요?", "acceptedAnswer": { "@type": "Answer", "text": "파일럿테스트상 관련 콤보 문항 수가 0개부터 9개까지 크게 흔들린 사례가 있어, '일 경험 없음'을 선택하고 군 관련 경험은 자유 답변에서 언급하는 전략이 더 안전합니다." } },
+    { "@type": "Question", "name": "OPI 준비는 오픽과 같은 방식인가요?", "acceptedAnswer": { "@type": "Answer", "text": "OPI는 전화로 즉석 난이도 조절이 이뤄지고 응시료가 오픽의 약 2배이며 지정 시험장에서만 응시 가능합니다. 국내에서는 AL 이상이면 오픽과 동일하게 취급하는 경우가 많습니다." } },
+    { "@type": "Question", "name": "카투사 목표 IM2라면 어떤 강의를 들어야 하나요?", "acceptedAnswer": { "@type": "Answer", "text": "IM2 핵심전략 강의를 우선 추천하며, 준비 기간이 여유롭다면 IM2+IH 패스트트랙도 방법입니다." } },
+    { "@type": "Question", "name": "토익스피킹과 오픽 중 어떤 걸 준비해야 하나요?", "acceptedAnswer": { "@type": "Answer", "text": "목표 기업·기관이 선호하는 시험 기준으로 결정해야 하며, 대기업은 오픽을 선호하는 경우가 많습니다." } },
+    { "@type": "Question", "name": "해외 취업에 오픽이 도움이 되나요?", "acceptedAnswer": { "@type": "Answer", "text": "오픽은 국내 채용 수요에 맞춰진 시험이라 해외 취업 시장에서는 메리트가 크지 않은 경우가 많습니다." } }
+  ]
+}
+</script>
+
+</body>
+</html>
