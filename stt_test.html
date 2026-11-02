@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>만능문장 실시간 AI 테스트</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#16181d;--muted:#6b7280;--line:#e5e7eb;--accent:#2f6fed;--ok:#15803d;--okbg:#e8f6ec;--bad:#c2410c;--badbg:#fff1e8;--miss:#9ca3af;--wave:#2f6fed;--wave2:#c7d2fe;--warn:#a16207;--warnbg:#fef9c3}
+@media (prefers-color-scheme:dark){:root{--bg:#111318;--card:#1a1d24;--text:#eceef2;--muted:#9aa1ad;--line:#2b2f38;--accent:#6b9bff;--ok:#4ade80;--okbg:#14301f;--bad:#fb923c;--badbg:#3a2212;--miss:#6b7280;--wave:#6b9bff;--wave2:#2b3550;--warn:#facc15;--warnbg:#3a3410}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 48px}
+h1{font-size:18px;margin:4px 0 2px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+details summary{cursor:pointer;font-weight:600;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"▸ ";color:var(--muted)}
+details[open] summary::before{content:"▾ "}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input[type=text],input[type=password],input[type=number],select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--text);font-size:15px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row>*{flex:1}
+.radio{display:flex;gap:6px;flex-wrap:wrap}
+.radio label{flex:1;margin:0;border:1px solid var(--line);border-radius:9px;padding:8px;color:var(--text);font-size:13px;min-width:140px}
+.radio input{margin-right:4px}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+button{font:inherit;border:0;border-radius:10px;padding:11px 14px;background:var(--line);color:var(--text);cursor:pointer}
+button.primary{background:var(--accent);color:#fff;font-weight:600}
+button:disabled{opacity:.45}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btns button{flex:1;min-width:90px}
+.dots{display:flex;gap:6px;justify-content:center;margin:2px 0 10px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dot.on{background:var(--accent)}.dot.done{background:var(--ok)}
+.status{text-align:center;font-size:13px;color:var(--muted);min-height:20px}
+.rep{text-align:center;font-size:12px;color:var(--muted)}
+.en{font-size:19px;font-weight:600;text-align:center;margin:8px 0 2px;min-height:28px}
+.en.hidden{color:var(--muted);font-weight:500;font-size:15px}
+.ko{text-align:center;color:var(--muted);font-size:14px}
+canvas{width:100%;height:64px;display:block;margin:10px 0 4px;border-radius:8px;background:var(--bg)}
+.timebar{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.timebar i{display:block;height:100%;width:0;background:var(--accent)}
+.heard{border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.heard .lbl{font-size:12px;color:var(--muted)}
+.heard .txt{font-size:17px;min-height:26px}
+.interim{color:var(--muted)}
+.w{padding:0 1px;border-radius:3px}
+.w.ok{color:var(--ok)}
+.w.bad{color:var(--bad);text-decoration:underline;text-decoration-thickness:2px}
+.w.miss{color:var(--miss);text-decoration:line-through}
+.w.extra{background:var(--badbg);color:var(--bad)}
+.verdict{margin-top:6px;font-size:13px;padding:6px 10px;border-radius:8px;display:inline-block}
+.verdict.ok{background:var(--okbg);color:var(--ok)}
+.verdict.bad{background:var(--badbg);color:var(--bad)}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12px}
+.kv b{font-weight:500;color:var(--muted)}
+.kv span{word-break:break-all}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat{background:var(--bg);border-radius:10px;padding:8px;text-align:center}
+.stat b{display:block;font-size:17px}
+.stat span{font-size:11px;color:var(--muted)}
+#log{font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;max-height:220px;overflow:auto;background:var(--bg);border-radius:8px;padding:8px;margin-top:8px}
+ol.check{padding-left:18px;margin:6px 0;font-size:13px}
+ol.check li{margin:3px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>만능문장 실시간 AI 테스트</h1>
+  <p class="sub">따라 말하기 중 내 목소리 파형 + AI가 들은 말을 실시간으로 보여줄 수 있는지 모바일에서 확인하는 내부용 페이지예요.</p>
+
+  <div id="envWarn"></div>
+
+  <details class="card" id="setup" open>
+    <summary>설정</summary>
+    <label>Azure Speech 키 (또는 토큰)</label>
+    <input id="key" type="password" autocomplete="off" placeholder="키 또는 Authorization 토큰">
+    <div class="row" style="margin-top:6px"><label style="margin:0;color:var(--text);font-size:13px"><input type="checkbox" id="saveKey"> 이 브라우저에 키 기억</label></div>
+    <div class="row">
+      <div><label>지역</label><input id="region" type="text" value="koreacentral"></div>
+      <div><label>원음 경로</label><input id="audioBase" type="text" value="만능150_음원/"></div>
+    </div>
+    <label>원음 재생 중 인식 처리</label>
+    <div class="radio">
+      <label><input type="radio" name="mode" value="stop" checked>멈춤 — 내 차례에만 인식 켜기</label>
+      <label><input type="radio" name="mode" value="ignore">무시 — 계속 켜 두고 원음 중 결과 버림</label>
+    </div>
+    <label>마이크 소리 전달 방식</label>
+    <div class="radio">
+      <label><input type="radio" name="input" value="stream" checked>SDK가 직접 (fromStreamInput)</label>
+      <label><input type="radio" name="input" value="push">페이지가 전달 (push stream)</label>
+    </div>
+    <div class="hint">아이폰에서 AI 글자가 안 나오면 '페이지가 전달'로 바꿔 보세요 (오디오 처리를 하나로 합침)</div>
+    <div class="hint">멈춤: 비용↓, 켤 때마다 지연이 생길 수 있음 · 무시: 지연 없음, 원음을 받아 적는지(에코) 확인 가능</div>
+    <div class="row">
+      <div><label>반복</label><select id="reps"><option>3</option><option>5</option><option>1</option></select></div>
+      <div><label>문장 끝 판단(무음 ms)</label><input id="segMs" type="number" value="600" step="100"></div>
+      <div><label>시간당 단가($)</label><input id="price" type="number" value="1" step="0.1"></div>
+    </div>
+    <div class="row" style="margin-top:8px"><label style="margin:0;color:var(--text);font-size:13px"><input type="checkbox" id="hideLast" checked> 마지막 반복은 문장 가리기</label></div>
+  </details>
+
+  <div class="card">
+    <div class="row" style="margin-bottom:8px">
+      <select id="setSel"></select>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="rep" id="rep">&nbsp;</div>
+    <div class="en" id="en"></div>
+    <div class="ko" id="ko"></div>
+    <canvas id="wave" width="600" height="64"></canvas>
+    <div class="timebar"><i id="tbar"></i></div>
+    <div class="status" id="status">[시작]을 누르면 마이크 권한을 물어봐요</div>
+    <div class="heard">
+      <div class="lbl">🤖 AI가 들은 말</div>
+      <div class="txt" id="heard"><span class="interim">—</span></div>
+      <div id="verdict"></div>
+    </div>
+    <div class="btns" style="margin-top:12px">
+      <button class="primary" id="btnStart">▶ 시작</button>
+      <button id="btnDone" disabled>■ 다 말했어요</button>
+      <button id="btnNext" disabled>다음 문장 →</button>
+    </div>
+    <div class="btns" style="margin-top:8px">
+      <button id="btnPreview">🔊 원음만 듣기</button>
+      <button id="btnStop" disabled>⏹ 끝내기</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:600;margin-bottom:8px">측정</div>
+    <div class="stats">
+      <div class="stat"><b id="sLat">–</b><span>말 끝→확정 평균(ms)</span></div>
+      <div class="stat"><b id="sStart">–</b><span>인식 켜기 평균(ms)</span></div>
+      <div class="stat"><b id="sEcho">0</b><span>원음 중 잡힌 말(에코)</span></div>
+      <div class="stat"><b id="sSec">0</b><span>인식 켜진 시간(초)</span></div>
+      <div class="stat"><b id="sCost">$0</b><span>예상 비용</span></div>
+      <div class="stat"><b id="sMatch">–</b><span>다 알아들음 비율</span></div>
+    </div>
+    <table><thead><tr><th>문장·회</th><th>결과</th><th>확정</th><th>켜기</th></tr></thead><tbody id="tbl"></tbody></table>
+  </div>
+
+  <details class="card">
+    <summary>환경 정보 · 로그</summary>
+    <div class="kv" id="env" style="margin-top:8px"></div>
+    <div id="log"></div>
+    <div class="btns" style="margin-top:8px"><button id="btnCopy">📋 결과 전체 복사 (공유용)</button></div>
+  </details>
+
+  <details class="card">
+    <summary>체크리스트 (기기마다)</summary>
+    <ol class="check">
+      <li>마이크 권한 → 파형이 움직이나</li>
+      <li>말하는 동안 AI 글자가 실시간으로 찍히나</li>
+      <li>말 끝→확정 시간이 1초 안쪽인가</li>
+      <li><b>원음 소리 크기</b>: [🔊 원음만 듣기](마이크 꺼짐)와 연습 중 원음이 비슷한가 · 수화기로 나오지 않나 (특히 아이폰)</li>
+      <li>'무시' 모드에서 에코 수 — 스피커일 때 / 이어폰일 때</li>
+      <li>'멈춤' 모드에서 인식 켜기 지연 — 첫 단어가 잘리지 않나</li>
+      <li>홈 화면 갔다 돌아와도 다시 되나 (로그에 끊김·재연결)</li>
+      <li>일부러 틀리게 말하면(r/l, 단어 빼기) 다르게 받아 적나</li>
+    </ol>
+    <div class="hint">기기: 아이폰 사파리 · 안드로이드 크롬 · 카톡 인앱 · PC 크롬. 각 기기에서 [결과 전체 복사]해서 모아 주세요.</div>
+  </details>
+</div>
+
+<script>
+const SENTS = [[1,"집·동네",1,"I like my neighborhood because it's a quiet and convenient place to live.","조용하고 살기 좋은 동네라서 좋아요.",4.54],[2,"집·동네",1,"I live in an apartment complex near the downtown area.","저는 번화가 근처 아파트 단지에 살고 있습니다.",3.77],[3,"집·동네",1,"Although it's close to downtown, my town is pretty quiet.","시내에서 가깝지만 우리 마을은 꽤 조용합니다.",3.87],[4,"집·동네",1,"I use public transportation to get around.","대중교통을 이용해서 돌아다닙니다.",2.91],[5,"집·동네",1,"The only neighbor I talk to is Mr. Lee, who lives upstairs.","제가 얘기하는 유일한 이웃은 위층에 사는 이씨입니다.",4.22],[6,"집·동네",2,"We run into each other about once a week.","우리는 일주일에 한 번 정도 마주칩니다.",2.79],[7,"집·동네",2,"We usually have a conversation when we both get into the elevator.","우리는 보통 둘 다 엘리베이터에 타면 대화를 합니다.",4.29],[8,"집·동네",2,"Sometimes they meet up with their friends and chat for a while at a coffee shop or go shopping together.","가끔 친구들과 만나서 커피숍에서 잠시 수다를 떨거나 함께 쇼핑을 하기도 합니다.",6.11],[9,"집·동네",2,"She played it for five straight hours and I couldn't stand it.","그녀는 5시간 연속으로 그것을 연주했고, 저는 그것을 참을 수 없었습니다.",4.05],[10,"집·동네",2,"I called the building superintendent and complained about it.","건물 관리인에게 전화해서 항의했습니다.",3.56],[11,"가구·가전(1)",1,"It is still in good condition.","여전히 좋은 상태입니다.",2.03],[12,"가구·가전(1)",1,"My mom put some paintings in the living room.","엄마가 거실에 그림을 좀 놓으셨습니다.",2.78],[13,"가구·가전(1)",1,"When I first moved into my house, everything was brand new.","제가 처음 집에 이사했을 때 모든 것이 새로웠습니다.",3.86],[14,"가구·가전(1)",1,"First of all, I bought a new refrigerator.","우선 냉장고를 새로 구입했습니다.",2.74],[15,"가구·가전(1)",1,"The old one broke down and made a weird sound.","오래된 것이 고장이 나서 이상한 소리가 났습니다.",3.22],[16,"가구·가전(1)",2,"The new one is a lot bigger than the old one, so we can put more stuff inside.","새 제품은 기존 제품보다 훨씬 크기 때문에 더 많은 물건을 넣을 수 있습니다.",5.01],[17,"가구·가전(1)",2,"My new bed is really big and takes up a lot of space.","제 새 침대는 정말 크고 공간을 많이 차지합니다.",4.1],[18,"가구·가전(1)",2,"My apartment is small and cozy.","제 아파트는 작고 아늑합니다.",2.63],[19,"가구·가전(1)",2,"I hope I could get a top floor apartment so that nobody lives above me.","제 위에 아무도 살지 않도록 최상층 아파트를 얻을 수 있기를 바랍니다.",4.62],[20,"가구·가전(1)",2,"When it gets really cold in Korea, the water pipes can freeze.","한국이 정말 추워지면 수도관이 얼 수 있습니다.",4.28],[21,"가구·가전(2)",1,"In my house, there is a huge sofa in the middle of the living room.","저희 집에는 거실 한가운데에 커다란 소파가 있습니다.",4.34],[22,"가구·가전(2)",1,"When I'm at home, I spend most of my time on the sofa.","집에 있을 때는 대부분 소파에서 시간을 보냅니다.",3.94],[23,"가구·가전(2)",1,"In my room, I have a desk, a bed, and a closet.","제 방에는 책상이 있고 침대와 옷장이 있습니다.",4.11],[24,"가구·가전(2)",1,"My closet is pretty big because I share it with my sister.","내 옷장은 내 여동생과 공유하기 때문에 꽤 큽니다.",3.99],[25,"가구·가전(2)",1,"In the kitchen, there is a big dining table where we have dinner together.","주방에는 저녁 식사를 함께 하는 큰 식탁이 있습니다.",4.24],[26,"가구·가전(2)",2,"It's a big closet with small drawers, so I store most of my wardrobe in it.","작은 서랍이 있는 큰 옷장입니다. 그래서 대부분의 옷장을 그 안에 보관합니다.",5.38],[27,"가구·가전(2)",2,"There are so many useful home appliances.","유용한 가전제품이 정말 많습니다.",3.1],[28,"가구·가전(2)",2,"I always use the microwave to heat up my food and drinks.","저는 항상 전자레인지를 사용하여 음식과 음료를 데웁니다.",3.85],[29,"가구·가전(2)",2,"There are many smaller devices I like, such as the blender and the kettle.","믹서기, 주전자 등 제가 좋아하는 작은 기기들이 많이 있습니다.",4.8],[30,"가구·가전(2)",2,"I use the blender every morning to make some apple juice.","저는 매일 아침 블렌더를 사용하여 사과 주스를 만듭니다.",3.43],[31,"영화",1,"My favorite actor is Matt Damon.","제가 가장 좋아하는 배우는 맷 데이먼입니다.",2.77],[32,"영화",1,"He actually becomes the character, and it's so believable.","그는 실제로 캐릭터가 되고 정말 믿을 수 있습니다.",3.97],[33,"영화",1,"He studied for his undergraduate degree at Harvard, and he even writes scenarios.","그는 하버드에서 학부를 공부했고 시나리오도 씁니다.",5.42],[34,"영화",1,"I usually go to the theater in my neighborhood.","저는 주로 우리 동네에 있는 극장에 갑니다.",2.85],[35,"영화",1,"It's very big with lots of screenings, so I can always watch a movie whenever I want.","영화 상영이 많아서 언제든지 영화를 볼 수 있습니다.",5.58],[36,"영화",2,"At the theater, I get my tickets from the ticket booth.","극장에서 티켓을 매표소에서 받습니다.",3.67],[37,"영화",2,"I never let my friend talk because it really distracts me.","저는 친구가 말을 하도록 놔두지 않아요. 왜냐하면 그것은 정말 저를 방해하기 때문입니다.",3.82],[38,"영화",2,"I checked from the internet to see what's recently been released.","최근에 출시된 것을 확인하기 위해 인터넷에서 확인했습니다.",3.88],[39,"영화",2,"I wanted to see the film because I had read quite good compliments on the movie.","저는 영화에 대한 칭찬을 꽤 잘 읽었기 때문에 그 영화를 보고 싶었습니다.",4.72],[40,"영화",2,"The actress Natalie Portman also won the best actress Oscar.","여배우 나탈리 포트만도 여우주연상을 수상했습니다.",4.88],[41,"콘서트·공연",1,"My best friend Kim and I have the same taste in music.","저의 가장 친한 친구인 Kim과 저는 음악에 대한 취향이 같습니다.",3.75],[42,"콘서트·공연",1,"We usually go for a drink and share our feelings about the concert.","우리는 보통 술을 마시러 가서 콘서트에 대한 감정을 공유합니다.",4.39],[43,"콘서트·공연",1,"I like to attend the concerts of my favorite singers.","저는 제가 좋아하는 가수들의 콘서트에 참석하는 것을 좋아합니다.",3.47],[44,"콘서트·공연",1,"I like musicians who play hip hop and dance music.","저는 힙합과 댄스음악을 하는 뮤지션을 좋아합니다.",3.5],[45,"콘서트·공연",1,"I may not be able to see them in person ever again in my life.","제 인생에서 다시는 그들을 직접 볼 수 없을지도 모릅니다.",4.32],[46,"콘서트·공연",2,"I often go to classic concerts like symphony or piano recitals.","저는 교향곡이나 피아노 독주회 같은 클래식 음악회에 자주 갑니다.",4.9],[47,"콘서트·공연",2,"Since then, I've become a huge fan of live concerts.","그 이후로 저는 라이브 콘서트의 열렬한 팬이 되었습니다.",3.9],[48,"콘서트·공연",2,"At the concert hall, we saw many Korean musicians came to see Lady Gaga.","공연장에서 레이디 가가를 보러 온 많은 한국 음악가들을 보았습니다.",5.04],[49,"콘서트·공연",2,"She was actually really good at singing and the concert was amazing.","그녀는 사실 노래를 정말 잘했고, 콘서트는 굉장했습니다.",4.07],[50,"콘서트·공연",2,"Kim and I were so impressed and I definitely want to go see her again.","김 씨와 저는 너무 인상 깊었고, 그녀를 꼭 다시 보러 가고 싶습니다.",4.67],[51,"공원",1,"When you walk through the gate, you can see a lot of trees and lawn.","대문을 들어서면 많은 나무와 잔디가 보입니다.",4.03],[52,"공원",1,"There is a small pond inside the park.","공원 안에는 작은 연못이 있습니다.",2.93],[53,"공원",1,"When I go to the park, I usually take a walk first.","저는 공원에 갈 때 보통 제일 먼저 산책을 합니다.",3.71],[54,"공원",1,"It takes about 15 minutes to walk around the whole park, so I walk a few laps around the park.","공원 전체를 걷는데 약 15분이 걸립니다. 그래서, 저는 공원을 몇 바퀴 돌면서 걷습니다.",6.09],[55,"공원",1,"We have a nice conversation while walking back home.","우리는 집으로 걸어가는 동안 좋은 대화를 나누었습니다.",3.38],[56,"공원",2,"I lie down on the grass and read a book.","풀밭에 누워서 책을 읽습니다.",2.66],[57,"공원",2,"I want to jog there, but end up just walking.","거기서 조깅을 하고 싶지만 결국 그냥 걷게 됩니다.",3.28],[58,"공원",2,"We found a nice spot to sit and put a blanket on the grass.","우리는 잔디 위에 담요를 깔고 앉을 좋은 장소를 찾았습니다.",3.91],[59,"공원",2,"We spent a whole afternoon in the park.","우리는 오후 내내 공원에서 보냈습니다.",2.8],[60,"공원",2,"When I visited the park that I usually go to, I actually ran into my ex-girlfriend.","제가 주로 가는 공원을 방문했을 때, 저는 사실 전 여자친구를 우연히 만났습니다.",5.85],[61,"요리",1,"You can make any kind of fried rice by adding whatever you want.","원하는 것을 무엇이든 넣어 어떤 종류의 볶음밥도 만들 수 있습니다.",4.59],[62,"요리",1,"To make it, you need a bowl of rice, an egg and any ingredients you want to put in the rice.","만들기 위해서는 밥 한 그릇과 달걀, 그리고 밥에 넣고 싶은 재료가 필요합니다.",6.52],[63,"요리",1,"Stir-fry them until they look good.","맛있게 보일 때까지 볶습니다.",2.54],[64,"요리",1,"When it's ready, put an egg fried sunny-side on the top and enjoy your dish.","준비가 되면 위에 계란 후라이 써니사이드를 올려놓고 맛있게 드세요.",5.99],[65,"요리",1,"They're easy to make, but the taste isn't guaranteed.","만들기는 쉽지만 맛은 보장되지 않습니다.",3.69],[66,"요리",2,"The first time I cooked was when I made dinner for my family.","제가 처음 요리를 한 것은 가족을 위해 저녁을 만들 때였습니다.",4.01],[67,"요리",2,"I decided to make seafood pasta for the main dish.","메인 요리로 해산물 파스타를 만들기로 결정했습니다.",3.55],[68,"요리",2,"It was her first time to actually cook besides instant noodles.","라면 말고 실제로 요리를 해본 건 처음이었습니다.",4.3],[69,"요리",2,"She Googled the recipe and bought every ingredient she needed.","그녀는 요리법을 검색하고 필요한 재료를 모두 구입했습니다.",4.03],[70,"요리",2,"When she got home after the delivery, her brother told her how salty her chocolate was.","그녀가 배달을 마치고 집에 왔을 때, 그녀의 오빠는 그녀에게 초콜릿이 얼마나 짠지 말했습니다.",5.72],[71,"음악감상",1,"My MP3 player is very small and light, but it contains thousands of songs I like.","제 MP3 플레이어는 매우 작고 가볍지만 제가 좋아하는 수천곡의 노래가 들어있습니다.",6.2],[72,"음악감상",1,"I like dance and hip-hop music the most because they cheer me up.","저는 춤과 힙합 음악을 가장 좋아합니다. 왜냐하면 그 음악들은 저에게 힘을 주기 때문입니다.",4.35],[73,"음악감상",1,"Sometimes I listen to jazz and classical music before I go to bed.","가끔 잠자기 전에 재즈와 클래식 음악을 듣습니다.",4.67],[74,"음악감상",1,"My favorite singer and composer is JYP.","제가 좋아하는 가수이자 작곡가는 JYP 입니다.",3.62],[75,"음악감상",1,"I love his music because he composes great melodies and lyrics.","저는 그의 음악을 사랑합니다 왜냐하면 그는 멋진 멜로디와 가사를 작곡하기 때문입니다.",4.62],[76,"음악감상",2,"I just like the way he thinks and expresses himself.","저는 그냥 그가 생각하고 표현하는 방식이 좋아요.",3.5],[77,"음악감상",2,"Most of his songs are very popular in Korea.","그의 노래는 대부분 한국에서 매우 인기가 있습니다.",3.31],[78,"음악감상",2,"I was so excited to have a portable music device.","휴대용 음악 장치가 있다는 것이 너무 신났습니다.",3.65],[79,"음악감상",2,"I always carried it with me and I was always listening to music.","항상 가지고 다녔고, 항상 음악을 듣고 있었습니다.",4.43],[80,"음악감상",2,"I could focus well with some background music.","배경음악으로 집중을 잘 할 수 있었습니다.",3.05],[81,"조깅",1,"I don't need a companion to jog because I just like running and listening to music.","저는 단지 뛰고 음악을 듣는 것을 좋아하기 때문에 조깅을 할 동반자가 필요하지 않습니다.",5.37],[82,"조깅",1,"I like to run on a treadmill.","저는 러닝머신에서 뛰는 것을 좋아합니다.",2.07],[83,"조깅",1,"When I jog, I need a good pair of running shoes.","조깅을 할 때는 좋은 러닝화가 필요합니다.",3.22],[84,"조깅",1,"I also put on some sunblock before I jog.","조깅하기 전에 자외선 차단제도 발라요.",3.38],[85,"조깅",1,"I decided to jog because I was gaining weight.","살이 쪄서 조깅을 하기로 했어요.",3.23],[86,"조깅",2,"I wanted to lose some weight and I decided to jog.","살을 빼고 싶어서 조깅을 하기로 했어요.",3.5],[87,"조깅",2,"I jog because I want to keep in shape.","몸매를 유지하고 싶어서 조깅을 합니다.",2.63],[88,"조깅",2,"I knew I'd be more tired if I skipped exercising.","운동을 빼먹으면 더 피곤할 줄 알았어요.",3.42],[89,"조깅",2,"I turned around and ran back home, but I was already soaked in the heavy rain.","몸을 돌려 집으로 달려갔지만 이미 폭우에 흠뻑 젖었습니다.",5.38],[90,"조깅",2,"I learned to check the weather before I go jogging.","조깅을 하기 전에 날씨를 확인하는 법을 배웠습니다.",3.44],[91,"헬스",1,"I go to a gym at least three times a week to work out.","일주일에 최소 3번은 헬스장에 가서 운동을 합니다.",4.01],[92,"헬스",1,"When I first started to work out, I was extremely tired.","운동을 처음 시작했을 때, 저는 극도로 피곤했습니다.",4.07],[93,"헬스",1,"The main purpose of going to a gym is to stay fit.","체육관에 가는 주된 목적은 건강을 유지하는 것입니다.",3.85],[94,"헬스",1,"I was a little overweight when I was a kid.","어렸을 때 조금 과체중이었어요.",2.89],[95,"헬스",1,"It was not easy to lose weight, so I never miss my workout.","살을 빼는 것은 쉽지 않았습니다. 그래서 저는 운동을 절대 놓치지 않습니다.",4.33],[96,"헬스",2,"The gym I go to has a lot of exercise equipment.","제가 다니는 체육관에는 운동기구가 많이 있습니다.",3.71],[97,"헬스",2,"I often have difficulties in order to do weight training properly.","웨이트 트레이닝을 제대로 하려다 보니 어려움을 겪을 때가 많습니다.",4.79],[98,"헬스",2,"Without anyone spotting you, you might drop the dumbbell.","옆에서 보조해 주는 사람이 없으면 덤벨을 떨어뜨릴 수 있습니다.",3.77],[99,"헬스",2,"At the gym, I first do stretch, so I won't get hurt during my workout.","헬스장에서는 스트레칭을 먼저 하기 때문에 운동 중에 다치지 않습니다.",5.09],[100,"헬스",2,"After I'm done with running, I do weight training to build up some muscles.","달리기가 끝나면 근력을 키우기 위해 웨이트 트레이닝을 합니다.",4.68],[101,"수영·해변",1,"I once won the race in the women's 100m freestyle.","저는 여자 자유형 100m에서 우승한 적이 있습니다.",3.95],[102,"수영·해변",1,"I know all the strokes and my favorite stroke is freestyle.","저는 모든 스트로크를 알고 있고, 제가 가장 좋아하는 스트로크는 자유형입니다.",3.82],[103,"수영·해변",1,"My mom signed me up for swimming lessons at a sports center.","엄마가 스포츠 센터에서 수영 레슨을 신청했어요.",3.67],[104,"수영·해변",1,"He actually was a really good swimmer and I learned from him a lot.","사실 그는 정말 훌륭한 수영 선수였고, 저는 그에게서 많은 것을 배웠습니다.",4.11],[105,"수영·해변",1,"I think of him as a great instructor, but I'm still a little scared of him.","저는 그가 훌륭한 강사라고 생각하지만, 여전히 그가 조금 무섭습니다.",4.56],[106,"수영·해변",2,"Indoor pools were boring, so I asked my parents to take me to the beach.","실내 수영장은 지루했습니다. 그래서 저는 부모님께 저를 해변에 데려가 달라고 부탁드렸습니다.",4.99],[107,"수영·해변",2,"My mom made me wear a life jacket.","엄마가 구명조끼를 입으라고 하셨어요.",2.59],[108,"수영·해변",2,"I got very tired and had no energy to swim, and of course I was pretty far from the shore.","저는 매우 지쳤고 수영할 힘도 없었고, 물론 해안에서 꽤 멀리 떨어져 있었습니다.",6.23],[109,"수영·해변",2,"I started to drown and I was so scared.","물에 빠지기 시작했는데 너무 무서웠습니다.",3.27],[110,"수영·해변",2,"It was the scariest thing ever and since then, I don't really like to swim in the ocean.","그것은 지금까지 가장 무서웠습니다. 그리고 그 이후로, 저는 바다에서 수영하는 것을 별로 좋아하지 않습니다.",5.67],[111,"자전거",1,"It's a used mountain bike with 24 gears.","24개의 기어가 달린 중고 산악 자전거입니다.",3.35],[112,"자전거",1,"I usually go riding on my bike along the bank.","저는 보통 은행을 따라 자전거를 탑니다.",3.21],[113,"자전거",1,"I always wear my helmet when I ride my bike.","저는 자전거를 탈 때 항상 헬멧을 씁니다.",2.93],[114,"자전거",1,"My dad put two training wheels on the rear wheel so that I wouldn't fall down.","아빠는 제가 넘어지지 않도록 뒷바퀴에 훈련용 바퀴를 달아 놓으셨습니다.",4.94],[115,"자전거",1,"Bicycles with four wheels don't go as fast as two-wheeled ones.","바퀴가 4개 달린 자전거는 바퀴가 2개 달린 자전거만큼 빨리 가지 않습니다.",4.62],[116,"자전거",2,"He held my bike from the back until I could ride by myself.","그는 제가 혼자 탈 수 있을 때까지 뒤에서 제 자전거를 잡아주었습니다.",4.02],[117,"자전거",2,"He showed me wounds he got from mountain biking.","산악자전거로 인한 상처를 보여줬어요.",3.43],[118,"자전거",2,"I decided to give it a try.","한 번 해보기로 했습니다.",2.08],[119,"자전거",2,"Suddenly, a dog jumped in front of me and I had to slam on the brakes.","갑자기 개 한 마리가 제 앞으로 뛰어들었고, 저는 브레이크를 밟아야 했습니다.",5.57],[120,"자전거",2,"I couldn't hear his owner calling out the dog's name.","주인이 개의 이름을 부르는 소리는 들리지 않았습니다.",3.33],[121,"해외여행",1,"My first international trip was to Canada.","저의 첫 번째 국제 여행은 캐나다였습니다.",3.23],[122,"해외여행",1,"I had traveled to many different spots in Korea, but it was my first time traveling overseas.","한국의 여러 곳을 여행한 적은 있지만 해외 여행은 처음이었습니다.",6.12],[123,"해외여행",1,"I had made my first passport as well because it was our first family vacation outside Korea.","한국 밖에서의 첫 가족 휴가였기 때문에 첫 여권도 만들었습니다.",6.58],[124,"해외여행",1,"I don't know why my dad chose Canada as our first destination.","아빠가 왜 캐나다를 첫 여행지로 선택했는지 모르겠습니다.",4.31],[125,"해외여행",1,"I always try to pack light when I travel.","저는 여행할 때 항상 가벼운 짐을 챙기려고 노력합니다.",2.85],[126,"해외여행",2,"Having a heavy or big suitcase actually could be a big hassle.","무겁거나 큰 여행 가방을 가지고 있는 것은 사실 큰 번거로움이 될 수 있습니다.",4.48],[127,"해외여행",2,"I also pack an emergency medical kit whenever I travel.","저는 또한 여행할 때마다 응급 의료 키트를 포장합니다.",4.22],[128,"해외여행",2,"I'd like to travel there because I want to see pyramids and other ancient buildings.","피라미드와 다른 고대 건물들을 보고 싶기 때문에 그곳을 여행하고 싶습니다.",4.95],[129,"해외여행",2,"I've always had an admiration for Egypt.","저는 항상 이집트를 동경해 왔습니다.",2.94],[130,"해외여행",2,"When I get there, I would like to take pictures of the great ancient architecture.","그곳에 도착하면 위대한 고대 건축물의 사진을 찍고 싶습니다.",4.99],[131,"국내여행",1,"I love going to Jeju Island because I think it is the most beautiful island in Korea.","저는 제주도가 한국에서 가장 아름다운 섬이라고 생각하기 때문에 제주도에 가는 것을 좋아합니다.",5.72],[132,"국내여행",1,"A lot of movie and drama scenes were filmed there.","많은 영화와 드라마 장면이 그곳에서 촬영되었습니다.",3.41],[133,"국내여행",1,"Since it is an island, seafood there is extremely fresh and delicious.","섬 씨푸드이기 때문에 굉장히 신선하고 맛있습니다.",5.38],[134,"국내여행",1,"I would most likely go to Jeju Island for my domestic trip.","저는 아마 국내 여행으로 제주도에 갈 것 같습니다.",4.0],[135,"국내여행",1,"I always bring at least one sweater to a trip, even if the place is hot.","저는 장소가 덥더라도 항상 여행에 스웨터를 하나 이상 가지고 옵니다.",5.13],[136,"국내여행",2,"After packing clothes, I pack all the toiletries and cosmetics.","옷을 포장한 후에, 모든 세면도구와 화장품을 포장했습니다.",4.78],[137,"국내여행",2,"The last things I pack are my passport, travel guide and wallet.","내가 마지막으로 포장하는 것 또는 여권, 여행 가이드 및 지갑.",4.55],[138,"국내여행",2,"My passport is not necessary if I am traveling within my country.","제가 국내 여행을 하는 경우 여권은 필요하지 않습니다.",4.7],[139,"국내여행",2,"A travel guide is always useful, even if you know the place well.","여행 가이드는 장소를 잘 알더라도 항상 유용합니다.",4.55],[140,"국내여행",2,"I would love to go to places I've been which I do not remember.","저는 제가 가본 곳 중 기억이 나지 않는 곳에 가고 싶습니다.",4.06],[141,"자기소개",1,"My name is Park, and I'm in my mid-20s.","제 이름은 박**이고 20대 중반입니다.",3.46],[142,"자기소개",1,"I'm a college student majoring in economics.","저는 경제학을 전공하는 대학생입니다.",3.19],[143,"자기소개",1,"To talk about my personality, I'm easy going.","제 성격에 대해 말하자면 저는 쉽게 가는 편입니다.",3.3],[144,"자기소개",1,"I also have a good sense of humor.","유머 감각도 좋습니다.",2.26],[145,"자기소개",1,"Since I'm very outgoing, I like sports that I can do with other people.","저는 외향적이기 때문에 다른 사람들과 함께 할 수 있는 운동을 좋아합니다.",4.48],[146,"자기소개",2,"I'm a senior majoring in engineering.","저는 공학과 4학년입니다.",2.64],[147,"자기소개",2,"This is my last semester, so I'm currently looking for a job.","이번 학기가 마지막이라 지금 직장을 구하고 있습니다.",4.21],[148,"자기소개",2,"My dad is a businessman. My mom is a housewife.","아빠는 사업가이시고 엄마는 주부이십니다.",3.45],[149,"자기소개",2,"My sister got married last year and moved out.","제 여동생은 작년에 결혼해서 이사를 갔습니다.",3.28],[150,"자기소개",2,"I've been working at a trading company for three years and I'm in the sales department.","저는 무역회사에서 3년간 근무했고 영업부에 있습니다.",5.0]]; // [번호, 챕터, 세트, 문장, 해석, 음원길이초]
+const SDK_URL = 'https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@1.52.0/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js';
+const $ = id => document.getElementById(id);
+const store = { get(k){try{return localStorage.getItem('fsrt_'+k)}catch(e){return null}}, set(k,v){try{v==null?localStorage.removeItem('fsrt_'+k):localStorage.setItem('fsrt_'+k,v)}catch(e){}} };
+
+// ---------- 로그 ----------
+const T0 = performance.now();
+const logLines = [];
+function log(msg){ const t=((performance.now()-T0)/1000).toFixed(2); const line=`[${t}] ${msg}`; logLines.push(line); const el=$('log'); el.textContent=logLines.slice(-200).join('\n'); el.scrollTop=el.scrollHeight; }
+window.addEventListener('error', e => log('JS 오류: '+e.message));
+window.addEventListener('unhandledrejection', e => log('Promise 오류: '+(e.reason&&e.reason.message||e.reason)));
+
+// ---------- 환경 ----------
+const ua = navigator.userAgent;
+const env = {
+  'UA': ua,
+  'iOS': /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1),
+  'Android': /Android/.test(ua),
+  '인앱': (ua.match(/KAKAOTALK|Instagram|FBAN|FBAV|NAVER|Line\/|DaumApps|everytimeApp|Whale/)||['아님'])[0],
+  'HTTPS': window.isSecureContext,
+  'getUserMedia': !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia),
+  'AudioWorklet': typeof AudioWorkletNode!=='undefined',
+};
+function renderEnv(extra){ Object.assign(env, extra||{}); $('env').innerHTML = Object.entries(env).map(([k,v])=>`<b>${k}</b><span>${String(v)}</span>`).join(''); }
+renderEnv();
+(function(){ const w=[]; if(!env.HTTPS) w.push('HTTPS가 아니라 마이크를 쓸 수 없어요.'); if(!env.getUserMedia) w.push('이 브라우저는 마이크(getUserMedia)를 지원하지 않아요.'); if(env['인앱']!=='아님') w.push(`인앱 브라우저(${env['인앱']})예요 — 이 환경도 테스트 대상이에요.`); $('envWarn').innerHTML = w.map(x=>`<div class="warn">${x}</div>`).join(''); })();
+
+// ---------- 설정 저장 ----------
+['region','audioBase','reps','segMs','price'].forEach(id=>{ const v=store.get(id); if(v!=null) $(id).value=v; $(id).addEventListener('change',()=>store.set(id,$(id).value)); });
+const savedKey = store.get('key'); if(savedKey){ $('key').value=savedKey; $('saveKey').checked=true; $('setup').open=false; }
+$('saveKey').addEventListener('change',()=>store.set('key',$('saveKey').checked?$('key').value:null));
+$('key').addEventListener('change',()=>{ if($('saveKey').checked) store.set('key',$('key').value); });
+const savedInput = store.get('input'); if(savedInput) document.querySelector(`input[name=input][value=${savedInput}]`).checked=true;
+document.querySelectorAll('input[name=input]').forEach(r=>r.addEventListener('change',()=>{ store.set('input',getInput()); if(recognizer){ try{recognizer.close()}catch(e){} recognizer=null; } }));
+function getInput(){ return document.querySelector('input[name=input]:checked').value; }
+const savedMode = store.get('mode'); if(savedMode) document.querySelector(`input[name=mode][value=${savedMode}]`).checked=true;
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>store.set('mode',getMode())));
+const hl = store.get('hideLast'); if(hl!=null) $('hideLast').checked = hl==='1';
+$('hideLast').addEventListener('change',()=>store.set('hideLast',$('hideLast').checked?'1':'0'));
+function getMode(){ return document.querySelector('input[name=mode]:checked').value; }
+
+// ---------- 세트 ----------
+const sets = []; const seen = {};
+SENTS.forEach(s=>{ const k=s[1]+'|'+s[2]; if(!seen[k]){ seen[k]={chapter:s[1],set:s[2],items:[]}; sets.push(seen[k]); } seen[k].items.push(s); });
+$('setSel').innerHTML = sets.map((s,i)=>`<option value="${i}">${s.chapter} ${s.set}세트 (${s.items[0][0]}~${s.items[s.items.length-1][0]})</option>`).join('');
+const savedSet = store.get('set'); if(savedSet) $('setSel').value = savedSet;
+$('setSel').addEventListener('change',()=>{ store.set('set',$('setSel').value); if(!running){ cur.idx=0; showSentence(); } });
+const cur = { idx:0 };
+function curSet(){ return sets[+$('setSel').value].items; }
+function renderDots(doneUpTo){ $('dots').innerHTML = curSet().map((_,i)=>`<div class="dot ${i<doneUpTo?'done':i===cur.idx?'on':''}"></div>`).join(''); }
+function showSentence(hide){ const s=curSet()[cur.idx]; $('en').textContent = hide ? '(가려짐 — 기억해서 말해 보세요)' : s[3]; $('en').className = 'en'+(hide?' hidden':''); $('ko').textContent=s[4]; renderDots(cur.idx); }
+showSentence();
+
+// ---------- 오디오(원음) ----------
+const player = new Audio(); player.preload='auto'; player.setAttribute('playsinline','');
+function audioUrl(n){ let b=$('audioBase').value.trim(); if(b && !b.endsWith('/')) b+='/'; return b+String(n).padStart(3,'0')+'.mp3'; }
+let playing = false;
+function playOriginal(s){
+  return new Promise(resolve=>{
+    playing = true; setStatus('🔊 원음 듣는 중…');
+    let done=false;
+    const fin=()=>{ if(done) return; done=true; playing=false; player.onended=player.onerror=null; skipPlay=null; setTimeout(resolve,150); };
+    const toTTS=(why)=>{ if(done) return; log(why+' → 기기 TTS로 대체'); player.onended=player.onerror=null; speakTTS(s[3]).then(fin); };
+    skipPlay = fin;
+    player.onended = fin;
+    player.onerror = ()=>toTTS('원음 재생 실패: '+audioUrl(s[0]));
+    player.src = audioUrl(s[0]);
+    player.play().catch(err=>toTTS('play() 거부: '+err.message));
+  });
+}
+let skipPlay=null;
+function speakTTS(text){ return new Promise(res=>{ try{ const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.onend=res; u.onerror=res; speechSynthesis.speak(u); setTimeout(res, 9000);}catch(e){res();} }); }
+$('btnPreview').onclick = ()=>{ const s=curSet()[cur.idx]; log('원음만 듣기 (마이크 '+(stream?'켜짐':'꺼짐')+')'); player.src=audioUrl(s[0]); player.play().catch(e=>log('미리듣기 실패: '+e.message)); };
+
+// ---------- 마이크 + 파형 ----------
+let stream=null, actx=null, analyser=null, buf=null;
+let turnActive=false, lastLoud=0, voicedMs=0, lastFrame=0;
+const bars = new Array(120).fill(0);
+async function ensureMic(){
+  if(stream && stream.active) return;
+  const t=performance.now();
+  stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+  if(actx.state==='suspended') await actx.resume();
+  const src = actx.createMediaStreamSource(stream);
+  analyser = actx.createAnalyser(); analyser.fftSize=1024; buf=new Float32Array(analyser.fftSize);
+  src.connect(analyser);
+  // push 방식용: 같은 AudioContext에서 16kHz PCM으로 바꿔 전달
+  const proc = actx.createScriptProcessor(4096,1,1); const mute = actx.createGain(); mute.gain.value=0;
+  src.connect(proc); proc.connect(mute); mute.connect(actx.destination);
+  proc.onaudioprocess = e=>{ if(!pushStream || !recOn) return; pushStream.write(to16k(e.inputBuffer.getChannelData(0), actx.sampleRate)); };
+  const tr = stream.getAudioTracks()[0]; const st = tr.getSettings ? tr.getSettings() : {};
+  renderEnv({'마이크':tr.label||'(이름 없음)','샘플레이트':actx.sampleRate,'에코제거':st.echoCancellation});
+  log(`마이크 열림 ${Math.round(performance.now()-t)}ms · ${actx.sampleRate}Hz`);
+  tr.onended = ()=>log('⚠ 마이크 트랙 종료됨');
+  requestAnimationFrame(draw);
+}
+function draw(ts){
+  const c=$('wave'), g=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1; const W=c.clientWidth*dpr, H=c.clientHeight*dpr; if(c.width!==W){c.width=W;c.height=H;}
+  let rms=0; if(analyser){ analyser.getFloatTimeDomainData(buf); for(const v of buf) rms+=v*v; rms=Math.sqrt(rms/buf.length); }
+  const dt = lastFrame? ts-lastFrame : 16; lastFrame=ts;
+  const loud = rms>0.02;
+  if(turnActive && loud){ lastLoud=performance.now(); voicedMs+=dt; }
+  bars.push({v:Math.min(1,rms*6), me:turnActive}); bars.shift();
+  g.clearRect(0,0,W,H); const bw=W/bars.length;
+  const cs=getComputedStyle(document.documentElement);
+  bars.forEach((b,i)=>{ if(!b) return; const h=Math.max(2*dpr,b.v*H*0.95); g.fillStyle=b.me?cs.getPropertyValue('--wave'):cs.getPropertyValue('--wave2'); g.fillRect(i*bw+1,(H-h)/2,Math.max(1,bw-2),h); });
+  requestAnimationFrame(draw);
+}
+
+function to16k(f32, rate){ const ratio=rate/16000; const n=Math.floor(f32.length/ratio); const out=new Int16Array(n); for(let i=0;i<n;i++){ const a=Math.floor(i*ratio), b=Math.min(f32.length,Math.floor((i+1)*ratio)); let sum=0; for(let j=a;j<b;j++) sum+=f32[j]; let v=sum/Math.max(1,b-a); v=Math.max(-1,Math.min(1,v)); out[i]=v<0?v*0x8000:v*0x7fff; } return out.buffer; }
+let pushStream=null;
+// ---------- SDK ----------
+let SDK=null, recognizer=null, recOn=false, recOnSince=0, recSec=0;
+function loadSDK(){ if(SDK) return Promise.resolve(SDK); const t=performance.now(); return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=SDK_URL; s.onload=()=>{ SDK=window.SpeechSDK; log(`SDK 로드 ${Math.round(performance.now()-t)}ms`); res(SDK); }; s.onerror=()=>rej(new Error('SDK 로드 실패')); document.head.appendChild(s); }); }
+function makeRecognizer(){
+  const key=$('key').value.trim(), region=$('region').value.trim();
+  if(!key) throw new Error('키를 입력하세요');
+  const sc = key.length>100 ? SDK.SpeechConfig.fromAuthorizationToken(key,region) : SDK.SpeechConfig.fromSubscription(key,region);
+  sc.speechRecognitionLanguage='en-US';
+  sc.setProfanity(SDK.ProfanityOption.Raw);
+  sc.setProperty(SDK.PropertyId.Speech_SegmentationSilenceTimeoutMs, String($('segMs').value||600));
+  let ac;
+  if(getInput()==='push'){ pushStream = SDK.AudioInputStream.createPushStream(SDK.AudioStreamFormat.getWaveFormatPCM(16000,16,1)); ac = SDK.AudioConfig.fromStreamInput(pushStream); }
+  else { pushStream=null; ac = SDK.AudioConfig.fromStreamInput(stream); }
+  const r = new SDK.SpeechRecognizer(sc, ac);
+  r.recognizing = (_,e)=>onPartial(e.result.text);
+  r.recognized = (_,e)=>{ if(e.result.reason===SDK.ResultReason.RecognizedSpeech) onFinal(e.result.text); };
+  r.canceled = (_,e)=>{ log(`⚠ 취소: ${SDK.CancellationReason[e.reason]} ${e.errorCode!=null?SDK.CancellationErrorCode[e.errorCode]:''} ${e.errorDetails||''}`); if(e.reason===SDK.CancellationReason.Error){ setStatus('⚠ 연결 오류 — 다음 차례에 다시 연결해요'); markRecOff(); recognizer=null; try{r.close()}catch(_){}} };
+  r.sessionStarted = ()=>log('세션 시작');
+  r.sessionStopped = ()=>log('세션 종료');
+  return r;
+}
+function markRecOn(){ if(!recOn){ recOn=true; recOnSince=performance.now(); } }
+function markRecOff(){ if(recOn){ recOn=false; recSec+=(performance.now()-recOnSince)/1000; updateStats(); } }
+let stopping=null;
+async function startRec(){ if(stopping) await stopping; if(!recognizer) recognizer=makeRecognizer(); const t=performance.now(); return new Promise((res,rej)=>recognizer.startContinuousRecognitionAsync(()=>{ markRecOn(); res(performance.now()-t); }, err=>{ log('시작 실패: '+err); recognizer=null; rej(new Error(err)); })); }
+function stopRec(){ if(stopping) return stopping; if(!recognizer||!recOn) return Promise.resolve(); const r=recognizer;
+  stopping = new Promise(res=>r.stopContinuousRecognitionAsync(()=>res(), err=>{ log('정지 실패: '+err); res(); })).then(()=>{ markRecOff(); if(getInput()==='push'){ try{ pushStream&&pushStream.close(); r.close(); }catch(e){} if(recognizer===r){ recognizer=null; pushStream=null; } } stopping=null; });
+  return stopping; }
+
+// ---------- 차례 처리 ----------
+let turn=null; // {finals:[], partial:'', resolve, lastFinalAt, endTimer}
+let echoCount=0;
+function onPartial(text){
+  if(!turnActive||playing){ return; }
+  if(turn){ turn.partial=text; clearTimeout(turn.endTimer); renderHeard(); }
+}
+function onFinal(text){
+  if(!turnActive||playing){ if(text){ if(playing){ echoCount++; log('에코(원음 중 잡힘): '+text); } else log('차례 밖 늦은 결과: '+text); updateStats(); } return; }
+  if(!turn||!text) return;
+  turn.finals.push(text); turn.partial=''; turn.lastFinalAt=performance.now();
+  if(turn.firstFinalAt==null){ turn.firstFinalAt=turn.lastFinalAt; turn.latency = lastLoud? Math.round(turn.lastFinalAt-lastLoud) : null; }
+  else turn.latency = lastLoud? Math.round(turn.lastFinalAt-lastLoud) : turn.latency;
+  renderHeard();
+  clearTimeout(turn.endTimer); turn.endTimer=setTimeout(()=>endTurn('확정'), 700);
+}
+function renderHeard(){ const t=turn.finals.join(' '); const p=turn.partial; $('heard').innerHTML = (t||p) ? esc(t)+(p?` <span class="interim">${esc(p)}</span>`:'') : '<span class="interim">듣는 중…</span>'; }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+let tbarRaf=null;
+function userTurn(s, startMs){
+  return new Promise(resolve=>{
+    turn={finals:[],partial:'',resolve,startMs,firstFinalAt:null,latency:null};
+    voicedMs=0; lastLoud=0; turnActive=true; $('btnDone').disabled=false;
+    $('heard').innerHTML='<span class="interim">듣는 중… 말해 보세요</span>'; $('verdict').innerHTML='';
+    setStatus('🎙 내 차례 — 말해 보세요');
+    const limit = Math.min(15, (s[5]||4)*2+3)*1000; const t0=performance.now();
+    turn.limitTimer = setTimeout(()=>endTurn('시간 초과'), limit);
+    const tick=()=>{ if(!turnActive) { $('tbar').style.width='0'; return; } $('tbar').style.width=Math.min(100,(performance.now()-t0)/limit*100)+'%'; tbarRaf=requestAnimationFrame(tick); }; tick();
+  });
+}
+function endTurn(why){
+  if(!turn||!turnActive) return;
+  const t=turn; turnActive=false; clearTimeout(t.endTimer); clearTimeout(t.limitTimer); $('btnDone').disabled=true;
+  if(t.partial && !t.finals.length) t.finals.push(t.partial);
+  t.why=why; t.voicedMs=Math.round(voicedMs); turn=null; t.resolve(t);
+}
+$('btnDone').onclick=()=>{ if(turn){ // 확정 대기 짧게
+  const t=turn; clearTimeout(t.endTimer); t.endTimer=setTimeout(()=>endTurn('다 말했어요'), 400); } };
+
+// ---------- 비교 ----------
+const NUM = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const CONTR = {"it's":"it is","i'm":"i am","don't":"do not","can't":"can not","cannot":"can not","couldn't":"could not","i've":"i have","i'd":"i would","i'll":"i will","that's":"that is","there's":"there is","we're":"we are","they're":"they are","you're":"you are","isn't":"is not","wasn't":"was not","didn't":"did not","doesn't":"does not","won't":"will not","let's":"let us","he's":"he is","she's":"she is","what's":"what is","aren't":"are not","haven't":"have not","wouldn't":"would not","shouldn't":"should not","weren't":"were not","we've":"we have","they've":"they have","you've":"you have","we'll":"we will","they'll":"they will","you'll":"you will","it'll":"it will","here's":"here is","who's":"who is"};
+function normWord(w){ w=w.toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9']/g,''); if(!w) return []; if(CONTR[w]) return CONTR[w].split(' '); if(/^\d+$/.test(w) && +w<=20) return [NUM[+w]]; w=w.replace(/'s$/,'s').replace(/'/g,''); return w?[w]:[]; }
+function tokens(text){ const disp=text.split(/\s+/).filter(Boolean); const out=[]; disp.forEach((d,i)=>normWord(d).forEach(n=>out.push({n,i}))); return {disp,out}; }
+function lcs(a,b){ const m=a.length,n=b.length,dp=Array.from({length:m+1},()=>new Int16Array(n+1)); for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--)dp[i][j]=a[i].n===b[j].n?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]); const ma=new Set(),mb=new Set(); let i=0,j=0; while(i<m&&j<n){ if(a[i].n===b[j].n){ma.add(i);mb.add(j);i++;j++;} else if(dp[i+1][j]>=dp[i][j+1]) i++; else j++; } return {ma,mb}; }
+function compare(orig, heard){
+  const A=tokens(orig), B=tokens(heard); const {ma,mb}=lcs(A.out,B.out);
+  const okDisp=new Array(A.disp.length).fill(true); A.out.forEach((t,k)=>{ if(!ma.has(k)) okDisp[t.i]=false; });
+  const okHeard=new Array(B.disp.length).fill(true); B.out.forEach((t,k)=>{ if(!mb.has(k)) okHeard[t.i]=false; });
+  const missCount = okDisp.filter(x=>!x).length;
+  return {A,B,okDisp,okHeard,missCount};
+}
+function showResult(s, t, hidden){
+  const heard=t.finals.join(' ').trim();
+  if(!heard){ $('heard').innerHTML='<span class="interim">(아무 말도 받아 적지 못했어요)</span>'; $('verdict').innerHTML=`<span class="verdict bad">🔇 잘 안 들렸어요 · 소리 난 시간 ${(t.voicedMs/1000).toFixed(1)}초</span>`; return {all:false,miss:null}; }
+  const c=compare(s[3],heard);
+  $('heard').innerHTML = c.B.disp.map((w,i)=>`<span class="w ${c.okHeard[i]?'':'extra'}">${esc(w)}</span>`).join(' ');
+  const origHtml = c.A.disp.map((w,i)=>`<span class="w ${c.okDisp[i]?'ok':'bad'}">${esc(w)}</span>`).join(' ');
+  $('en').innerHTML = origHtml; $('en').className='en';
+  $('verdict').innerHTML = c.missCount===0 ? '<span class="verdict ok">✓ AI가 다 알아들었어요</span>' : `<span class="verdict bad">원문과 다르게 들린 단어 ${c.missCount}개</span>`;
+  return {all:c.missCount===0, miss:c.missCount};
+}
+
+// ---------- 측정 ----------
+const rows=[];
+function updateStats(){
+  const lat=rows.filter(r=>r.latency!=null).map(r=>r.latency); const st=rows.filter(r=>r.startMs!=null).map(r=>r.startMs);
+  $('sLat').textContent = lat.length? Math.round(lat.reduce((a,b)=>a+b,0)/lat.length) : '–';
+  $('sStart').textContent = st.length? Math.round(st.reduce((a,b)=>a+b,0)/st.length) : '–';
+  $('sEcho').textContent = echoCount;
+  const sec = recSec + (recOn? (performance.now()-recOnSince)/1000 : 0);
+  $('sSec').textContent = sec.toFixed(0);
+  $('sCost').textContent = '$'+(sec/3600*(+$('price').value||1)).toFixed(3);
+  const judged=rows.filter(r=>r.all!=null); $('sMatch').textContent = judged.length? Math.round(judged.filter(r=>r.all).length/judged.length*100)+'%' : '–';
+}
+setInterval(()=>{ if(running) updateStats(); },1000);
+function addRow(r){ rows.push(r); $('tbl').insertAdjacentHTML('beforeend', `<tr><td>${r.n}·${r.rep}${r.hidden?'(가림)':''}</td><td>${esc(r.heard||'—')}<br><small>${r.all?'✓ 다 알아들음':r.miss==null?'🔇':'다름 '+r.miss}</small></td><td>${r.latency??'–'}</td><td>${r.startMs!=null?Math.round(r.startMs):'–'}</td></tr>`); updateStats(); }
+
+// ---------- 진행 ----------
+let running=false, stopFlag=false, skipFlag=false;
+function setStatus(t){ $('status').textContent=t; }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+$('btnStart').onclick = async ()=>{
+  if(running) return;
+  try{
+    $('btnStart').disabled=true; setStatus('준비 중…');
+    if(!actx){ actx = new (window.AudioContext||window.webkitAudioContext)(); actx.resume(); }
+    // iOS: 사용자 동작 안에서 오디오 잠금 해제
+    try{ player.muted=true; player.src=audioUrl(curSet()[cur.idx][0]); await player.play(); player.pause(); player.muted=false; }catch(e){ player.muted=false; log('오디오 잠금 해제 실패: '+e.message); }
+    await ensureMic();
+    await loadSDK();
+    if(!recognizer) recognizer = makeRecognizer();
+    if(getMode()==='ignore'){ const ms=await startRec(); log(`인식 켜짐(계속) ${Math.round(ms)}ms`); }
+    $('setup').open=false;
+  }catch(e){ log('시작 오류: '+e.message); setStatus('⚠ '+e.message); $('btnStart').disabled=false; return; }
+  running=true; stopFlag=false; $('btnStop').disabled=false; $('btnNext').disabled=false;
+  log(`== 시작: ${sets[+$('setSel').value].chapter} ${sets[+$('setSel').value].set}세트 · 모드 ${getMode()} · 입력 ${getInput()} · 반복 ${$('reps').value}`);
+  const items=curSet();
+  for(; cur.idx<items.length && !stopFlag; cur.idx++){
+    const s=items[cur.idx]; skipFlag=false; const R=+$('reps').value;
+    for(let rep=1; rep<=R && !stopFlag && !skipFlag; rep++){
+      const hide = $('hideLast').checked && rep===R && R>1;
+      showSentence(hide); $('rep').textContent=`${cur.idx+1}번째 문장 · ${rep}/${R}회${hide?' · 가림':''}`;
+      $('heard').innerHTML='<span class="interim">—</span>'; $('verdict').innerHTML='';
+      if(getMode()==='stop') await stopRec();
+      await playOriginal(s);
+      if(stopFlag||skipFlag) break;
+      let startMs=null;
+      if(getMode()==='stop'){ try{ startMs=await startRec(); }catch(e){ setStatus('⚠ 인식 시작 실패'); } }
+      else if(!recOn){ try{ startMs=await startRec(); log('재연결'); }catch(e){} }
+      const t = await userTurn(s, startMs);
+      if(getMode()==='stop') stopRec();
+      const res = showResult(s, t, hide);
+      addRow({n:s[0],rep,hidden:hide,heard:t.finals.join(' '),latency:t.latency,startMs,all:res.all,miss:res.miss,why:t.why,voiced:t.voicedMs});
+      log(`${s[0]}-${rep} ${t.why} · 확정 ${t.latency??'–'}ms · 켜기 ${startMs!=null?Math.round(startMs):'–'}ms · 소리 ${t.voicedMs}ms · "${t.finals.join(' ')}"`);
+      setStatus(rep<R?'다음 반복으로…':'다음 문장으로…');
+      await sleep(1600);
+    }
+    renderDots(cur.idx+1);
+  }
+  await finish();
+};
+$('btnNext').onclick=()=>{ skipFlag=true; if(turnActive) endTurn('건너뜀'); player.pause(); try{speechSynthesis.cancel()}catch(e){} if(skipPlay) skipPlay(); };
+$('btnStop').onclick=()=>{ stopFlag=true; if(turnActive) endTurn('끝내기'); player.pause(); try{speechSynthesis.cancel()}catch(e){} if(skipPlay) skipPlay(); };
+async function finish(){
+  await stopRec(); running=false; turnActive=false;
+  $('btnStart').disabled=false; $('btnStop').disabled=true; $('btnNext').disabled=true; $('btnDone').disabled=true;
+  if(cur.idx>=curSet().length){ cur.idx=0; setStatus('✓ 세트 끝 — 다른 모드·세트로 다시 해 보세요'); } else setStatus('멈췄어요');
+  updateStats(); log('== 끝');
+}
+document.addEventListener('visibilitychange',()=>{ log('화면 '+(document.hidden?'숨김':'보임')+' · 마이크 '+(stream&&stream.active?'활성':'비활성')+' · AudioContext '+(actx?actx.state:'-')); if(!document.hidden && actx && actx.state==='suspended') actx.resume().then(()=>log('AudioContext 재개')); });
+
+// ---------- 복사 ----------
+$('btnCopy').onclick=async ()=>{
+  const lines=['# 만능문장 실시간 AI 테스트 결과', ...Object.entries(env).map(([k,v])=>`${k}: ${v}`), `모드: ${getMode()} · 입력 ${getInput()} · 반복 ${$('reps').value} · 무음 ${$('segMs').value}ms`, `확정 평균 ${$('sLat').textContent}ms · 켜기 평균 ${$('sStart').textContent}ms · 에코 ${echoCount} · 인식 ${$('sSec').textContent}초 · ${$('sCost').textContent} · 다 알아들음 ${$('sMatch').textContent}`, '', '## 회차', ...rows.map(r=>`${r.n}-${r.rep}${r.hidden?'(가림)':''} | ${r.all?'OK':r.miss==null?'무음':'다름'+r.miss} | 확정 ${r.latency??'-'} | 켜기 ${r.startMs!=null?Math.round(r.startMs):'-'} | ${r.heard}`), '', '## 로그', ...logLines];
+  const text=lines.join('\n');
+  try{ await navigator.clipboard.writeText(text); $('btnCopy').textContent='✓ 복사됨'; }catch(e){ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); $('btnCopy').textContent='✓ 복사됨';}catch(_){ $('btnCopy').textContent='복사 실패 — 로그를 길게 눌러 복사'; } ta.remove(); }
+  setTimeout(()=>$('btnCopy').textContent='📋 결과 전체 복사 (공유용)',2000);
+};
+log('페이지 준비됨');
+</script>
+</body>
+</html>
